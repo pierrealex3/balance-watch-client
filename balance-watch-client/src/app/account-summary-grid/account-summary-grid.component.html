@@ -1,0 +1,35 @@
+<div style="margin-top: 20px">
+    <label style="margin-right: 10px">Account</label>
+    <select>
+        <option selected value="RDPRM123">RDPRM123</option>
+    </select>
+</div>
+<div>
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Debit|Credit</th>
+                <th>Note #1</th>
+                <th>Note #2</th>
+                <th>Account</th>
+                <th>Connection</th>
+            </tr>
+        </thead>
+
+        <tr *ngFor="let t of transactions" (click)="onSelect(t)">
+            <td><a routerLink="/tdetail/{{t.id}}">{{t.date}}</a></td>
+            <td><a routerLink="/tdetail/{{t.id}}">{{t.type}}</a></td>
+            <td><a routerLink="/tdetail/{{t.id}}">{{t.amount}}</a></td>
+            <td><a routerLink="/tdetail/{{t.id}}">{{t.way}}</a></td>
+            <td><a routerLink="/tdetail/{{t.id}}">{{t.note1}}</a></td>
+            <td><a routerLink="/tdetail/{{t.id}}">{{t.note2}}</a></td>
+            <td><a routerLink="/tdetail/{{t.id}}">{{t.account}}</a></td>
+            <td><a routerLink="/tdetail/{{t.id}}">{{t.accountConnection}}</a></td>
+        </tr>
+
+    </table>
+</div>
+

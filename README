@@ -1,1 +1,26 @@
-hello
+# some commands used in the dev process
+ng new balance-watch-client
+ng generate component AccountSummaryGrid
+
+<input [(ngModel)]="hero.name" placeholder="name"/>
+import { FormsModule } from '@angular/forms'; // <-- NgModel lives here
+
+<tr *ngFor="let t of transactions"> <td> {{t.date}}
+<div *ngIf="transaction" (click)="onSelect(objRef)">
+
+<my-component [myInputProp]="myRef" ></my-component>
+@Input() myInputProp:MyType;
+
+ng generate service accountTransaction
+constructor(private accountTransactionSvc:AccountTransactionService) {} // ctor auto-injection, must be public if binding needs to be done in the template
+getTransactions() : void { this.accountTransactoinSvc.getTransactions( t => this.transactions = t)} // rxjs observable subscription
+
+ng generate module app-routing --flat --module=app
+<a routerLink"/tdetails/{{t.id}}">allo</a>
+import { ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
+getTransaction() : void {
+    const id = +this.route.snapshot.paramMap.get('id');
+    this.accountTransactionService.getTransaction(id).subscribe( t => this.transaction = t );
+}
+

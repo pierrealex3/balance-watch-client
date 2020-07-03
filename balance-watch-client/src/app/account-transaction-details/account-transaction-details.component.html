@@ -1,0 +1,33 @@
+<div *ngIf="transaction">
+    <h1>Account transaction details</h1>
+    <div>
+        <label for="tdate">Date</label>
+        <input id="tdate" [(ngModel)]="transaction.date" />
+    </div>
+    <div>
+        <label for="tdorc">Debit|Credit</label>
+        <input id="tdorc" [(ngModel)]="transaction.way" />
+    </div>
+    <div>
+        <label for="tamt">Amount</label>
+        <input id="tamt" [(ngModel)]="transaction.amount" />
+    </div>
+    <div>
+        <label for="ttype">Type</label>
+        <input id="ttype" [(ngModel)]="transaction.type" />
+    </div>
+    <div>
+        <label for="tnote1">Note</label>
+        <input id="tnote1" [(ngModel)]="transaction.note1" />
+    </div>
+    <div>
+        <label for="tnote2">Extra Note</label>
+        <input id="tnote2" [(ngModel)]="transaction.note2" />
+    </div>
+    <div>
+        <label for="tconn">Account Connection</label>
+        <input id="tconn" [(ngModel)]="transaction.accountConnection"/>
+    </div>
+</div>
+<br/>
+<button (click)="goBack()">Back</button>
