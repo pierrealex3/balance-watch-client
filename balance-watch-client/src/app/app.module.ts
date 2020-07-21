@@ -7,13 +7,15 @@ import { AccountSummaryGridComponent } from './account-summary-grid/account-summ
 import { AccountTransactionDetailsComponent } from './account-transaction-details/account-transaction-details.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AccountTransactionTemplateComponent } from './account-transaction-template/account-transaction-template.component';
+import { TransactionTemplateGroupComponent } from './transaction-template-group/transaction-template-group.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AccountSummaryGridComponent,
     AccountTransactionDetailsComponent,
-    AccountTransactionTemplateComponent
+    AccountTransactionTemplateComponent,
+    TransactionTemplateGroupComponent
   ],
   imports: [
     BrowserModule,

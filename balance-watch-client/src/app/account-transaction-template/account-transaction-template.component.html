@@ -1,1 +1,13 @@
-<p>account-transaction-template works!</p>
+<p>Select transaction template</p>
+<p>
+    <a routerLink="/ttgroup/0">New</a> 
+</p>
+<br/>
+<p>
+    <label for="tgtMonth">Month</label><input id="tgtMonth"/>
+    <label for="tgtYear">Year</label><input id="tgtYear"/>    
+</p>
+<p>
+    <a routerLink="/tsummary{{selectedGroup != null ? '/' + selectedGroup.id : ''}}">Build</a>
+</p>
+

@@ -24,3 +24,6 @@ getTransaction() : void {
     this.accountTransactionService.getTransaction(id).subscribe( t => this.transaction = t );
 }
 
+import { Router } from '@angular/router';
+constructor(private router: Router) { }
+this.router.navigateByUrl("/ttemplate")

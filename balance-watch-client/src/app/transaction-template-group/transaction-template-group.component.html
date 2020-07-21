@@ -1,0 +1,88 @@
+<br />
+<div class="container">
+    <label>Transaction Template Name</label>
+    <input [(ngModel)]="name" />
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <label>Type</label>
+        </div>
+        <div class="col-md-6">
+            <input [(ngModel)]="activeTT.type" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <label>Amount</label>
+        </div>
+        <div class="col-md-6">
+            <input [(ngModel)]="activeTT.amount" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <label>Credit or Debit</label>
+        </div>
+        <div class="col-md-6">
+            <select [(ngModel)]="activeTT.way">
+                <option></option>
+                <option>Credit</option>
+                <option>Debit</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <label>Frequency</label>
+        </div>
+        <div class="col-md-6">
+            <select>
+                <option></option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <label>Note (TBD)</label>
+        </div>
+        <div class="col-md-6">
+            <input />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <label>Extra Note (TBD)</label>
+        </div>
+        <div class="col-md-6">
+            <input />
+        </div>
+    </div>
+</div>
+<div class="container">
+    <button (click)="saveActiveTT()">Add</button>
+    <button (click)="clearFields()">Clear</button>
+</div>
+
+<div id="ttGroupSummary">
+    <table>
+        <thead>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Way</th>
+        </thead>
+        <tbody>
+            <tr *ngFor="let tt of listOfTT" (click)="editTT(tt)">
+                <td>{{tt.type}}</td>
+                <td>{{tt.amount}}</td>
+                <td>{{tt.way}}</td>
+            </tr>
+        </tbody>
+
+    </table>
+</div>
+
+<div>
+    <button (click)="saveTTGroup()">Generate Template</button>
+</div>
