@@ -1,13 +1,23 @@
-<p>Select transaction template</p>
+<p></p>
+<div><label>Build for account:</label></div>
+<select [(ngModel)]="selAccount">
+    <option value="ABC123">ABC123</option>
+</select>
+<div></div>
+<div><label>Use transaction template group:</label></div>
+<a routerLink="/ttgroup/0">New</a>
+<div *ngIf="ttGroups.length > 0">
+    <select>
+        <option [selected]="initSelTtGroup == ttg.id" *ngFor="let ttg of ttGroups">
+            {{ttg.data.description}}
+        </option>
+    </select>
+</div>
+<br />
 <p>
-    <a routerLink="/ttgroup/0">New</a> 
-</p>
-<br/>
-<p>
-    <label for="tgtMonth">Month</label><input id="tgtMonth"/>
-    <label for="tgtYear">Year</label><input id="tgtYear"/>    
+    <label for="tgtMonth">Month</label><input id="tgtMonth" />
+    <label for="tgtYear">Year</label><input id="tgtYear" />
 </p>
 <p>
     <a routerLink="/tsummary{{selectedGroup != null ? '/' + selectedGroup.id : ''}}">Build</a>
 </p>
-

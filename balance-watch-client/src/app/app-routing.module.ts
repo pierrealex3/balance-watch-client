@@ -8,7 +8,7 @@ import { TransactionTemplateGroupComponent } from './transaction-template-group/
 const routes:Routes = [
   {path: 'tsummary', component: AccountSummaryGridComponent},
   {path: 'tdetail/:id', component: AccountTransactionDetailsComponent},
-  {path: 'ttemplate', component: AccountTransactionTemplateComponent},
+  {path: 'ttemplate/:id', component: AccountTransactionTemplateComponent},
   {path: 'ttgroup/:id', component: TransactionTemplateGroupComponent},
   {path: '', redirectTo:'tsummary', pathMatch: 'full'}
 

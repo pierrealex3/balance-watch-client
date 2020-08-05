@@ -75,7 +75,7 @@ export class TransactionTemplateGroupComponent implements OnInit {
           },
           complete: () => {
             console.log('complete!');
-            this.router.navigateByUrl("/ttemplate");
+            this.router.navigateByUrl("/ttemplate/" + ttGroupId);
           },
           error: (err) => {
             console.log('error is: ' + err)
