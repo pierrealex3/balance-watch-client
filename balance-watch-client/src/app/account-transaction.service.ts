@@ -5,6 +5,7 @@ import { Observable, of} from 'rxjs';
 import { HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 import { TransactionTemplateGroup } from './transaction-template-group';
 import { TransactionTemplateGroupResWrapper } from './service-response-wrappers/transaction-template-group-res-wrapper';
+import { FrequencyResWrapper } from './service-response-wrappers/frequency-res-wrapper';
 
 const BASE_URI = 'http://localhost:9898/app/'; // TODO export that
 
@@ -33,6 +34,10 @@ export class AccountTransactionService {
 
   getAllTtGroups(account : string) : Observable<TransactionTemplateGroupResWrapper[]> {
     return this.http.get<TransactionTemplateGroupResWrapper[]>(BASE_URI + 'transactionTemplateGroups?account=' + account, { observe: "body", responseType: "json"});
+  }
+
+  getAllFrequencies() : Observable<FrequencyResWrapper[]> {
+    return this.http.get<FrequencyResWrapper[]>(BASE_URI + 'frequencies', { observe: "body"});
   }
 
 

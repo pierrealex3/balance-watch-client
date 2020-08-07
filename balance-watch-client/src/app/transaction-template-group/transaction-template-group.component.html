@@ -38,25 +38,17 @@
             <label>Frequency</label>
         </div>
         <div class="col-md-6">
-            <select>
-                <option></option>
+            <select [(ngModel)]="activeTT.frequencyList[0]">
+                <option *ngFor="let freq of listOfFrequencies" [ngValue]="freq">{{freq.data.description}}</option>
             </select>
         </div>
     </div>
     <div class="row">
         <div class="col-md-6">
-            <label>Note (TBD)</label>
+            <label>Note</label>
         </div>
         <div class="col-md-6">
-            <input />
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <label>Extra Note (TBD)</label>
-        </div>
-        <div class="col-md-6">
-            <input />
+            <input [(ngModel)]="activeTT.note" />
         </div>
     </div>
 </div>
@@ -71,12 +63,16 @@
             <th>Type</th>
             <th>Amount</th>
             <th>Way</th>
+            <th>Note</th>
+            <th>Frequency</th>
         </thead>
         <tbody>
             <tr *ngFor="let tt of listOfTT" (click)="editTT(tt)">
                 <td>{{tt.type}}</td>
                 <td>{{tt.amount}}</td>
                 <td>{{tt.way}}</td>
+                <td>{{tt.note}}</td>
+                <td>{{tt.frequencyList[0].data.description}}</td>
             </tr>
         </tbody>
 

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AccountTransactionService } from '../account-transaction.service';
 import { forkJoin, Observable } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
+import { FrequencyResWrapper } from '../service-response-wrappers/frequency-res-wrapper';
 
 @Component({
   selector: 'app-transaction-template-group',
@@ -15,12 +16,18 @@ export class TransactionTemplateGroupComponent implements OnInit {
   name: string;
   activeTT: TransactionTemplate;
   listOfTT: TransactionTemplate[] = [];  
+  listOfFrequencies: FrequencyResWrapper[] = [];
 
   constructor(private router: Router,
     private transactionService: AccountTransactionService) { }
 
   ngOnInit() {
     this.clearFields();
+    this.loadFrequencyList();
+  }
+
+  loadFrequencyList(): void {
+    this.transactionService.getAllFrequencies().subscribe( frequencies => { this.listOfFrequencies = frequencies; });
   }
 
   saveActiveTT(): void {
@@ -36,6 +43,7 @@ export class TransactionTemplateGroupComponent implements OnInit {
 
   clearFields() : void {
     const emptyTT = {} as TransactionTemplate;
+    emptyTT.frequencyList = new Array<FrequencyResWrapper>(1);
     this.activeTT = emptyTT;
   }
 
@@ -57,15 +65,12 @@ export class TransactionTemplateGroupComponent implements OnInit {
               'amount': value.amount,
               'way': value.way,
               'account': 'ABC123',  // TODO adapt
-              'frequencies': [1]  // TODO must select a given frequency
+              'frequencies': value.frequencyList.map( (f) => f.id ) ,
+              'note': value.note
             },
             ttGroupId
           );
 
-          postReq.subscribe( resp => {
-            const ttId = resp.headers.get("X-Internal-Id");
-            console.log("processed tt: " + ttId + " with http status code: " + resp.status);
-          });
           requestBatch.push(postReq);
         });
 

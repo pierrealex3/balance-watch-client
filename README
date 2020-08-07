@@ -27,3 +27,9 @@ getTransaction() : void {
 import { Router } from '@angular/router';
 constructor(private router: Router) { }
 this.router.navigateByUrl("/ttemplate")
+
+ng add @angular/material
+
+<select [(ngModel)]="activeProp.arrayOfMyObj[0]">
+  <option *ngFor="let myObj of refArrayOfMyObj" [ngValue]="myObj">{{myObj.someString}}</option> 
+
