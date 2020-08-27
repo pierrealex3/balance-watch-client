@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AccountTransactionService } from '../account-transaction.service';
 import { TransactionTemplateGroupResWrapper } from '../service-response-wrappers/transaction-template-group-res-wrapper';
 import { ActivatedRoute } from '@angular/router';
+import { TransactionTemplateGroup } from '../transaction-template-group';
 
 @Component({
   selector: 'app-account-transaction-template',
@@ -14,6 +15,9 @@ export class AccountTransactionTemplateComponent implements OnInit {
   initSelTtGroup: number;
   initSelAccount: string;
   selAccount: string = 'ABC123';
+  selGroup: TransactionTemplateGroupResWrapper;
+  tgtMonth: string;
+  tgtYear: string;
 
   constructor(
     private transactionService: AccountTransactionService,

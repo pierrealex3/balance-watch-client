@@ -7,17 +7,17 @@
 <div><label>Use transaction template group:</label></div>
 <a routerLink="/ttgroup/0">New</a>
 <div *ngIf="ttGroups.length > 0">
-    <select>
-        <option [selected]="initSelTtGroup == ttg.id" *ngFor="let ttg of ttGroups">
+    <select [(ngModel)]="selGroup">
+        <option [selected]="initSelTtGroup == ttg.id" *ngFor="let ttg of ttGroups" [ngValue]="ttg">
             {{ttg.data.description}}
         </option>
     </select>
 </div>
 <br />
 <p>
-    <label for="tgtMonth">Month</label><input id="tgtMonth" />
-    <label for="tgtYear">Year</label><input id="tgtYear" />
+    <label for="tgtMonth">Month</label><input [(ngModel)]="tgtMonth" />
+    <label for="tgtYear">Year</label><input [(ngModel)]="tgtYear" />
 </p>
 <p>
-    <a routerLink="/tsummary{{selectedGroup != null ? '/' + selectedGroup.id : ''}}">Build</a>
+    <a [routerLink]="['/tsummary', {selGroup: selGroup != undefined ? selGroup.id : '', forMonth: tgtMonth, forYear: tgtYear}]">Build</a>
 </p>

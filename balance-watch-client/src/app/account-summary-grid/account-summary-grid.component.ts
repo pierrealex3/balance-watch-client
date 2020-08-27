@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountTransaction } from '../account-transaction';
 import { AccountTransactionService } from '../account-transaction.service';
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { forkJoin, Observable, of} from 'rxjs';
 
 
 
@@ -12,12 +14,20 @@ import { AccountTransactionService } from '../account-transaction.service';
 export class AccountSummaryGridComponent implements OnInit {
 
 selectedTransaction: AccountTransaction;
-transactions: AccountTransaction[];
+transactions: AccountTransaction[] = [];
 
-  constructor(private accountTransactionService:AccountTransactionService ) {}
+  constructor(
+    private accountTransactionService:AccountTransactionService,
+    private route: ActivatedRoute 
+    ) {}
 
   ngOnInit() {
-    this.getTransactions();
+    const paramMap:ParamMap = this.route.snapshot.paramMap;
+    if (paramMap.keys.length == 0) {
+      this.getTransactions();    
+    } else {      
+      this.getTransactionsFromTemplateGroup(paramMap.get('selGroup'), paramMap.get('forMonth'), paramMap.get('forYear'));
+    }
   }
 
   /**
@@ -30,5 +40,10 @@ transactions: AccountTransaction[];
   onSelect(t:AccountTransaction) : void {
     this.selectedTransaction = t;
   }
+
+  getTransactionsFromTemplateGroup(groupId:string, month:string, year:string) : void {
+    this.accountTransactionService.generateTransactions(groupId, month, year, i => this.transactions.push(i) );
+  }
+
 
 }

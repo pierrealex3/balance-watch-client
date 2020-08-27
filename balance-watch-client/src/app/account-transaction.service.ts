@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AccountTransaction } from './account-transaction'
 import { MOCK_TRANSACTIONS } from './mock-transactions';
-import { Observable, of} from 'rxjs';
+import { Observable, of, forkJoin} from 'rxjs';
 import { HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 import { TransactionTemplateGroup } from './transaction-template-group';
 import { TransactionTemplateGroupResWrapper } from './service-response-wrappers/transaction-template-group-res-wrapper';
-import { FrequencyResWrapper } from './service-response-wrappers/frequency-res-wrapper';
+import { TransactionTemplateResWrapper } from './service-response-wrappers/transaction-template-res-wrapper';
 
 const BASE_URI = 'http://localhost:9898/app/'; // TODO export that
 
@@ -36,8 +36,29 @@ export class AccountTransactionService {
     return this.http.get<TransactionTemplateGroupResWrapper[]>(BASE_URI + 'transactionTemplateGroups?account=' + account, { observe: "body", responseType: "json"});
   }
 
-  getAllFrequencies() : Observable<FrequencyResWrapper[]> {
-    return this.http.get<FrequencyResWrapper[]>(BASE_URI + 'frequencies', { observe: "body"});
+  getAllTt(groupId: string) : Observable<TransactionTemplateResWrapper[]> {
+    return this.http.get<TransactionTemplateResWrapper[]>(BASE_URI + 'transactionTemplateGroups/' + groupId + '/templates', {observe: "body", responseType: "json"});
+  }
+
+  generateTransactions(groupId: string, forMonth: string, forYear: string, callbackFn: (value: AccountTransaction) => void) : void {
+
+    const fullTransactionObsArr: Observable<AccountTransaction[]>[] = [];
+
+    this.getAllTt(groupId).subscribe( ttArr => {
+      ttArr.forEach(tt => {
+        const transactionArrObservable: Observable<AccountTransaction[]> = this.http.get<AccountTransaction[]>(BASE_URI + 'xtransactions?year=' + forYear + '&month=' + forMonth + '&ttId=' + tt.id);
+        fullTransactionObsArr.push(transactionArrObservable);
+      });
+
+      forkJoin( fullTransactionObsArr ).subscribe(
+        resp => {
+          console.log('how is this different from complete?');
+          const flatArray: AccountTransaction[] = ([] as AccountTransaction[]).concat(...resp);
+          flatArray.forEach(callbackFn);        
+        }
+      );
+    });
+    
   }
 
 

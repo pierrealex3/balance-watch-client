@@ -38,9 +38,7 @@
             <label>Frequency</label>
         </div>
         <div class="col-md-6">
-            <select [(ngModel)]="activeTT.frequencyList[0]">
-                <option *ngFor="let freq of listOfFrequencies" [ngValue]="freq">{{freq.data.description}}</option>
-            </select>
+            <input [(ngModel)]="activeTT.frequency" />
         </div>
     </div>
     <div class="row">
@@ -72,7 +70,7 @@
                 <td>{{tt.amount}}</td>
                 <td>{{tt.way}}</td>
                 <td>{{tt.note}}</td>
-                <td>{{tt.frequencyList[0].data.description}}</td>
+                <td>{{tt.frequency}}</td>
             </tr>
         </tbody>
 

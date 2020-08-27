@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { AccountTransactionService } from '../account-transaction.service';
 import { forkJoin, Observable } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
-import { FrequencyResWrapper } from '../service-response-wrappers/frequency-res-wrapper';
 
 @Component({
   selector: 'app-transaction-template-group',
@@ -16,18 +15,12 @@ export class TransactionTemplateGroupComponent implements OnInit {
   name: string;
   activeTT: TransactionTemplate;
   listOfTT: TransactionTemplate[] = [];  
-  listOfFrequencies: FrequencyResWrapper[] = [];
 
   constructor(private router: Router,
     private transactionService: AccountTransactionService) { }
 
   ngOnInit() {
     this.clearFields();
-    this.loadFrequencyList();
-  }
-
-  loadFrequencyList(): void {
-    this.transactionService.getAllFrequencies().subscribe( frequencies => { this.listOfFrequencies = frequencies; });
   }
 
   saveActiveTT(): void {
@@ -43,7 +36,6 @@ export class TransactionTemplateGroupComponent implements OnInit {
 
   clearFields() : void {
     const emptyTT = {} as TransactionTemplate;
-    emptyTT.frequencyList = new Array<FrequencyResWrapper>(1);
     this.activeTT = emptyTT;
   }
 
@@ -57,7 +49,6 @@ export class TransactionTemplateGroupComponent implements OnInit {
         const requestBatch: Observable<HttpResponse<Object>>[] = [];
 
         this.listOfTT.forEach(value => {
-          console.log('processing: ' + value.type + ' ' + value.way);
 
           const postReq: Observable<HttpResponse<Object>> = this.transactionService.addTt(
             {
@@ -65,7 +56,7 @@ export class TransactionTemplateGroupComponent implements OnInit {
               'amount': value.amount,
               'way': value.way,
               'account': 'ABC123',  // TODO adapt
-              'frequencies': value.frequencyList.map( (f) => f.id ) ,
+              'frequency': value.frequency ,
               'note': value.note
             },
             ttGroupId
@@ -87,7 +78,6 @@ export class TransactionTemplateGroupComponent implements OnInit {
           }
         });
 
-        
       }
     );
 
