@@ -4,8 +4,8 @@ export interface AccountTransaction {
     type: string;
     amount: number;
     way: string;
-    note1: string;
-    note2: string;
+    note: string;
+    noteXtra: string;
     account: string;
     accountConnection: string;
 }

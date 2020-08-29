@@ -33,3 +33,37 @@ ng add @angular/material
 <select [(ngModel)]="activeProp.arrayOfMyObj[0]">
   <option *ngFor="let myObj of refArrayOfMyObj" [ngValue]="myObj">{{myObj.someString}}</option> 
 
+// interpolation
+{{ allo?.myprop }} is simpler than {{ allo != null ? allo.myprop : ''}}
+
+// help for debug - use | json pipe with <pre>
+<pre>{{ allo | json }}</pre>
+
+// property binding
+application: [property]="expression"
+types of property: [element property, component property, directive property]
+examples:
+element property:	<img [src]="vehicle.imageUrl">
+component property: <vehicle-detail [vehicle]="currentVehicle"></vehicle-detail>
+directive property:	<div [ngClass]="{selected: isSelected}">X-Wing</div>
+
+// (Attribute, class and style) property binding on html elements
+element attribute property:	<button [attr.aria-label]="ok">OK</button>
+element class property:		<div [class.isStopped]="isStopped">Stopped</div>	// good for css selection!
+element style property:		<button [style.color]="isStopped ? 'red' : 'green'" >
+
+
+// event handling
+application: (event-target)="statement"
+types of events: [element event, component event]
+examples:
+element event:		<button (click)="save()">Save</button>
+component event:	<vehicle-detail (changed)="vehicleChanged"></vehicle-detail>
+
+// event handling - capture the event target
+<input (change)="logSomething($event.target.value)">Initial</input>
+
+
+
+
+

@@ -18,11 +18,11 @@
     </div>
     <div>
         <label for="tnote1">Note</label>
-        <input id="tnote1" [(ngModel)]="transaction.note1" />
+        <input id="tnote1" [(ngModel)]="transaction.note" />
     </div>
     <div>
         <label for="tnote2">Extra Note</label>
-        <input id="tnote2" [(ngModel)]="transaction.note2" />
+        <input id="tnote2" [(ngModel)]="transaction.noteXtra" />
     </div>
     <div>
         <label for="tconn">Account Connection</label>
@@ -31,3 +31,4 @@
 </div>
 <br/>
 <button (click)="goBack()">Back</button>
+<button (click)="save()">Save</button>

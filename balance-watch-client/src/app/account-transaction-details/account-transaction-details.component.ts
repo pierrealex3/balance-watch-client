@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { AccountTransaction } from '../account-transaction';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { AccountTransactionService } from '../account-transaction.service';
 
@@ -12,11 +12,13 @@ import { AccountTransactionService } from '../account-transaction.service';
 export class AccountTransactionDetailsComponent implements OnInit {
 
   transaction:AccountTransaction;
+  selTransactionId: number;
 
   constructor(
     private route: ActivatedRoute,
     private accountTransactionService: AccountTransactionService,
-    private location: Location
+    private location: Location,
+    private router: Router
     ) {}
 
   ngOnInit() {
@@ -25,11 +27,20 @@ export class AccountTransactionDetailsComponent implements OnInit {
 
   getTransaction() : void {
     const id = +this.route.snapshot.paramMap.get('id');
-    this.accountTransactionService.getTransaction(id).subscribe( t => this.transaction = t );
+    this.accountTransactionService.getTransaction(id).subscribe( t => {
+      this.transaction = t;
+      this.selTransactionId = id;
+    } );
   }
 
   goBack() : void {
-    this.location.back();
+    //this.location.back();
+    this.router.navigate(['/tsummary']);
+    
+  }
+
+  save() : void {
+    this.accountTransactionService.updateTransaction(this.transaction, this.selTransactionId);
   }
 
 

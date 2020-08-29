@@ -13,6 +13,7 @@ import { HttpResponse } from '@angular/common/http';
 export class TransactionTemplateGroupComponent implements OnInit {
 
   name: string;
+  freqSel: string;
   activeTT: TransactionTemplate;
   listOfTT: TransactionTemplate[] = [];  
 

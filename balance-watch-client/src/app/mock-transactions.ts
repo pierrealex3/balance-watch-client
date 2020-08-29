@@ -7,8 +7,8 @@ export const MOCK_TRANSACTIONS: AccountTransaction[] = [
         amount: 82.23,
         date: new Date(),
         id: 1,
-        note1: 'recurrent',
-        note2: '',
+        note: 'recurrent',
+        noteXtra: '',
         type: 'Muni Tax',
         way: 'D'
     },
@@ -18,8 +18,8 @@ export const MOCK_TRANSACTIONS: AccountTransaction[] = [
         amount: 2525.00,
         date: new Date(),
         id: 2,
-        note1: 'salary',
-        note2: 'early',
+        note: 'salary',
+        noteXtra: 'early',
         type: 'Income',
         way: 'C'
     }

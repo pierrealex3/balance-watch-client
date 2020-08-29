@@ -38,7 +38,18 @@
             <label>Frequency</label>
         </div>
         <div class="col-md-6">
-            <input [(ngModel)]="activeTT.frequency" />
+            <select [(ngModel)]="freqSel">
+                <option></option>
+                <option value="em-dom">Every month - on a specific day</option>
+            </select>            
+        </div>
+    </div>
+    <div *ngIf="freqSel === 'em-dom'" class="row">
+        <div class="col-md-6">
+            <label>Which day?</label>
+        </div>
+        <div class="col-md-6">
+            <input [(ngModel)]="activeTT.frequency" placeholder="dayOfMonth=4"/>
         </div>
     </div>
     <div class="row">
