@@ -63,7 +63,8 @@ component event:	<vehicle-detail (changed)="vehicleChanged"></vehicle-detail>
 // event handling - capture the event target
 <input (change)="logSomething($event.target.value)">Initial</input>
 
-
+// npm update
+npm update // when everything was screwed up compiling after bot updates in github
 
 
 
