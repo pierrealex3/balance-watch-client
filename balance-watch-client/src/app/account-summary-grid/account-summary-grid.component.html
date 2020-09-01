@@ -3,9 +3,22 @@
             <label for="accSelId">Account</label>
         </div>
         <div class="col-md-2">
-            <select id="accSelId" class="form-control">
-                <option selected value="ABC123">ABC123</option>
+            <select id="accSelId" [(ngModel)]="sessionDataService.selAccount" class="form-control">
+                <option value="ABC123">ABC123</option>
+                <option value="UNME3U3">UNME3U3</option>
             </select>
+        </div>
+        <div class="col-md-2">
+            <label for="summaryYear">Year</label>            
+        </div>
+        <div class="col-md-2">
+            <input id="summaryYear" [(ngModel)]="sessionDataService.summaryYear" class="form-control" />
+        </div>
+        <div class="col-md-2">
+            <label for="summaryMonth">Month</label>            
+        </div>
+        <div class="col-md-2">
+            <input id="summaryMonth" [(ngModel)]="sessionDataService.summaryMonth" class="form-control" />
         </div>
 </div>
 <div>

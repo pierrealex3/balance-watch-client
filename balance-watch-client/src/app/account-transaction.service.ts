@@ -17,8 +17,9 @@ export class AccountTransactionService {
 
   constructor(private http: HttpClient) { }
 
-  getTransactions() : Observable<AccountTransaction[]> {
-    return of(MOCK_TRANSACTIONS);
+  getTransactions(year: string, month: string, account:string, callbackFn: (value: TransactionResWrapper) => void) : void {
+    const ot:Observable<TransactionResWrapper[]> = this.http.get<TransactionResWrapper[]>(BASE_URI + 'transactions?year=' + year + '&month=' + month + '&account=' + account);
+    ot.subscribe( t => { t.forEach( callbackFn) });
   }
 
   getTransaction(id: number) : Observable<AccountTransaction> {

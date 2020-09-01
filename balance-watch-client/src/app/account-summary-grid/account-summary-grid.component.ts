@@ -3,6 +3,7 @@ import { AccountTransaction } from '../account-transaction';
 import { AccountTransactionService } from '../account-transaction.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { TransactionResWrapper } from '../service-response-wrappers/transaction-res-wrapper';
+import { SessionDataService } from '../session-data.service';
 
 @Component({
   selector: 'app-account-summary-grid',
@@ -14,10 +15,9 @@ export class AccountSummaryGridComponent implements OnInit {
 selectedTransaction: AccountTransaction;
 transactions: AccountTransaction[] = [];
 
-selMonth: string;
-
   constructor(
     private accountTransactionService:AccountTransactionService,
+    public sessionDataService: SessionDataService,
     private route: ActivatedRoute 
     ) {}
 
@@ -25,8 +25,9 @@ selMonth: string;
     const paramMap:ParamMap = this.route.snapshot.paramMap;
     if (paramMap.keys.length == 0) {
       this.getTransactions();    
-    } else {      
-      this.selMonth = paramMap.get('forMonth');
+    } else {            
+      this.sessionDataService.summaryYear = paramMap.get('forYear');
+      this.sessionDataService.summaryMonth = paramMap.get('forMonth');
       this.getTransactionsFromTemplateGroup(paramMap.get('selGroup'), paramMap.get('forMonth'), paramMap.get('forYear'));
     }
   }
@@ -35,7 +36,9 @@ selMonth: string;
    * Fetches the transactions from the service and updates this component with the fetched data.
    */
   getTransactions() : void {
-    this.accountTransactionService.getTransactions().subscribe( t => this.transactions = t );
+    this.accountTransactionService.getTransactions(this.sessionDataService.summaryYear, this.sessionDataService.summaryMonth, this.sessionDataService.selAccount, t => {
+      this.transactions.push(this.mapFromWrapperToTransaction(t));
+     });
   }
 
   onSelect(t:AccountTransaction) : void {

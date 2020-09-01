@@ -40,7 +40,9 @@ export class AccountTransactionDetailsComponent implements OnInit {
   }
 
   save() : void {
-    this.accountTransactionService.updateTransaction(this.transaction, this.selTransactionId);
+    this.accountTransactionService.updateTransaction(this.transaction, this.selTransactionId).subscribe( r => {
+      this.goBack();
+    });
   }
 
 
