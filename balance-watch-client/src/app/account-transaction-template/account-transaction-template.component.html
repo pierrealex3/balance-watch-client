@@ -1,24 +1,33 @@
-<p></p>
-<div><label>Build for account:</label></div>
-<select [(ngModel)]="selAccount">
-    <option value="ABC123">ABC123</option>
-</select>
-<div></div>
-<div><label>Use transaction template group:</label></div>
-<a routerLink="/ttgroup/0">New</a>
+<div class="container form-group" style="margin-top:15px">
+
+<div>
+    <label for="selAccountId">Build for account</label>
+    <select id="selAccountId" [(ngModel)]="selAccount" class="form-control">
+        <option value="ABC123">ABC123</option>
+    </select>
+</div>
+
+<div>
+    <label>Use transaction template group:</label>
+</div>
+<div>
+        <a class="btn btn-primary" routerLink="/ttgroup/0">New</a>
+</div>
+
 <div *ngIf="ttGroups.length > 0">
-    <select [(ngModel)]="selGroup">
+    <select [(ngModel)]="selGroup" class="form-control">
         <option [selected]="initSelTtGroup == ttg.id" *ngFor="let ttg of ttGroups" [ngValue]="ttg">
             {{ttg.data.description}}
         </option>
     </select>
 </div>
 <br />
-<p>
-    <label for="tgtMonth">Month</label><input [(ngModel)]="tgtMonth" />
-    <label for="tgtYear">Year</label><input [(ngModel)]="tgtYear" />
-</p>
-<p>
-    <a [routerLink]="['/tsummary', {selGroup: selGroup != undefined ? selGroup.id : '', forMonth: tgtMonth, forYear: tgtYear}]">Build</a>    
-</p>
+<div>
+    <label for="tgtMonthId">Month</label><input id="tgtMonthId" [(ngModel)]="tgtMonth" class="form-control"/>
+    <label for="tgtYearId">Year</label><input id="tgtYearId" [(ngModel)]="tgtYear" class="form-control" />
+</div>
+<div>
+    <a class="btn btn-primary" [routerLink]="['/tsummary', {selGroup: selGroup != undefined ? selGroup.id : '', forMonth: tgtMonth, forYear: tgtYear}]">Build</a>    
+</div>
+</div>
 

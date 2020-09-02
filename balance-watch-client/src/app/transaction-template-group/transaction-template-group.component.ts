@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AccountTransactionService } from '../account-transaction.service';
 import { forkJoin, Observable } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
+import { $ } from 'protractor';
 
 @Component({
   selector: 'app-transaction-template-group',

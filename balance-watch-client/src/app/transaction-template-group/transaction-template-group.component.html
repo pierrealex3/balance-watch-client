@@ -1,32 +1,31 @@
-<br />
-<div class="container">
-    <label>Transaction Template Name</label>
-    <input [(ngModel)]="name" />
+<div class="container form-group" style="margin-top:15px">
+    <label for="ttgNameId">Transaction Template Group Name</label>
+    <input id="ttgNameId" class="form-control" [(ngModel)]="name"/>
 </div>
 
 <div class="container">
     <div class="row">
         <div class="col-md-6">
-            <label>Type</label>
+            <label for="ttTypeId">Type</label>
         </div>
         <div class="col-md-6">
-            <input [(ngModel)]="activeTT.type" />
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <label>Amount</label>
-        </div>
-        <div class="col-md-6">
-            <input [(ngModel)]="activeTT.amount" />
+            <input id="ttTypeId" class="form-control" [(ngModel)]="activeTT.type" />
         </div>
     </div>
     <div class="row">
         <div class="col-md-6">
-            <label>Credit or Debit</label>
+            <label for="ttAmtId">Amount</label>
         </div>
         <div class="col-md-6">
-            <select [(ngModel)]="activeTT.way">
+            <input id="ttAmtId" class="form-control" [(ngModel)]="activeTT.amount" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <label for="ttWayId">Credit or Debit</label>
+        </div>
+        <div class="col-md-6">
+            <select id="ttWayId" class="form-control" [(ngModel)]="activeTT.way">
                 <option></option>
                 <option value="CREDIT">Credit</option>
                 <option value="DEBIT">Debit</option>
@@ -35,21 +34,21 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            <label>Frequency</label>
+            <label for="ttFreqSelId">Frequency</label>
         </div>
         <div class="col-md-6">
-            <select [(ngModel)]="freqSel">
+            <select id="ttFreqSelId" class="form-control" [(ngModel)]="activeTT.freqSel">
                 <option></option>
                 <option value="em-dom">Every month - on a specific day</option>
             </select>            
         </div>
     </div>
-    <div *ngIf="freqSel === 'em-dom'" class="row">
+    <div *ngIf="activeTT.freqSel === 'em-dom'" class="row">
         <div class="col-md-6">
             <label>Which day?</label>
         </div>
         <div class="col-md-6">
-            <input [(ngModel)]="activeTT.frequency" placeholder="dayOfMonth=4"/>
+            <input class="form-control" [(ngModel)]="activeTT.frequency" placeholder="dayOfMonth=4"/>
         </div>
     </div>
     <div class="row">
@@ -57,17 +56,17 @@
             <label>Note</label>
         </div>
         <div class="col-md-6">
-            <input [(ngModel)]="activeTT.note" />
+            <input class="form-control" [(ngModel)]="activeTT.note" />
         </div>
     </div>
 </div>
 <div class="container">
-    <button (click)="saveActiveTT()">Add</button>
-    <button (click)="clearFields()">Clear</button>
+    <button class="btn btn-primary" style="margin-right: 5px" (click)="saveActiveTT()">Add</button>
+    <button class="btn btn-primary" (click)="clearFields()">Clear</button>
 </div>
 
-<div id="ttGroupSummary">
-    <table>
+<div id="ttGroupSummary" class="container" style="margin-top: 15px">
+    <table class="table table-hover table-striped table-dark">
         <thead>
             <th>Type</th>
             <th>Amount</th>
@@ -78,7 +77,7 @@
         <tbody>
             <tr *ngFor="let tt of listOfTT" (click)="editTT(tt)">
                 <td>{{tt.type}}</td>
-                <td>{{tt.amount}}</td>
+                <td>{{tt.amount | currency}}</td>
                 <td>{{tt.way}}</td>
                 <td>{{tt.note}}</td>
                 <td>{{tt.frequency}}</td>
@@ -88,6 +87,6 @@
     </table>
 </div>
 
-<div>
-    <button (click)="saveTTGroup()">Generate Template</button>
+<div class="container">
+    <button class="btn btn-primary" (click)="saveTTGroup()">Generate Template</button>
 </div>

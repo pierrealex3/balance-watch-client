@@ -67,4 +67,28 @@ component event:	<vehicle-detail (changed)="vehicleChanged"></vehicle-detail>
 npm update // when everything was screwed up compiling after bot updates in github
 
 
+// built-in directives
+[ngStyle]=
+[ngClass]="{selected: isSelected}"
+
+// alternative to *ngIf when all we want to do is show|hide something and not play with the DOM
+[style.visibility]="isVisible()"
+
+// date pipe
+<p> {{ myDate | date:'yMMMd' }} </p>	// with granular info
+<p> {{ myDate | date:'medium' }} </p>	// preformatted - look at the docs
+
+
+// custom pipe - transform with regex
+lookup for @Pipe({ name: 'xxx'})
+
+// alternative to interface for pojo: class with constructor similar to lombo's @AllArgsConstructor
+export class Character { constructor(public id: number, public name:string){} }
+
+// provide the services throughout the app (to NgModule)
+@NgModule({
+...
+ providers: [MyService],
+... })
+export class AppModule { }
 

@@ -37,9 +37,9 @@
         </thead>
 
         <tr *ngFor="let t of transactions" (click)="onSelect(t)">
-            <td><a routerLink="/tdetail/{{t.id}}">{{t.date}}</a></td>
+            <td [title]="t.date | date:'medium'"><a routerLink="/tdetail/{{t.id}}">{{t.date | date:'fullDate'}}</a></td>
             <td><a routerLink="/tdetail/{{t.id}}">{{t.type}}</a></td>
-            <td><a routerLink="/tdetail/{{t.id}}">{{t.amount}}</a></td>
+            <td><a routerLink="/tdetail/{{t.id}}">{{t.amount | currency}}</a></td>
             <td><a routerLink="/tdetail/{{t.id}}">{{t.way}}</a></td>
             <td><a routerLink="/tdetail/{{t.id}}">{{t.note}}</a></td>
             <td><a routerLink="/tdetail/{{t.id}}">{{t.note2}}</a></td>
