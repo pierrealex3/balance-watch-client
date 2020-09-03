@@ -1,6 +1,7 @@
 # some commands used in the dev process
 ng new balance-watch-client
 ng generate component AccountSummaryGrid
+ng generate component frequency/emdom
 
 <input [(ngModel)]="hero.name" placeholder="name"/>
 import { FormsModule } from '@angular/forms'; // <-- NgModel lives here

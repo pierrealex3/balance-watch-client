@@ -10,6 +10,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AccountTransactionTemplateComponent } from './account-transaction-template/account-transaction-template.component';
 import { TransactionTemplateGroupComponent } from './transaction-template-group/transaction-template-group.component';
 import { TtGroupSummaryComponent } from './tt-group-summary/tt-group-summary.component';
+import { EmdomComponent } from './frequency/emdom/emdom.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { TtGroupSummaryComponent } from './tt-group-summary/tt-group-summary.com
     AccountTransactionDetailsComponent,
     AccountTransactionTemplateComponent,
     TransactionTemplateGroupComponent,
-    TtGroupSummaryComponent
+    TtGroupSummaryComponent,
+    EmdomComponent
   ],
   imports: [
     BrowserModule,

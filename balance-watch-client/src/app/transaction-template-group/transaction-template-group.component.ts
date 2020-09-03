@@ -55,6 +55,7 @@ export class TransactionTemplateGroupComponent implements OnInit {
 
     const ttm:TTMeta = new TTMeta(ttx);
     ttm.id = tt.id;
+    ttm.freqDesc = tt.freqDesc;
     ttm.freqRef = tt.freqRef;
 
     this.activeTT = ttm;

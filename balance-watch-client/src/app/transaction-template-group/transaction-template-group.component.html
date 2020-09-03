@@ -42,13 +42,8 @@
             </select>            
         </div>
     </div>
-    <div *ngIf="activeTT.freqRef?.code === 'em-dom'" class="row">
-        <div class="col-md-6">
-            <label>Which day?</label>
-        </div>
-        <div class="col-md-6">
-            <input class="form-control" [(ngModel)]="activeTT.data.frequency" placeholder="dayOfMonth=4"/>
-        </div>
+    <div *ngIf="activeTT.freqRef?.code === 'em-dom'">
+        <app-emdom [activeTT]="activeTT"></app-emdom>
     </div>
     <div class="row">
         <div class="col-md-6">
