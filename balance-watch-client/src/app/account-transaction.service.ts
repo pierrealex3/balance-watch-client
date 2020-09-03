@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { AccountTransaction } from './account-transaction'
-import { MOCK_TRANSACTIONS } from './mock-transactions';
 import { Observable, of, forkJoin} from 'rxjs';
 import { HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 import { TransactionTemplateGroup } from './transaction-template-group';

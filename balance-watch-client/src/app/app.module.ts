@@ -9,6 +9,7 @@ import { AccountTransactionDetailsComponent } from './account-transaction-detail
 import { AppRoutingModule } from './app-routing.module';
 import { AccountTransactionTemplateComponent } from './account-transaction-template/account-transaction-template.component';
 import { TransactionTemplateGroupComponent } from './transaction-template-group/transaction-template-group.component';
+import { TtGroupSummaryComponent } from './tt-group-summary/tt-group-summary.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { TransactionTemplateGroupComponent } from './transaction-template-group/
     AccountSummaryGridComponent,
     AccountTransactionDetailsComponent,
     AccountTransactionTemplateComponent,
-    TransactionTemplateGroupComponent
+    TransactionTemplateGroupComponent,
+    TtGroupSummaryComponent
   ],
   imports: [
     BrowserModule,

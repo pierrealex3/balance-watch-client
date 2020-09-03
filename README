@@ -92,3 +92,40 @@ export class Character { constructor(public id: number, public name:string){} }
 ... })
 export class AppModule { }
 
+// example of how to use Http @angular/http
+* log at the service level, then decide what action to take at the ui component level.
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/observable/throw';
+
+a =this.http.get('api/end/point')
+	.map( (response:Response) => <MyDtoDomain>response.json() )
+	.catch(this.handleError)
+	.finally( () => this.cleanupStuff() );
+	
+private handleError(error: Response) {
+  let msg = `status code ${error.status} on url ${error.url}`;
+  return Observable.throw(msg);
+}
+
+a.subscribe( d => this.something = d, error => this.errorMsg = <any>error )
+
+// async pipe - alternative to simplify display - just chain the Observable.catch in the UI component.
+@Component
+fList: Observable<MyDomain[]>;
+
+<select>
+	<option *ngFor="let f of fList | async">
+
+
+// @Input() @Output() and @ViewChild(MyComponent)
+@Input 		property binding from parent to child component
+			<my-child [childProp]="parentProp"></my-child>  @Component export class MyChild { @Input() childProp: ChildPropType;  ... }
+@Output 	provide event communication from child to parent component
+			<my-child (childEvent)="parentFunction($event)"</my-child> @Component export class Mychild { @Output() childEvent = new EventEmitter<ChildPropType>(); doSomething() : void { this.childEvent.emit(childProp); } }
+@ViewChild	access child components method/data from parent
+			@Component export class MyParent { @ViewChild(MyChild) childHook: MyChild; }
+
+
+

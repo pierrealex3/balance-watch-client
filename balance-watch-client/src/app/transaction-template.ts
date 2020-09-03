@@ -1,3 +1,5 @@
+import { TTFrequency } from './frequency/tt-frequency';
+
 export interface TransactionTemplate {
     id: number;
     type: string;
