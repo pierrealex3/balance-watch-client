@@ -1,8 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-
+import {MatNativeDateModule} from '@angular/material/core';
 import { AppComponent } from './app.component';
 import { AccountSummaryGridComponent } from './account-summary-grid/account-summary-grid.component';
 import { AccountTransactionDetailsComponent } from './account-transaction-details/account-transaction-details.component';
@@ -11,6 +11,9 @@ import { AccountTransactionTemplateComponent } from './account-transaction-templ
 import { TransactionTemplateGroupComponent } from './transaction-template-group/transaction-template-group.component';
 import { TtGroupSummaryComponent } from './tt-group-summary/tt-group-summary.component';
 import { EmdomComponent } from './frequency/emdom/emdom.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatMaterialModule} from './material-module';
+
 
 @NgModule({
   declarations: [
@@ -26,7 +29,11 @@ import { EmdomComponent } from './frequency/emdom/emdom.component';
     BrowserModule,
     FormsModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MatMaterialModule,
+    MatNativeDateModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
