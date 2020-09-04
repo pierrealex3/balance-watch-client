@@ -41,7 +41,7 @@ export class AccountTransactionService {
     return this.http.get<TransactionTemplateResWrapper[]>(BASE_URI + 'transactionTemplateGroups/' + groupId + '/templates', {observe: "body", responseType: "json"});
   }
 
-  generateTransactions(groupId: string, forMonth: string, forYear: string, callbackFn: (value: TransactionResWrapper) => void) : void {
+  generateTransactions(groupId: string, forMonth: string, forYear: string, callbackFn: () => void) : void {
 
     const fullTransactionObsArr: Observable<TransactionResWrapper[]>[] = [];
 
@@ -53,9 +53,10 @@ export class AccountTransactionService {
 
       forkJoin( fullTransactionObsArr ).subscribe(
         resp => {
-          console.log('how is this different from complete?');
+          console.log('forkJoin resp from account-transaction-service');
           const flatArray: TransactionResWrapper[] = ([] as TransactionResWrapper[]).concat(...resp);
-          flatArray.forEach(callbackFn);        
+          console.log('xtransactions generated = ' + flatArray.length);
+          callbackFn();        
         }
       );
     });

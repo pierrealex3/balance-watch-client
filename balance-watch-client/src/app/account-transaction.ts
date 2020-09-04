@@ -8,4 +8,5 @@ export interface AccountTransaction {
     noteXtra: string;
     account: string;
     accountConnection: string;
+    ttIdGen: number;
 }

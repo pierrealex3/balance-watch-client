@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountTransaction } from '../account-transaction';
 import { AccountTransactionService } from '../account-transaction.service';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { TransactionResWrapper } from '../service-response-wrappers/transaction-res-wrapper';
 import { SessionDataService } from '../session-data.service';
 
@@ -18,7 +18,7 @@ transactions: AccountTransaction[] = [];
   constructor(
     private accountTransactionService:AccountTransactionService,
     public sessionDataService: SessionDataService,
-    private route: ActivatedRoute 
+    private route: ActivatedRoute
     ) {}
 
   ngOnInit() {
@@ -41,13 +41,43 @@ transactions: AccountTransaction[] = [];
      });
   }
 
+  get sortedTransactions() : AccountTransaction[] {
+    return this.transactions.sort( (a, b) => {
+      let aa:Date = new Date(a.date);
+      let bb:Date = new Date(b.date);
+       return aa<bb ? -1 : (aa===bb ? 0 : 1) 
+      });
+  }
+
+  copysortedTransactions() : AccountTransaction[] {
+    return this.transactions.sort( (a, b) => {
+      let aa:Date = new Date(a.date);
+      let bb:Date = new Date(b.date);
+       return aa<bb ? -1 : (aa===bb ? 0 : 1) 
+      });
+  }
+
+  balanceAtIndex(i:number) : number {
+    console.log('balanceAtIndex:' + i);
+    return this.sortedTransactions.slice(0, i+1)
+    .map( at => {return at.way === 'DEBIT' ? at.amount*-1 : at.amount} )
+    .reduce( (pr, cu) => {
+      console.log('pr=' + pr + ' cu=' + cu);
+      return pr + cu
+    } , 0); // TODO replace the 0 initial value by the provided account balance on current month's day-1.
+  }
+
   onSelect(t:AccountTransaction) : void {
     this.selectedTransaction = t;
   }
 
   getTransactionsFromTemplateGroup(groupId:string, month:string, year:string) : void {
-    this.accountTransactionService.generateTransactions(groupId, month, year, i => {
-      this.transactions.push(this.mapFromWrapperToTransaction(i));
+    this.accountTransactionService.generateTransactions(groupId, month, year, () => {      
+
+      this.accountTransactionService.getTransactions(year, month, "ABC123", ii => {
+        console.log('transaction added to list');
+        this.transactions.push(this.mapFromWrapperToTransaction(ii));
+      });
     } );
   }
 
@@ -62,7 +92,8 @@ transactions: AccountTransaction[] = [];
       note: i.data.note,
       noteXtra: i.data.noteXtra,
       account: i.data.account,
-      accountConnection: i.data.accountConnection
+      accountConnection: i.data.accountConnection,
+      ttIdGen: i.data.ttIdGen
     };
     return t;
   }
