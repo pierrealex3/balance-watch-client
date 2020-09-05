@@ -5,8 +5,11 @@
         <input id="tdate" class="form-control" [(ngModel)]="transaction.date" />
     </div>
     <div>
-        <label for="tdorc">Debit|Credit</label>
-        <input id="tdorc" class="form-control" [(ngModel)]="transaction.way" />
+        <label for="tdorc">Debit or Credit</label>
+        <select id="tdorc" class="form-control" [(ngModel)]="transaction.way" >
+            <option value="DEBIT">Debit</option>
+            <option value="CREDIT">Credit</option>
+        </select>
     </div>
     <div>
         <label for="tamt">Amount</label>

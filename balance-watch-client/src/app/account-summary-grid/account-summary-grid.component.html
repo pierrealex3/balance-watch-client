@@ -46,7 +46,7 @@
                 <td><a [ngStyle]="{'color': t.ttIdGen ? '#00d0ff' : '#007bff'}" routerLink="/tdetail/{{t.id}}">{{t.amount | currency}}</a></td>
                 <td><a [ngStyle]="{'color': t.ttIdGen ? '#00d0ff' : '#007bff'}" routerLink="/tdetail/{{t.id}}">{{t.way}}</a></td>
                 <td><a [ngStyle]="{'color': t.ttIdGen ? '#00d0ff' : '#007bff'}" routerLink="/tdetail/{{t.id}}">{{t.note}}</a></td>
-                <td><a [ngStyle]="{'color': t.ttIdGen ? '#00d0ff' : '#007bff'}" routerLink="/tdetail/{{t.id}}">{{t.note2}}</a></td>
+                <td><a [ngStyle]="{'color': t.ttIdGen ? '#00d0ff' : '#007bff'}" routerLink="/tdetail/{{t.id}}">{{t.noteXtra}}</a></td>
                 <td><a [ngStyle]="{'color': t.ttIdGen ? '#00d0ff' : '#007bff'}" routerLink="/tdetail/{{t.id}}">{{t.account}}</a></td>
                 <td><a [ngStyle]="{'color': t.ttIdGen ? '#00d0ff' : '#007bff'}" routerLink="/tdetail/{{t.id}}">{{t.accountConnection}}</a></td>
                 <td [ngStyle]="{'background-color': balanceAtIndex(i) &lt; 0 ? 'red' : ''}">{{balanceAtIndex(i) | currency}}</td>
