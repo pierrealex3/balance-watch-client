@@ -77,6 +77,20 @@ export class AccountTransactionService {
     return this.http.put<HttpResponse<Object>>(BASE_URI + 'transactions/' + id, req, {observe: "body", responseType: "json"});
   }
 
+  addTransaction(t: AccountTransaction) : Observable<HttpResponse<Object>> {
+    const req = {
+      date: t.date,
+      type: t.type,
+      amount: t.amount,
+      way: t.way,
+      note: t.note,
+      noteXtra: t.noteXtra,
+      account: t.account,
+      accountConnection: t.accountConnection
+    }
+    return this.http.post<HttpResponse<Object>>(BASE_URI + 'transactions', req, {observe: "body", responseType: "json"});
+  }
+
 
 
 

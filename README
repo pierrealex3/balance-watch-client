@@ -2,6 +2,10 @@
 ng new balance-watch-client
 ng generate component AccountSummaryGrid
 ng generate component frequency/emdom
+npm i @angular/material-moment-adapter --save
+npm i moment
+
+
 
 <input [(ngModel)]="hero.name" placeholder="name"/>
 import { FormsModule } from '@angular/forms'; // <-- NgModel lives here
@@ -127,6 +131,11 @@ fList: Observable<MyDomain[]>;
 			<my-child (childEvent)="parentFunction($event)"</my-child> @Component export class Mychild { @Output() childEvent = new EventEmitter<ChildPropType>(); doSomething() : void { this.childEvent.emit(childProp); } }
 @ViewChild	access child components method/data from parent
 			@Component export class MyParent { @ViewChild(MyChild) childHook: MyChild; }
+			
 
+// Template variable references
+to reuse a DOM element somewhere else in the same template
+ex: 		<input #fax /> <button (click)="callFax(fax.value)">Fax</button>
+ex alt: 	<input ref-fax /> <button (click)="callFax(fax.value)">Fax</button>
 
 

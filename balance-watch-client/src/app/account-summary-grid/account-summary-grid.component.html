@@ -1,5 +1,5 @@
-<div class="form-group container" style="margin-top: 20px">
-        <div class="col-md-2">
+<div class="form-inline container" style="margin-top: 20px">
+        <div class="col-md-1">
             <label for="accSelId">Account</label>
         </div>
         <div class="col-md-2">
@@ -8,20 +8,23 @@
                 <option value="UNME3U3">UNME3U3</option>
             </select>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-1">
             <label for="summaryYear">Year</label>            
         </div>
-        <div class="col-md-2">
-            <input id="summaryYear" [(ngModel)]="sessionDataService.summaryYear" class="form-control" />
+        <div class="col-md-1">
+            <input id="summaryYear" [(ngModel)]="sessionDataService.summaryYear" class="form-control" style="width:65px"/>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-1">
             <label for="summaryMonth">Month</label>            
         </div>
-        <div class="col-md-2">
-            <input id="summaryMonth" [(ngModel)]="sessionDataService.summaryMonth" class="form-control" />
+        <div class="col-md-1">
+            <input id="summaryMonth" [(ngModel)]="sessionDataService.summaryMonth" (focusout)="getTransactions()" class="form-control" style="width:65px"/>
+        </div>
+        <div class="col-md-2 offset-md-3">
+                <a class="btn btn-primary" routerLink="/tdetail/0" style="display: inline-block;vertical-align: middle;">Add Transaction</a>
         </div>
 </div>
-<div class="container">
+<div class="container" style="margin-top: 20px">
     <table class="table table-hover table-striped table-dark">
         <thead>
             <tr>

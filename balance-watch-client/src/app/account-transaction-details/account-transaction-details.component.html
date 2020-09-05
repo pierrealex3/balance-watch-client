@@ -29,7 +29,8 @@
         <input id="tconn" class="form-control" [(ngModel)]="transaction.accountConnection"/>
     </div>    
     <div style="margin-top:15px">
-        <button class="btn btn-info" style="margin-right:10px" (click)="goBack()">Back</button>
-        <button class="btn btn-info" (click)="save()">Save</button>
+        <button class="btn btn-primary" style="margin-right:10px" (click)="goBack()">Back</button>
+        <button class="btn btn-primary" *ngIf="editMode" (click)="update()">Update</button>
+        <button class="btn btn-primary" *ngIf="!editMode" (click)="add()">Add</button>
     </div>
 </div>

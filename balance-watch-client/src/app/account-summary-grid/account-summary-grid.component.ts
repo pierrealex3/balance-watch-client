@@ -33,23 +33,16 @@ transactions: AccountTransaction[] = [];
   }
 
   /**
-   * Fetches the transactions from the service and updates this component with the fetched data.
+   * Clears the actual transactions and fetches the transactions from the service and updates this component with the fetched data.
    */
   getTransactions() : void {
-    this.accountTransactionService.getTransactions(this.sessionDataService.summaryYear, this.sessionDataService.summaryMonth, this.sessionDataService.selAccount, t => {
+    this.transactions = [];    
+    this.accountTransactionService.getTransactions(this.sessionDataService.summaryYear, this.sessionDataService.summaryMonth, this.sessionDataService.selAccount, t => {      
       this.transactions.push(this.mapFromWrapperToTransaction(t));
      });
   }
 
   get sortedTransactions() : AccountTransaction[] {
-    return this.transactions.sort( (a, b) => {
-      let aa:Date = new Date(a.date);
-      let bb:Date = new Date(b.date);
-       return aa<bb ? -1 : (aa===bb ? 0 : 1) 
-      });
-  }
-
-  copysortedTransactions() : AccountTransaction[] {
     return this.transactions.sort( (a, b) => {
       let aa:Date = new Date(a.date);
       let bb:Date = new Date(b.date);
