@@ -7,6 +7,7 @@ import { HttpResponse } from '@angular/common/http';
 import { TTMeta } from './tt-meta';
 import { globalFrequencyList } from '../frequency/frequency-repo';
 import { TTFrequency } from '../frequency/tt-frequency';
+import { SessionDataService } from '../session-data.service';
 
 @Component({
   selector: 'app-transaction-template-group',
@@ -23,7 +24,8 @@ export class TransactionTemplateGroupComponent implements OnInit {
   seed:number = 0;
 
   constructor(private router: Router,
-    private transactionService: AccountTransactionService) {
+    private transactionService: AccountTransactionService,
+    public sessionDataService: SessionDataService) {
       this.frequencyList = globalFrequencyList;
     }
 
@@ -46,7 +48,7 @@ export class TransactionTemplateGroupComponent implements OnInit {
       'type': tt.data.type,
       'amount': tt.data.amount,
       'way': tt.data.way,
-      'account': 'ABC123',  // TODO adapt
+      'account': this.sessionDataService.selectedAccount.id,
       'frequency': tt.data.frequency,
       'note': tt.data.note,
       'accountConnection': tt.data.accountConnection,
@@ -71,7 +73,7 @@ export class TransactionTemplateGroupComponent implements OnInit {
 
   saveTTGroup() : void {
 
-    this.transactionService.addTtGroup( { 'description': this.name, 'account': 'ABC123' }).subscribe(
+    this.transactionService.addTtGroup( { 'description': this.name, 'account': this.sessionDataService.selectedAccount.id }).subscribe(
       resp => {
         const ttGroupId: string = resp.headers.get("X-Internal-Id");
         console.log('ttgroupid is: ' + ttGroupId);
@@ -85,7 +87,7 @@ export class TransactionTemplateGroupComponent implements OnInit {
               'type': value.type,
               'amount': value.amount,
               'way': value.way,
-              'account': 'ABC123',  // TODO adapt
+              'account': this.sessionDataService.selectedAccount.id,
               'frequency': value.frequency,
               'note': value.note
             },
@@ -119,6 +121,10 @@ export class TransactionTemplateGroupComponent implements OnInit {
 
   activeTTExists() : boolean {
     return this.listOfTT.filter(tt => tt.id == this.activeTT.id).length > 0;
+  }
+
+  goBack() : void {
+    this.router.navigateByUrl("/ttemplate/0");
   }
 
 }

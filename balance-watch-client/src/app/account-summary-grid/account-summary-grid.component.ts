@@ -4,6 +4,7 @@ import { AccountTransactionService } from '../account-transaction.service';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { TransactionResWrapper } from '../service-response-wrappers/transaction-res-wrapper';
 import { SessionDataService } from '../session-data.service';
+import { Account } from '../account';
 
 @Component({
   selector: 'app-account-summary-grid',
@@ -14,6 +15,8 @@ export class AccountSummaryGridComponent implements OnInit {
 
 selectedTransaction: AccountTransaction;
 transactions: AccountTransaction[] = [];
+selectedAccount: Account;
+accountList: Account[] = [];
 
   constructor(
     private accountTransactionService:AccountTransactionService,
@@ -23,23 +26,52 @@ transactions: AccountTransaction[] = [];
 
   ngOnInit() {
     const paramMap:ParamMap = this.route.snapshot.paramMap;
+    this.getAccounts();
     if (paramMap.keys.length == 0) {
       this.getTransactions();    
     } else {            
       this.sessionDataService.summaryYear = paramMap.get('forYear');
       this.sessionDataService.summaryMonth = paramMap.get('forMonth');
       this.getTransactionsFromTemplateGroup(paramMap.get('selGroup'), paramMap.get('forMonth'), paramMap.get('forYear'));
+    }    
+  }
+
+  // TODO this function has a copy within account-transaction-template... think about sharing the code.
+  getAccounts() : void {
+    this.accountList = [];
+    if (this.sessionDataService.selectedAccount != null) {
+      this.accountList.push(this.sessionDataService.selectedAccount);
     }
+    this.accountTransactionService.getAllAccounts(this.sessionDataService.loggedUser).subscribe( (accountWrapperList) => {
+      accountWrapperList.forEach( (aw) => {
+
+        const exAccount = this.accountList.find( (value:Account) => {
+          return value.id == aw.id;
+        });
+
+        if (exAccount) {
+          exAccount.accountNumber = aw.data.accountNumber;
+          exAccount.desc = aw.data.desc;
+        } else {
+          const account = new Account(aw.data.accountNumber, aw.data.desc);
+          account.id = aw.id;
+          this.accountList.push(account);
+        }
+      });      
+    });
+
   }
 
   /**
    * Clears the actual transactions and fetches the transactions from the service and updates this component with the fetched data.
    */
   getTransactions() : void {
-    this.transactions = [];    
-    this.accountTransactionService.getTransactions(this.sessionDataService.summaryYear, this.sessionDataService.summaryMonth, this.sessionDataService.selAccount, t => {      
-      this.transactions.push(this.mapFromWrapperToTransaction(t));
-     });
+    if (this.sessionDataService.selectedAccount) {
+      this.transactions = [];    
+      this.accountTransactionService.getTransactions(this.sessionDataService.summaryYear, this.sessionDataService.summaryMonth, this.sessionDataService.selectedAccount.id, t => {      
+        this.transactions.push(this.mapFromWrapperToTransaction(t));
+      });
+    }
   }
 
   get sortedTransactions() : AccountTransaction[] {
@@ -64,10 +96,14 @@ transactions: AccountTransaction[] = [];
     this.selectedTransaction = t;
   }
 
+  onAccountSelect() : void {    
+    this.sessionDataService.selectedAccount = this.selectedAccount;
+  }
+
   getTransactionsFromTemplateGroup(groupId:string, month:string, year:string) : void {
     this.accountTransactionService.generateTransactions(groupId, month, year, () => {      
 
-      this.accountTransactionService.getTransactions(year, month, "ABC123", ii => {
+      this.accountTransactionService.getTransactions(year, month, this.sessionDataService.selectedAccount.id, ii => {
         console.log('transaction added to list');
         this.transactions.push(this.mapFromWrapperToTransaction(ii));
       });

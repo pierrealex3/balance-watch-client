@@ -18,9 +18,11 @@ export class AccountTransactionService {
 
   constructor(private http: HttpClient) { }
 
-  getTransactions(year: string, month: string, account:string, callbackFn: (value: TransactionResWrapper) => void) : void {
+  getTransactions(year: string, month: string, account:number, callbackFn: (value: TransactionResWrapper) => void) : void {
     const ot:Observable<TransactionResWrapper[]> = this.http.get<TransactionResWrapper[]>(BASE_URI + 'transactions?year=' + year + '&month=' + month + '&account=' + account);
-    ot.subscribe( t => { t.forEach( callbackFn) });
+    ot.subscribe( (t) => {
+       t.forEach( callbackFn) 
+      });
   }
 
   getTransaction(id: number) : Observable<AccountTransaction> {
@@ -35,7 +37,7 @@ export class AccountTransactionService {
     return this.http.post(BASE_URI + 'transactionTemplateGroups/' + ttGroupId + '/templates', tt, {observe: "response"});
   }
 
-  getAllTtGroups(account : string) : Observable<TransactionTemplateGroupResWrapper[]> {
+  getAllTtGroups(account : number) : Observable<TransactionTemplateGroupResWrapper[]> {
     return this.http.get<TransactionTemplateGroupResWrapper[]>(BASE_URI + 'transactionTemplateGroups?account=' + account, { observe: "body", responseType: "json"});
   }
 

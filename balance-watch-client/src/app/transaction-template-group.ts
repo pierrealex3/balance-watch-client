@@ -1,4 +1,4 @@
 export interface TransactionTemplateGroup {
     description: string,
-    account: string
+    account: number
 }

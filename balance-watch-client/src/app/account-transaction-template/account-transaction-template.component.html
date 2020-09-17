@@ -2,18 +2,19 @@
 
 <div>
     <label for="selAccountId">Build for account</label>
-    <select id="selAccountId" [(ngModel)]="selAccount" class="form-control">
-        <option value="ABC123">ABC123</option>
+    <select id="selAccountId" [(ngModel)]="sessionDataService.selectedAccount" (change)="fetchTransactionGroups()" class="form-control">
+        <option *ngFor="let account of accountList" [ngValue]="account">{{account.accountNumber}} - {{account.desc}}</option>
     </select>
 </div>
-
+<div class="spacer20"></div>
 <div>
-    <label>Use transaction template group:</label>
+    <label>Transaction template group:</label>
 </div>
 <div>
         <a class="btn btn-primary" routerLink="/ttgroup/0">New</a>
 </div>
 
+<div class="spacer10"></div>
 <div *ngIf="ttGroups.length > 0">
     <select [(ngModel)]="selGroup" class="form-control">
         <option [selected]="initSelTtGroup == ttg.id" *ngFor="let ttg of ttGroups" [ngValue]="ttg">
@@ -21,11 +22,13 @@
         </option>
     </select>
 </div>
-<br />
+<div class="spacer20"></div>
 <div>
     <label for="tgtMonthId">Month</label><input id="tgtMonthId" [(ngModel)]="tgtMonth" class="form-control"/>
+    <div class="spacer10"></div>
     <label for="tgtYearId">Year</label><input id="tgtYearId" [(ngModel)]="tgtYear" class="form-control" />
 </div>
+<div class="spacer20"></div>
 <div>
     <a class="btn btn-primary" [routerLink]="['/tsummary', {selGroup: selGroup != undefined ? selGroup.id : '', forMonth: tgtMonth, forYear: tgtYear}]">Build</a>    
 </div>

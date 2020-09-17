@@ -10,7 +10,7 @@ export interface TransactionRes {
     way: string;
     note: string;
     noteXtra: string;
-    account: string;
+    account: number;
     accountConnection: string;
     ttIdGen: number;
 }

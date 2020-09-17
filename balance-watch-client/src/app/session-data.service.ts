@@ -1,19 +1,20 @@
 import { Injectable } from '@angular/core';
+import { Account } from '../app/account';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SessionDataService {
 
-  selAccount: string;
+  selectedAccount: Account;
   summaryYear: string;
   summaryMonth: string;
   loggedUser: string;
 
   constructor() {
-    this.selAccount = "ABC123";
+    this.selectedAccount = null;
     this.summaryYear = '2020';
-    this.summaryMonth = '3';
+    this.summaryMonth = '3';    
    }
 
 

@@ -42,7 +42,7 @@ export class AccountTransactionDetailsComponent implements OnInit {
     
     startFromNew() : void {
       this.transaction = {} as AccountTransaction;
-      this.transaction.account = this.sessionData.selAccount;
+      this.transaction.account = this.sessionData.selectedAccount.id;
     }
     
     goBack() : void {

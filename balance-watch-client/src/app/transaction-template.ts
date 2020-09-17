@@ -5,7 +5,7 @@ export interface TransactionTemplate {
     type: string;
     amount: number;
     way: string;
-    account: string;
+    account: number;
     accountConnection: string;
     note: string;
     frequency: string;
