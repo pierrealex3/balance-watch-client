@@ -8,6 +8,7 @@ export class SessionDataService {
   selAccount: string;
   summaryYear: string;
   summaryMonth: string;
+  loggedUser: string;
 
   constructor() {
     this.selAccount = "ABC123";

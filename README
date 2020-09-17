@@ -1,3 +1,20 @@
+# npm (based on pluralsight course and more)
+https://docs.npmjs.com/misc/config 	=> shortcut commands for npm
+https://npmjs.com					=> npm registry: everything that's been published through npm
+	shortcut npmjs.com/package/<pkgname>
+npm init						=> have a project created with the package.json file to start with.
+npm install <pkgname> -D 		=> install it within dev dependencies
+npm list --depth 0
+how package.json ^ vs ~	vs (x or *)			=> caret will limit to minor updates, tilde will limit to revision updates, (x or *) as a whole will always get the most recent version no matter the major.
+npm i <pkgname> -g				=> install packages globally (aka outside of your project)
+npm i <pkgname>@M.m				=> install the most recent patch where minor revision = m
+npm i <pkgname>@M.m.r --save-exact		=> npm will never update this package unless explicitly asked for
+npm update
+npm set|get init-author-name	=> see ~/.npmrc
+npm grunt						=> useful to remove all dependencies that aren't related to the tracked dependencies in the package.json
+npm repo <pkgname>				=> get to the repo i.e. github faster
+npm i npm@latest -g				=> upgrade to the latest version of npm
+
 # some commands used in the dev process
 ng new balance-watch-client
 ng generate component AccountSummaryGrid

@@ -1,0 +1,15 @@
+<div class="container form-group" style="margin-top:20px">
+    <div>
+        <label for="accountNumber">Account Number</label>
+        <input id="accountNumber" title="The account number shall be unique amongst your accounts" class="form-control" [(ngModel)]="selAccount.accountNumber" />
+    </div>
+    <div>
+        <label for="desc">Account Description</label>
+        <input id="desc" title="ex: Personal savings account at Bank XYZ" class="form-control" [(ngModel)]="selAccount.desc" />
+    </div>
+</div>
+<div class="container"  style="margin-top:15px">
+    <a class="btn btn-primary" style="margin-right:10px" (click)="goBack()">Back</a>
+    <a class="btn btn-primary" *ngIf="!editMode" (click)="save()">Save</a>
+    <a class="btn btn-primary" *ngIf="editMode" (click)="update()">Update</a>
+</div>

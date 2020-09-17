@@ -6,6 +6,8 @@ import { TransactionTemplateGroup } from './transaction-template-group';
 import { TransactionTemplateGroupResWrapper } from './service-response-wrappers/transaction-template-group-res-wrapper';
 import { TransactionTemplateResWrapper } from './service-response-wrappers/transaction-template-res-wrapper';
 import { TransactionResWrapper } from './service-response-wrappers/transaction-res-wrapper';
+import { AccountResWrapper } from './service-response-wrappers/account-res-wrapper';
+import { Account } from './account';
 
 const BASE_URI = 'http://localhost:9898/app/'; // TODO export that
 
@@ -61,6 +63,30 @@ export class AccountTransactionService {
       );
     });
     
+  }
+
+  getAllAccounts(userId : string) : Observable<AccountResWrapper[]> {
+    return this.http.get<AccountResWrapper[]>(BASE_URI + 'users/' + userId + '/accounts', { observe: "body", responseType: "json"});
+  }
+
+  getAccount(accountId: number) : Observable<AccountResWrapper> {
+    return this.http.get<AccountResWrapper>(BASE_URI + 'accounts/' + accountId, {observe: "body", responseType: "json"});
+  }
+
+  addAccount(userId: string, account: Account) : Observable<HttpResponse<Object>> {
+    const req = {
+      accountNumber: account.accountNumber,
+      desc: account.desc
+    };
+    return this.http.post<HttpResponse<Object>>(BASE_URI + 'users/' + userId + '/accounts', req, {observe: "body", responseType:"json"});
+  }
+
+  updateAccount(account: Account) : Observable<HttpResponse<Object>> {
+    const req = {
+      accountNumber: account.accountNumber,
+      desc: account.desc
+    };
+    return this.http.put<HttpResponse<Object>>(BASE_URI + 'accounts/' + account.id, req, {observe: "body", responseType: "json"});
   }
 
   updateTransaction(t: AccountTransaction, id: number) : Observable<HttpResponse<Object>> {

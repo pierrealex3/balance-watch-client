@@ -13,6 +13,8 @@ import { TtGroupSummaryComponent } from './tt-group-summary/tt-group-summary.com
 import { EmdomComponent } from './frequency/emdom/emdom.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatMaterialModule} from './material-module';
+import { AccountsHomeComponent } from './accounts-home/accounts-home.component';
+import { AccountEditComponent } from './account-edit/account-edit.component';
 
 
 @NgModule({
@@ -23,7 +25,9 @@ import {MatMaterialModule} from './material-module';
     AccountTransactionTemplateComponent,
     TransactionTemplateGroupComponent,
     TtGroupSummaryComponent,
-    EmdomComponent
+    EmdomComponent,
+    AccountsHomeComponent,
+    AccountEditComponent
   ],
   imports: [
     BrowserModule,
