@@ -1,3 +1,6 @@
+// is this cheating?  use jQuery in ts files...
+import * as $ from 'jquery';
+
 # npm (based on pluralsight course and more)
 https://docs.npmjs.com/misc/config 	=> shortcut commands for npm
 https://npmjs.com					=> npm registry: everything that's been published through npm

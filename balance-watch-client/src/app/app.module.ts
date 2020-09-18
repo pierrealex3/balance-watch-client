@@ -15,6 +15,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatMaterialModule} from './material-module';
 import { AccountsHomeComponent } from './accounts-home/accounts-home.component';
 import { AccountEditComponent } from './account-edit/account-edit.component';
+import { SomHomeComponent } from './som-home/som-home.component';
+import { CurrencyPipe } from '@angular/common';
 
 
 @NgModule({
@@ -27,7 +29,8 @@ import { AccountEditComponent } from './account-edit/account-edit.component';
     TtGroupSummaryComponent,
     EmdomComponent,
     AccountsHomeComponent,
-    AccountEditComponent
+    AccountEditComponent,
+    SomHomeComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +42,9 @@ import { AccountEditComponent } from './account-edit/account-edit.component';
     MatNativeDateModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [
+    CurrencyPipe
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

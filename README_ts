@@ -1,0 +1,10 @@
+-- type script notes
+www.typescriptlang.org
+
+npm install typescript --save-dev
+`tsc app.ts` generates app.js
+
+tsconfig.json -> ts project file
+"./**/*.ts	-> pattern that means search from current directory (.) in a recursive manner (**) for all files ending with .ts (*.ts)
+
+

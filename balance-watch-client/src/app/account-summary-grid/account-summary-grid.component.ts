@@ -13,6 +13,7 @@ import { Account } from '../account';
 })
 export class AccountSummaryGridComponent implements OnInit {
 
+somBalance: number;  
 selectedTransaction: AccountTransaction;
 transactions: AccountTransaction[] = [];
 selectedAccount: Account;
@@ -27,6 +28,8 @@ accountList: Account[] = [];
   ngOnInit() {
     const paramMap:ParamMap = this.route.snapshot.paramMap;
     this.getAccounts();
+    this.getSom();
+    
     if (paramMap.keys.length == 0) {
       this.getTransactions();    
     } else {            
@@ -74,6 +77,11 @@ accountList: Account[] = [];
     }
   }
 
+  getSomAndTransactions() : void {
+    this.getSom();
+    this.getTransactions();
+  }
+
   get sortedTransactions() : AccountTransaction[] {
     return this.transactions.sort( (a, b) => {
       let aa:Date = new Date(a.date);
@@ -89,7 +97,7 @@ accountList: Account[] = [];
     .reduce( (pr, cu) => {
       console.log('pr=' + pr + ' cu=' + cu);
       return pr + cu
-    } , 0); // TODO replace the 0 initial value by the provided account balance on current month's day-1.
+    } , this.somBalance); // this.somBalance is the initial value by the provided account balance on current month's day-1.
   }
 
   onSelect(t:AccountTransaction) : void {
@@ -110,6 +118,16 @@ accountList: Account[] = [];
     } );
   }
 
+  getSom() : void {
+    if (this.sessionDataService.selectedAccount) {
+      this.accountTransactionService.getTBoard(+this.sessionDataService.summaryYear, +this.sessionDataService.summaryMonth, this.sessionDataService.selectedAccount.id).subscribe( (res) => {
+          this.somBalance = res.startAmt;
+      }, (err) => {
+        this.somBalance = 0;
+      });
+    }
+  }
+
   // refactor this mapper somewhere else
   mapFromWrapperToTransaction(i: TransactionResWrapper) : AccountTransaction {
     const t: AccountTransaction = {
@@ -125,6 +143,10 @@ accountList: Account[] = [];
       ttIdGen: i.data.ttIdGen
     };
     return t;
+  }
+
+  accountYearMonthAvail() : boolean {
+    return this.sessionDataService.selectedAccount != null && this.sessionDataService.summaryYear != null && this.sessionDataService.summaryMonth != null;
   }
 
 

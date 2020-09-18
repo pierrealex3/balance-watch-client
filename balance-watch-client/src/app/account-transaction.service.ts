@@ -8,6 +8,8 @@ import { TransactionTemplateResWrapper } from './service-response-wrappers/trans
 import { TransactionResWrapper } from './service-response-wrappers/transaction-res-wrapper';
 import { AccountResWrapper } from './service-response-wrappers/account-res-wrapper';
 import { Account } from './account';
+import { MatMultiYearView } from '@angular/material/datepicker';
+import { TBoard } from './tboard';
 
 const BASE_URI = 'http://localhost:9898/app/'; // TODO export that
 
@@ -119,9 +121,26 @@ export class AccountTransactionService {
     return this.http.post<HttpResponse<Object>>(BASE_URI + 'transactions', req, {observe: "body", responseType: "json"});
   }
 
+  addSomBalance(somBalance: number, year: number, month: number, account: number) : Observable<HttpResponse<Object>> {
+    const req = {
+      year: year,
+      month: month,
+      startAmt: somBalance,
+      account: account
+    };
+    return this.http.post<HttpResponse<Object>>(BASE_URI + 'transactionBoards', req, {observe: "body", responseType: "json"});
+  }
 
+  /**
+   * Update transaction board is quite special because its has a composite primary key which is a subset of its data members.
+   * @param req 
+   */
+  updSomBalance(req: TBoard) : Observable<HttpResponse<Object>> {
+    return this.http.put<HttpResponse<Object>>(BASE_URI + 'transactionBoards', req, {observe: "body", responseType: "json"});
+  }
 
-
-
+  getTBoard(year: number, month: number, account: number) : Observable<TBoard> {
+    return this.http.get<TBoard>(BASE_URI + 'transactionBoards/' + year + '/' + month + '/' + account, {observe: "body", responseType: "json"});
+  }
 
 }
