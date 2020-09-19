@@ -7,4 +7,15 @@ npm install typescript --save-dev
 tsconfig.json -> ts project file
 "./**/*.ts	-> pattern that means search from current directory (.) in a recursive manner (**) for all files ending with .ts (*.ts)
 
+// string formatting using backticks (new in es5)
+let name: string = 'mike'; console.log(`Say hello to ${name} !`);
+
+// casting (2 syntax)
+let value: any = 5;
+let f: string = (<number>value).toFixed(4);
+OR
+let f: string = (value as number).toFixed(4);
+
+// typeof a.k.a java's instanceof
+if (typeof m === 'string') {...}
 
