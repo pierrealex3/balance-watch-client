@@ -11,6 +11,6 @@ export interface TransactionRes {
     note: string;
     noteXtra: string;
     account: number;
-    accountConnection: string;
+    accountConnection: number;
     ttIdGen: number;
 }

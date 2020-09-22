@@ -19,3 +19,11 @@ let f: string = (value as number).toFixed(4);
 // typeof a.k.a java's instanceof
 if (typeof m === 'string') {...}
 
+// accessor functions ??? how are they used tho ???
+get tilte() : string
+set title(s: string) : void
+
+// static members
+static myVar L string = 'allo';
+
+

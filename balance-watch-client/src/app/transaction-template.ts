@@ -6,7 +6,7 @@ export interface TransactionTemplate {
     amount: number;
     way: string;
     account: number;
-    accountConnection: string;
+    accountConnection: number;
     note: string;
     frequency: string;
 }

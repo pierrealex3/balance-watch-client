@@ -7,6 +7,6 @@ export interface AccountTransaction {
     note: string;
     noteXtra: string;
     account: number;
-    accountConnection: string;
+    accountConnection: number;
     ttIdGen: number;
 }
