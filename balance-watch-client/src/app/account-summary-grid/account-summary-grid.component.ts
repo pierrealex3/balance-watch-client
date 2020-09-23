@@ -149,5 +149,4 @@ accountList: Account[] = [];
     return this.sessionDataService.selectedAccount != null && this.sessionDataService.summaryYear != null && this.sessionDataService.summaryMonth != null;
   }
 
-
 }

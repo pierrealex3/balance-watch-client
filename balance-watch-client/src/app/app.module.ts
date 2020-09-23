@@ -17,6 +17,7 @@ import { AccountsHomeComponent } from './accounts-home/accounts-home.component';
 import { AccountEditComponent } from './account-edit/account-edit.component';
 import { SomHomeComponent } from './som-home/som-home.component';
 import { CurrencyPipe } from '@angular/common';
+import { MonthSelectorComponent } from './month-selector/month-selector.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { CurrencyPipe } from '@angular/common';
     EmdomComponent,
     AccountsHomeComponent,
     AccountEditComponent,
-    SomHomeComponent
+    SomHomeComponent,
+    MonthSelectorComponent
   ],
   imports: [
     BrowserModule,
