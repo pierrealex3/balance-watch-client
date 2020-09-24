@@ -10,6 +10,7 @@ import { AccountResWrapper } from './service-response-wrappers/account-res-wrapp
 import { Account } from './account';
 import { MatMultiYearView } from '@angular/material/datepicker';
 import { TBoard } from './tboard';
+import { throwMatDialogContentAlreadyAttachedError } from '@angular/material/dialog';
 
 const BASE_URI = 'http://localhost:9898/app/'; // TODO export that
 
@@ -31,12 +32,33 @@ export class AccountTransactionService {
     return this.http.get<AccountTransaction>(BASE_URI + 'transactions/' + id);
   }
 
+  /**
+   * Convenient bridge for callers.
+   * @param ttGroup 
+   * @param ttGroupId 
+   */
+  addOrUpdateTtGroup(ttGroup: TransactionTemplateGroup, ttGroupId?: number) {
+    if (ttGroupId) { 
+      return this.updateTtGroup(ttGroup, ttGroupId);
+    } else {
+      return this.addTtGroup(ttGroup);
+    }
+  }
+
   addTtGroup(ttGroup: TransactionTemplateGroup) : Observable<HttpResponse<Object>> {
     return this.http.post(BASE_URI + 'transactionTemplateGroups', ttGroup, {observe: "response" });
   }
 
+  updateTtGroup(ttGroup: TransactionTemplateGroup, ttGroupId: number) : Observable<HttpResponse<Object>> {
+    return this.http.put<HttpResponse<Object>>(BASE_URI + 'transactionTemplateGroups/' + ttGroupId, ttGroup, {observe: "response"});
+  }
+
   addTt(tt: Object, ttGroupId: string) : Observable<HttpResponse<Object>> {
     return this.http.post(BASE_URI + 'transactionTemplateGroups/' + ttGroupId + '/templates', tt, {observe: "response"});
+  }
+
+  updateTT(tt: Object, ttId: number) : Observable<HttpResponse<Object>> {
+    return this.http.put<HttpResponse<Object>>(BASE_URI + 'transactionsTemplates/' + ttId, tt, {observe: "response"});
   }
 
   getAllTtGroups(account : number) : Observable<TransactionTemplateGroupResWrapper[]> {

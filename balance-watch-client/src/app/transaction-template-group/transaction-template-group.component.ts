@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TransactionTemplate } from '../transaction-template';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AccountTransactionService } from '../account-transaction.service';
 import { forkJoin, Observable } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
@@ -8,6 +8,8 @@ import { TTMeta } from './tt-meta';
 import { globalFrequencyList } from '../frequency/frequency-repo';
 import { TTFrequency } from '../frequency/tt-frequency';
 import { SessionDataService } from '../session-data.service';
+import { TransactionTemplateGroupResWrapper } from '../service-response-wrappers/transaction-template-group-res-wrapper';
+import { TransactionTemplateResWrapper } from '../service-response-wrappers/transaction-template-res-wrapper';
 
 @Component({
   selector: 'app-transaction-template-group',
@@ -17,6 +19,8 @@ import { SessionDataService } from '../session-data.service';
 export class TransactionTemplateGroupComponent implements OnInit {
 
   name: string;
+  ttgId: number;
+
   activeTT: TTMeta;
   listOfTT: TTMeta[] = [];  
   frequencyList:TTFrequency[] = [];
@@ -24,13 +28,19 @@ export class TransactionTemplateGroupComponent implements OnInit {
   seed:number = 0;
 
   constructor(private router: Router,
+    private activatedRoute: ActivatedRoute,
     private transactionService: AccountTransactionService,
     public sessionDataService: SessionDataService) {
       this.frequencyList = globalFrequencyList;
     }
 
   ngOnInit() {
-    this.clearFields();    
+    this.ttgId = +this.activatedRoute.snapshot.paramMap.get('id');    
+    this.clearFields();
+
+    if (this.ttgId > 0) {
+      this.renderEdit();
+    }
   }
 
   saveActiveTT(): void {
@@ -52,12 +62,11 @@ export class TransactionTemplateGroupComponent implements OnInit {
       'frequency': tt.data.frequency,
       'note': tt.data.note,
       'accountConnection': tt.data.accountConnection,
-      'id': tt.data.id  // TODO re-think this param
+      'id': tt.data.id
     }
 
     const ttm:TTMeta = new TTMeta(ttx);
-    ttm.id = tt.id;
-    ttm.freqDesc = tt.freqDesc;
+    ttm.id = tt.id;    
     ttm.freqRef = tt.freqRef;
 
     this.activeTT = ttm;
@@ -73,26 +82,30 @@ export class TransactionTemplateGroupComponent implements OnInit {
 
   saveTTGroup() : void {
 
-    this.transactionService.addTtGroup( { 'description': this.name, 'account': this.sessionDataService.selectedAccount.id }).subscribe(
+    this.transactionService.addOrUpdateTtGroup( { 'description': this.name, 'account': this.sessionDataService.selectedAccount.id }, this.ttgId>0 ? this.ttgId : undefined).subscribe(
       resp => {
-        const ttGroupId: string = resp.headers.get("X-Internal-Id");
+        const ttGroupId: string = this.ttgId>0 ? ''+this.ttgId :resp.headers.get("X-Internal-Id");
         console.log('ttgroupid is: ' + ttGroupId);
 
         const requestBatch: Observable<HttpResponse<Object>>[] = [];
 
         this.listOfTT.map(meta => meta.data).forEach(value => {
 
-          const postReq: Observable<HttpResponse<Object>> = this.transactionService.addTt(
-            {
-              'type': value.type,
-              'amount': value.amount,
-              'way': value.way,
-              'account': this.sessionDataService.selectedAccount.id,
-              'frequency': value.frequency,
-              'note': value.note
-            },
-            ttGroupId
-          );
+          let postReq: Observable<HttpResponse<Object>>;
+          const reqBody: Object = {
+            'type': value.type,
+            'amount': value.amount,
+            'way': value.way,
+            'account': this.sessionDataService.selectedAccount.id,
+            'frequency': value.frequency,
+            'note': value.note
+          };
+
+          if (value.id) {
+            postReq = this.transactionService.updateTT(reqBody, value.id);
+          } else {
+            postReq = this.transactionService.addTt(reqBody, ttGroupId);
+          }
 
           requestBatch.push(postReq);
         });
@@ -125,6 +138,56 @@ export class TransactionTemplateGroupComponent implements OnInit {
 
   goBack() : void {
     this.router.navigateByUrl("/ttemplate/0");
+  }
+
+  renderEdit() : void {
+    this.transactionService.getAllTtGroups(this.sessionDataService.selectedAccount.id).subscribe( res => {
+      let ttgW : TransactionTemplateGroupResWrapper = res.find( value => { return value.id === this.ttgId } );
+      this.name = ttgW.data.description;
+
+      this.transactionService.getAllTt(''+this.ttgId).subscribe( resArr => {
+        resArr.forEach( res => {          
+          this.listOfTT.push( this.buildTtMetaFromTt(res));
+          // map 
+        });
+
+        // adjust seed - once all ref data is loaded and TTMeta models are built        
+        this.activeTT.id = this.seed;
+      });
+
+    });
+  }
+
+  buildTtMetaFromTt(ttw: TransactionTemplateResWrapper) : TTMeta {
+    let ttMeta: TTMeta = new TTMeta(this.mapTTResWrapperToTT(ttw));
+    this.mapFreqBeToFreqFe(ttMeta);
+    ttMeta.id = this.seed++;
+    return ttMeta;
+  }
+
+  mapTTResWrapperToTT(ttw: TransactionTemplateResWrapper) : TransactionTemplate {
+    let tt : TransactionTemplate = {
+      account: ttw.data.account,
+      accountConnection: ttw.data.accountConnection,
+      amount: ttw.data.amount,
+      frequency: ttw.data.frequency,
+      id: ttw.id,
+      note: ttw.data.note,
+      type: ttw.data.type,
+      way: ttw.data.way
+    }
+
+    return tt;
+  }
+
+  /**
+   * Maps the frequencyCode obtained from the DTO to its static algo identifier.
+   * @param freqCode 
+   * @param ttMeta 
+   */
+  mapFreqBeToFreqFe(ttMeta: TTMeta) : void {
+    let freqMatch: TTFrequency = globalFrequencyList.find( freq => freq.regex.test(ttMeta.data.frequency) );
+    ttMeta.freqRef = freqMatch;
   }
 
 }

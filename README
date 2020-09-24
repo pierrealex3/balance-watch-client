@@ -158,4 +158,13 @@ to reuse a DOM element somewhere else in the same template
 ex: 		<input #fax /> <button (click)="callFax(fax.value)">Fax</button>
 ex alt: 	<input ref-fax /> <button (click)="callFax(fax.value)">Fax</button>
 
+// template reference variables
+ex: <form #form="ngForm">
+here #form is the template ref variable pointing to the ngForm directive.
 
+// copy object data
+-- shallow copy: simple object with primitive values
+originalSetting: UserSettings = { a: 'val', b: true };
+copyOfOriginal: UserSettings = { ...this.originalSetting };
+	
+-- deep copy @see low dash with its deep clone function

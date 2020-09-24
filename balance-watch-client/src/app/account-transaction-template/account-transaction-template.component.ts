@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountTransactionService } from '../account-transaction.service';
 import { TransactionTemplateGroupResWrapper } from '../service-response-wrappers/transaction-template-group-res-wrapper';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TransactionTemplateGroup } from '../transaction-template-group';
 import { SessionDataService } from '../session-data.service';
 import { Account } from '../account';
@@ -24,7 +24,8 @@ export class AccountTransactionTemplateComponent implements OnInit {
   constructor(
     private transactionService: AccountTransactionService,
     public sessionDataService: SessionDataService,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private router: Router) { }
 
   ngOnInit() {
     const id = +this.route.snapshot.paramMap.get('id');
@@ -65,6 +66,10 @@ export class AccountTransactionTemplateComponent implements OnInit {
       });      
     });
 
+  }
+
+  editTtGroup() : void {
+    this.router.navigateByUrl(`/ttgroup/${this.selGroup.id}`);
   }
 
 }

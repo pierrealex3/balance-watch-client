@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import {TTMeta} from '../transaction-template-group/tt-meta';
+import { globalFrequencyList } from '../frequency/frequency-repo';
+import { TTFrequency } from '../frequency/tt-frequency';
 
 @Component({
   selector: 'app-tt-group-summary',
@@ -12,8 +14,11 @@ export class TtGroupSummaryComponent implements OnInit {
   @Output() ttSelected = new EventEmitter<TTMeta>();
   selTT:TTMeta;
 
+  frequencyList:TTFrequency[] = [];
 
-  constructor() { }
+  constructor() {
+    this.frequencyList = globalFrequencyList;
+   }
 
   ngOnInit() {
   }
@@ -22,5 +27,23 @@ export class TtGroupSummaryComponent implements OnInit {
     this.selTT = tt;
     this.ttSelected.emit(this.selTT);
   }
+
+  getDescriptor(ttMeta: TTMeta) : string {
+    let targetFreq: TTFrequency = globalFrequencyList.find( freq => { return freq.code == ttMeta.freqRef.code });
+
+    var tgtRegex = targetFreq.regex;  // forced to do this!  Cannot chain the call for a reason I don't understand yet.
+    if (targetFreq.code === 'em-dom') {
+      
+      var matchRes = tgtRegex.exec(ttMeta.data.frequency);
+      var dayOfMonth:any = matchRes[1];
+      return `Every month - on that specific day: ${dayOfMonth}`;
+    } else {
+      return 'description unavailable';
+    }
+
+
+  }
+
+
 
 }

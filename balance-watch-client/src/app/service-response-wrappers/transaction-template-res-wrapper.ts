@@ -8,11 +8,12 @@ export interface TransactionTemplateRes {
     type: string;
     amount: number;
     way: string;
-    note1: string;
-    account: string;
-    accountConnection: string;
+    note: string;
+    account: number;
+    accountConnection: number;
     spans: Span[];
     reminderTemplate: ReminderTemplate;
+    frequency: string;
 }
 
 export interface Span {

@@ -22,7 +22,6 @@ export class EmdomComponent implements OnInit {
   focusOut() : void {
     // validation : is a number
     this.activeTT.data.frequency = 'dayOfMonth=' + this.dayOfMonth;
-    this.activeTT.freqDesc = "Every month, on this specific day: " + this.dayOfMonth;
   }
 
 }

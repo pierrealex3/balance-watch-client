@@ -3,8 +3,7 @@ import { TTFrequency } from '../frequency/tt-frequency';
 
 export class TTMeta {
     id:number;
-    freqRef:TTFrequency;
-    freqDesc:string;
+    freqRef:TTFrequency;    
     data: TransactionTemplate;
 
     constructor(datax:TransactionTemplate) {

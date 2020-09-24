@@ -11,7 +11,8 @@
     <label>Transaction canvas</label>
 </div>
 <div>
-        <a class="btn btn-primary" routerLink="/ttgroup/0">New</a>
+        <a class="btn btn-primary" routerLink="/ttgroup/0" style="margin-right: 10px">Add</a>
+        <button *ngIf="selGroup" class="btn btn-primary" (click)="editTtGroup()">Edit</button>
 </div>
 
 <div class="spacer10"></div>
