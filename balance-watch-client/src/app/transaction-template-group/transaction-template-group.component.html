@@ -7,12 +7,15 @@
     <div class="row">
         <pre>{{activeTT?.data | json}}</pre>
     </div>
+    <div [hidden]="displayErrBox == false" class="alert alert-danger">
+        Fill all required fields and resubmit.
+    </div>
     <div class="row">
         <div class="col-md-6">
             <label for="ttTypeId">Type</label>
         </div>
         <div class="col-md-6">
-            <input id="ttTypeId" class="form-control" [(ngModel)]="activeTT.data.type" />
+            <input id="ttTypeId" class="form-control" [(ngModel)]="activeTT.data.type" required #hookType="ngModel"/>
         </div>
     </div>
     <div class="spacer5"></div>
@@ -21,7 +24,7 @@
             <label for="ttAmtId">Amount</label>
         </div>
         <div class="col-md-6">
-            <input id="ttAmtId" class="form-control" [(ngModel)]="activeTT.data.amount" />
+            <input id="ttAmtId" class="form-control" [(ngModel)]="activeTT.data.amount" required pattern="\d+(\.\d{2})?" #hookAmount="ngModel" />
         </div>
     </div>
     <div class="spacer5"></div>
@@ -30,7 +33,7 @@
             <label for="ttWayId">Credit or Debit</label>
         </div>
         <div class="col-md-6">
-            <select id="ttWayId" class="form-control" [(ngModel)]="activeTT.data.way">
+            <select id="ttWayId" class="form-control" [(ngModel)]="activeTT.data.way" required #hookWay="ngModel">
                 <option></option>
                 <option value="CREDIT">Credit</option>
                 <option value="DEBIT">Debit</option>
@@ -54,15 +57,15 @@
     <div class="spacer5"></div>
     <div class="row">
         <div class="col-md-6">
-            <label>Note</label>
+            <span><label>Note</label><label style="font-style: italic;">&nbsp;(optional)</label></span>
         </div>
         <div class="col-md-6">
             <input class="form-control" [(ngModel)]="activeTT.data.note" />
         </div>
     </div>
     <div class="spacer5"></div>
-    <button class="btn btn-primary" *ngIf="activeTTExists()" style="margin-right: 10px" (click)="saveActiveTT()">Update</button>
-    <button class="btn btn-primary" *ngIf="!activeTTExists()" style="margin-right: 10px" (click)="saveActiveTT()">Add</button>
+    <button class="btn btn-primary" *ngIf="activeTTExists()" style="margin-right: 10px" (click)="saveActiveTT(hookType, hookAmount, hookWay)">Update</button>
+    <button class="btn btn-primary" *ngIf="!activeTTExists()" style="margin-right: 10px" (click)="saveActiveTT(hookType, hookAmount, hookWay)">Add</button>
     <button class="btn btn-primary" (click)="clearFields()">Clear</button>
 </div>
 

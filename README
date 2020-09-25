@@ -162,9 +162,49 @@ ex alt: 	<input ref-fax /> <button (click)="callFax(fax.value)">Fax</button>
 ex: <form #form="ngForm">
 here #form is the template ref variable pointing to the ngForm directive.
 
+-- view all classes of a dom element by using a template ref var with no value AND calling its className property.
+ex: <input #classTest id="abc" ...
+	<h3>{{ classTest.className }}</h3>
+
+
+// reference ngModel properties for validation
+note: all ngModel properties have an ng- prefix class equivalent on the target element ex: ng-invalid
+
+<input  [(ngModel)]="myField" ... #myTest="ngModel" >
+
+{{myTest.valid}}
+{{myTest.invalid}}
+
+{{myTest.dirty}}
+{{myTest.pristine}}
+{{myTest.touched}}
+{{myTest.untouched}}
+
+// style the invalid controls in the form and/or css - depending on the desired look
+<input required [(ngModel)]="myField" ... #myTest="ngModel" >
+<div [hidden]="myTest.valid || nameField untouched" class="alert alert-danger">
+	This field is required!
+</div>
+
+.ng-invalid:not(form).ng-touched {
+	border: 1px solid red;
+}
+
+//custom validation - pass the NgModel ref into a TS function of the component to see its validity
+<input  [(ngModel)]="myField" ... #myTest="ngModel" (blur)="onBlur(myTest)" >
+
+myTest(NgModel m) {
+	m.valid;
+}
+
+
 // copy object data
 -- shallow copy: simple object with primitive values
 originalSetting: UserSettings = { a: 'val', b: true };
 copyOfOriginal: UserSettings = { ...this.originalSetting };
 	
 -- deep copy @see low dash with its deep clone function
+
+// validation classes in angular
+ng-valid ng-invalid
+

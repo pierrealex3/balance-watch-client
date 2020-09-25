@@ -10,6 +10,7 @@ import { TTFrequency } from '../frequency/tt-frequency';
 import { SessionDataService } from '../session-data.service';
 import { TransactionTemplateGroupResWrapper } from '../service-response-wrappers/transaction-template-group-res-wrapper';
 import { TransactionTemplateResWrapper } from '../service-response-wrappers/transaction-template-res-wrapper';
+import { NgModel } from '@angular/forms';
 
 @Component({
   selector: 'app-transaction-template-group',
@@ -17,6 +18,8 @@ import { TransactionTemplateResWrapper } from '../service-response-wrappers/tran
   styleUrls: ['./transaction-template-group.component.css']
 })
 export class TransactionTemplateGroupComponent implements OnInit {
+
+  displayErrBox: boolean = false;
 
   name: string;
   ttgId: number;
@@ -35,6 +38,7 @@ export class TransactionTemplateGroupComponent implements OnInit {
     }
 
   ngOnInit() {
+
     this.ttgId = +this.activatedRoute.snapshot.paramMap.get('id');    
     this.clearFields();
 
@@ -43,12 +47,17 @@ export class TransactionTemplateGroupComponent implements OnInit {
     }
   }
 
-  saveActiveTT(): void {
-    this.listOfTT = this.listOfTT.filter(tt => tt.id != this.activeTT.id);
-    this.listOfTT.push(this.activeTT);
+  
+  saveActiveTT(hookType: NgModel, hookAmount: NgModel, hookWay: NgModel): void {
 
-    this.seed++;
-    this.clearFields();
+    if (this.validateTt(hookType, hookAmount, hookWay)) {
+      this.listOfTT = this.listOfTT.filter(tt => tt.id != this.activeTT.id);
+      this.listOfTT.push(this.activeTT);
+  
+      this.seed++;
+      this.clearFields();
+    }
+
   }
 
   editTT(tt: TTMeta): void {
@@ -188,6 +197,23 @@ export class TransactionTemplateGroupComponent implements OnInit {
   mapFreqBeToFreqFe(ttMeta: TTMeta) : void {
     let freqMatch: TTFrequency = globalFrequencyList.find( freq => freq.regex.test(ttMeta.data.frequency) );
     ttMeta.freqRef = freqMatch;
+  }
+
+  validateTt(hookType: NgModel, hookAmount: NgModel, hookWay: NgModel) : boolean {
+    console.log('valid type', hookType.valid);
+    console.log('valid amount', hookAmount.valid);
+    console.log('valid way', hookWay.valid);
+    
+    let frequencyValid: boolean = this.activeTT.freqRef ? this.activeTT.freqRef.regex.test(''+this.activeTT.data.frequency) : false;
+    console.log('valid frequency', frequencyValid);
+
+    if (hookType.valid && hookAmount.valid && hookWay.valid && frequencyValid) {
+      this.displayErrBox = false;
+      return true;
+    } else {
+      this.displayErrBox = true;
+      return false;
+    }    
   }
 
 }
