@@ -143,6 +143,10 @@ export class AccountTransactionService {
     return this.http.post<HttpResponse<Object>>(BASE_URI + 'transactions', req, {observe: "body", responseType: "json"});
   }
 
+  deleteTransaction(tid: number) : Observable<HttpResponse<Object>> {
+    return this.http.delete<HttpResponse<Object>>(BASE_URI + 'transactions/' + tid, {observe: "response"});
+  }
+
   addSomBalance(somBalance: number, year: number, month: number, account: number) : Observable<HttpResponse<Object>> {
     const req = {
       year: year,

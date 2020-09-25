@@ -61,7 +61,19 @@ export class AccountTransactionDetailsComponent implements OnInit {
           this.goBack();
         },
         err => console.log(err)
-        );
-      }
-                
+        );     
     }
+    
+    delete() : void {
+      if (confirm("Are you sure you want to delete this transaction?")) {
+        this.accountTransactionService.deleteTransaction(this.selTransactionId).subscribe( 
+          r => {
+            this.goBack();
+          },
+          err => console.log(err)
+          );
+        }
+      }
+
+  }
+    
