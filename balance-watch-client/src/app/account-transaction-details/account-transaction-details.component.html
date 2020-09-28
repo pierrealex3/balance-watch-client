@@ -2,7 +2,15 @@
     
     <div>
         <label for="tdate">Date</label>
-        <input id="tdate" class="form-control" [(ngModel)]="transaction.date" />
+        <input id="tdate" type="text" placeholder="Day of month" class="form-control" bsDatepicker [(ngModel)]="selDate" [minDate]="firstDayOfMonth" [maxDate]="lastDayOfMonth" />
+        <label for="wtime" style="margin-right: 7px;">Time</label>
+        <input [(ngModel)]="timeCheck" type="checkbox" id="wtime" />
+        <div [hidden]="!timeCheck">
+            <timepicker id="ttime" [(ngModel)]="selTime" [showMeridian]="false"></timepicker>
+        </div>
+    </div>
+    <div>
+
     </div>
     <div>
         <label for="tdorc">Debit or Credit</label>

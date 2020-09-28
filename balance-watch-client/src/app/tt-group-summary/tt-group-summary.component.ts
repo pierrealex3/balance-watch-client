@@ -31,12 +31,20 @@ export class TtGroupSummaryComponent implements OnInit {
   getDescriptor(ttMeta: TTMeta) : string {
     let targetFreq: TTFrequency = globalFrequencyList.find( freq => { return freq.code == ttMeta.freqRef.code });
 
-    var tgtRegex = targetFreq.regex;  // forced to do this!  Cannot chain the call for a reason I don't understand yet.
+    let tgtRegex = targetFreq.regex;  // forced to do this!  Cannot chain the call for a reason I don't understand yet.
     if (targetFreq.code === 'em-dom') {
-      
-      var matchRes = tgtRegex.exec(ttMeta.data.frequency);
-      var dayOfMonth:any = matchRes[1];
+      let matchRes = tgtRegex.exec(ttMeta.data.frequency);
+      let dayOfMonth:any = matchRes[1];
       return `Every month - on that specific day: ${dayOfMonth}`;
+    } else if (targetFreq.code === 'ew-dow') {
+      let matchRes = tgtRegex.exec(ttMeta.data.frequency);
+      let dayOfWeek:any = matchRes[1];
+      return `Every week on ${dayOfWeek}`;
+    } else if (targetFreq.code === 'exw-dow') {
+      let matchRes = tgtRegex.exec(ttMeta.data.frequency);
+      let dayOfWeek:any = matchRes[1];
+      let x:any = matchRes[2];
+      return `Every ${x} weeks on ${dayOfWeek}`;
     } else {
       return 'description unavailable';
     }

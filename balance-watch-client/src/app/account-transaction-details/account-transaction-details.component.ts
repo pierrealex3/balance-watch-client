@@ -14,6 +14,13 @@ export class AccountTransactionDetailsComponent implements OnInit {
   transaction:AccountTransaction;
   selTransactionId: number;
   editMode: boolean;
+  timeCheck: boolean;
+
+  firstDayOfMonth:Date;
+  lastDayOfMonth:Date;
+
+  selDate: Date = new Date();
+  selTime: Date = new Date();
   
   constructor(
     private route: ActivatedRoute,
@@ -22,12 +29,17 @@ export class AccountTransactionDetailsComponent implements OnInit {
     private sessionData: SessionDataService
     ) {}
     
-    ngOnInit() {
+    ngOnInit() {      
+      this.firstDayOfMonth = new Date(+this.sessionData.summaryYear, +this.sessionData.summaryMonth-1, 1);
+      this.lastDayOfMonth = new Date(+this.sessionData.summaryYear, +this.sessionData.summaryMonth, 0);
+
       const id = +this.route.snapshot.paramMap.get('id');
+
       if (id != 0) {
         this.editMode = true;
         this.getTransaction(id);
       } else {
+        this.selTime.setHours(0, 0);
         this.editMode = false;        
         this.startFromNew();
       }
@@ -37,6 +49,8 @@ export class AccountTransactionDetailsComponent implements OnInit {
       this.accountTransactionService.getTransaction(id).subscribe( t => {
         this.transaction = t;
         this.selTransactionId = id;
+        this.selDate = new Date(t.date);
+        this.selTime = new Date(t.date);
       } );
     }
     
@@ -50,18 +64,30 @@ export class AccountTransactionDetailsComponent implements OnInit {
     }
     
     update() : void {    
+      this.injectTimeIntoModel();
       this.accountTransactionService.updateTransaction(this.transaction, this.selTransactionId).subscribe( r => {
         this.goBack();
       });
     }
     
     add() : void {
+      this.injectTimeIntoModel();
       this.accountTransactionService.addTransaction(this.transaction).subscribe( 
         r => {
           this.goBack();
         },
         err => console.log(err)
         );     
+    }
+
+    injectTimeIntoModel() : void {
+      let year = this.selDate.getFullYear();
+      let month = this.selDate.getMonth();
+      let day = this.selDate.getDate();
+      let hours = this.selTime.getHours();
+      let minutes = this.selTime.getMinutes();
+
+      this.transaction.date = new Date(year, month, day, hours, minutes);
     }
     
     delete() : void {

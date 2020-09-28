@@ -46,13 +46,19 @@
             <label for="ttFreqSelId">Frequency</label>
         </div>
         <div class="col-md-6">
-            <select id="ttFreqSelId" class="form-control" [(ngModel)]="activeTT.freqRef">
+            <select id="ttFreqSelId" class="form-control" [(ngModel)]="activeTT.freqRef" (change)="onFrequencySelectionChange()">
                 <option *ngFor="let ff of frequencyList" [ngValue]="ff" >{{ff.description}}</option>
             </select>            
         </div>
     </div>
     <div *ngIf="activeTT.freqRef?.code === 'em-dom'">
         <app-emdom [activeTT]="activeTT"></app-emdom>
+    </div>
+    <div *ngIf="activeTT.freqRef?.code === 'ew-dow'">
+        <app-ewdow [activeTT]="activeTT"></app-ewdow>
+    </div>
+    <div *ngIf="activeTT.freqRef?.code === 'exw-dow'">
+        <app-exwdow [activeTT]="activeTT"></app-exwdow>
     </div>
     <div class="spacer5"></div>
     <div class="row">

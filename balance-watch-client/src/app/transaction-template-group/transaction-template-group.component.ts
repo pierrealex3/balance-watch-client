@@ -47,7 +47,7 @@ export class TransactionTemplateGroupComponent implements OnInit {
     }
   }
 
-  
+
   saveActiveTT(hookType: NgModel, hookAmount: NgModel, hookWay: NgModel): void {
 
     if (this.validateTt(hookType, hookAmount, hookWay)) {
@@ -214,6 +214,13 @@ export class TransactionTemplateGroupComponent implements OnInit {
       this.displayErrBox = true;
       return false;
     }    
+  }
+
+  /**
+   * When the frequency selector changes, we want the existing frequency construct to be blanked.
+   */
+  onFrequencySelectionChange() : void {
+    this.activeTT.data.frequency = '';
   }
 
 }

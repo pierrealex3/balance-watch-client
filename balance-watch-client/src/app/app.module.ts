@@ -18,6 +18,11 @@ import { AccountEditComponent } from './account-edit/account-edit.component';
 import { SomHomeComponent } from './som-home/som-home.component';
 import { CurrencyPipe } from '@angular/common';
 import { MonthSelectorComponent } from './month-selector/month-selector.component';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { TimepickerModule } from 'ngx-bootstrap/timepicker';
+import { EwdowComponent } from './frequency/ewdow/ewdow.component';
+import { ExwdowComponent } from './frequency/exwdow/exwdow.component';
+import { SimpleDowComponent } from './frequency/commons/simple-dow/simple-dow.component';
 
 
 @NgModule({
@@ -32,7 +37,8 @@ import { MonthSelectorComponent } from './month-selector/month-selector.componen
     AccountsHomeComponent,
     AccountEditComponent,
     SomHomeComponent,
-    MonthSelectorComponent
+    MonthSelectorComponent,    
+    EwdowComponent, ExwdowComponent, SimpleDowComponent
   ],
   imports: [
     BrowserModule,
@@ -42,7 +48,9 @@ import { MonthSelectorComponent } from './month-selector/month-selector.componen
     BrowserAnimationsModule,
     MatMaterialModule,
     MatNativeDateModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BsDatepickerModule.forRoot(),
+    TimepickerModule.forRoot()
   ],
   providers: [
     CurrencyPipe
