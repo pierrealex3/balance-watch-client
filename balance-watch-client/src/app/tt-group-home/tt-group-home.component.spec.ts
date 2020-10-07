@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TransactionTemplateGroupComponent } from './transaction-template-group.component';
+import { TransactionTemplateGroupComponent } from './tt-group-home.component';
 
 describe('TransactionTemplateGroupComponent', () => {
   let component: TransactionTemplateGroupComponent;

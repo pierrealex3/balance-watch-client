@@ -14,8 +14,8 @@ import { NgModel } from '@angular/forms';
 
 @Component({
   selector: 'app-transaction-template-group',
-  templateUrl: './transaction-template-group.component.html',
-  styleUrls: ['./transaction-template-group.component.css']
+  templateUrl: './tt-group-home.component.html',
+  styleUrls: ['./tt-group-home.component.css']
 })
 export class TransactionTemplateGroupComponent implements OnInit {
 

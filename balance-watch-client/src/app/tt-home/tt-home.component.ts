@@ -8,8 +8,8 @@ import { Account } from '../account';
 
 @Component({
   selector: 'app-account-transaction-template',
-  templateUrl: './account-transaction-template.component.html',
-  styleUrls: ['./account-transaction-template.component.css']
+  templateUrl: './tt-home.component.html',
+  styleUrls: ['./tt-home.component.css']
 })
 export class AccountTransactionTemplateComponent implements OnInit {
     

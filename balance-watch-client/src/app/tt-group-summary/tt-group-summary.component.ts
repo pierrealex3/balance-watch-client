@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import {TTMeta} from '../transaction-template-group/tt-meta';
+import {TTMeta} from '../tt-group-home/tt-meta';
 import { globalFrequencyList } from '../frequency/frequency-repo';
 import { TTFrequency } from '../frequency/tt-frequency';
 

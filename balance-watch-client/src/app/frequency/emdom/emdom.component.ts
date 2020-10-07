@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { TTMeta } from 'src/app/transaction-template-group/tt-meta';
+import { TTMeta } from 'src/app/tt-group-home/tt-meta';
 
 @Component({
   selector: 'app-emdom',
