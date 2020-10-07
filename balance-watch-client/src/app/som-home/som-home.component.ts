@@ -13,6 +13,7 @@ export class SomHomeComponent implements OnInit {
 
   fromPreviousMonth: boolean;
   balanceSom: string = '';
+  balanceSomCalc: number;
 
   year: number;
   month: number;
@@ -32,7 +33,6 @@ export class SomHomeComponent implements OnInit {
     this.account = +this.activatedRoute.snapshot.paramMap.get('account');
 
     this.getSom();
-    this.balanceInput();
   }
 
   goBack() : void {
@@ -44,6 +44,8 @@ export class SomHomeComponent implements OnInit {
     this.transactionService.getTBoard(+this.year, +this.month, this.account).subscribe( (res) => {
       this.editMode = true;
       this.balanceSom = res.startAmt.toString();
+      this.fromPreviousMonth = !res.startAmtMan;
+      this.balanceSomCalc = res.startAmtCalc;
     }, (err) => {
       
     });
@@ -55,7 +57,7 @@ export class SomHomeComponent implements OnInit {
   }
 
   addSomBalance() : void {
-    this.transactionService.addSomBalance(+this.balanceSom, this.year, this.month, this.account).subscribe( (res) => {
+    this.transactionService.addSomBalance(+this.balanceSom, this.year, this.month, this.account, !this.fromPreviousMonth).subscribe( (res) => {
       // TODO add validation
       this.goBack();
     });
@@ -63,7 +65,7 @@ export class SomHomeComponent implements OnInit {
   }
 
   updSomBalance() : void {
-    const req = new TBoard(this.year, this.month, this.account, +this.balanceSom);
+    const req = new TBoard(this.year, this.month, this.account, +this.balanceSom, !this.fromPreviousMonth);
     this.transactionService.updSomBalance(req).subscribe( (res) => {
       // TODO add validation
       this.goBack();

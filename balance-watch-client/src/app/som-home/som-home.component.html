@@ -1,16 +1,13 @@
 <div class="form-group container" style="margin-top:15px">
     <div class="spacer10"></div>
-    <!-- <div>
-        <input type="checkbox" checked data-toggle="toggle" data-on="Yes" data-off="No" />
-    </div> -->
     <div class="custom-control custom-switch">
-        <input id="fromLastMonthx" type="checkbox" class="custom-control-input" [checked]="fromPreviousMonth">
-        <label class="custom-control-label" for="fromLastMonthx">Continue from previous month</label>
+        <input id="fromLastMonthx" type="checkbox" class="custom-control-input" [checked]="fromPreviousMonth" [(ngModel)]="fromPreviousMonth">
+        <label class="custom-control-label" for="fromLastMonthx">Continue from previous month</label>        
     </div>
     <div class="spacer10"></div>
     <div>
         <label for="balanceSomx">Balance at start of month</label>
-        <input id="balanceSomx" class="form-control" [(ngModel)]="balanceSom" (keyup)="balanceInput()"/>
+        <input id="balanceSomx" class="form-control" [(ngModel)]="balanceSom" [disabled]="fromPreviousMonth"/>
     </div>
     <div class="spacer10"></div>
     <div>

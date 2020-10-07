@@ -121,7 +121,7 @@ accountList: Account[] = [];
   getSom() : void {
     if (this.sessionDataService.selectedAccount) {
       this.accountTransactionService.getTBoard(+this.sessionDataService.summaryYear, +this.sessionDataService.summaryMonth, this.sessionDataService.selectedAccount.id).subscribe( (res) => {
-          this.somBalance = res.startAmt;
+          this.somBalance = res.startAmtCalc;
       }, (err) => {
         this.somBalance = 0;
       });
