@@ -12,7 +12,7 @@ import { MatMultiYearView } from '@angular/material/datepicker';
 import { TBoard } from './tboard';
 import { throwMatDialogContentAlreadyAttachedError } from '@angular/material/dialog';
 
-const BASE_URI = 'http://localhost:9898/app/'; // TODO export that
+const BASE_URI = 'http://localhost:9897/mds/'; // This is the proxy-pass PORT
 
 @Injectable({
   providedIn: 'root'

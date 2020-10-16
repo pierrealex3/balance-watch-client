@@ -67,9 +67,9 @@ export class SomHomeComponent implements OnInit {
   updSomBalance() : void {
     const req = new TBoard(this.year, this.month, this.account, +this.balanceSom, !this.fromPreviousMonth);
     this.transactionService.updSomBalance(req).subscribe( (res) => {
-      // TODO add validation
+      // TODO add validation      
       this.goBack();
-    })
+    });
   }
 
   // Learn how to use currency pipe correctly before using this
