@@ -4,13 +4,8 @@ var dowRegex = /(MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY)/;
 
 export const globalFrequencyList: TTFrequency[] = [
     {
-        code: 'em-dom',
-        description: 'Every month - on a specific day',
-        regex: /^dayOfMonth=(\d+)(?:;time=(\d+)h(\d+)m)?$/
-    },
-    {
         code: 'ew-dow',
-        description: 'Once every week',
+        description: 'Once a week',
         regex: /^dayOfWeek=(MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY)\|everyWeek(?:;time=(\d+)h(\d+)m)?$/
     },
     {
@@ -19,15 +14,24 @@ export const globalFrequencyList: TTFrequency[] = [
         regex: /^dayOfWeek=(MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY)\|everyXWeeks=([234])(?:;time=(\d+)h(\d+)m)?$/
     },
     {
-        code: 'ey-doy',
-        description: 'Every year - on a specific day',
-        regex: /^dayOfYear=TBD$/
+        code: 'em-dom',
+        description: 'Once a month: on a specific day',
+        regex: /^dayOfMonth=(\d+)(?:;time=(\d+)h(\d+)m)?$/
+    },
+    {
+        code: 'em-dowadom',
+        description: 'Once a month: on a day of week  - after a specific day of month',
+        regex: /^dayOfWeek=(MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY)\|after\|dayOfMonth=(\d+)(?:;time=(\d+)h(\d+)m)?$/
     },
     {
         code: 'em-domwr',
-        description: 'Every month - on a specific day - may be postponed',
+        description: 'Once a month: on a specific day - with conditions for the day of week',
         regex: /^dayOfMonth=(\d+)(?:;time=(\d+)h(\d+)m)?\|report\|(?:from1=(MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY);to1=(MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY)(?:;from2=(MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY);to2=(MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY)(?:;from3=(MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY);to3=(MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY))?)?)?$/
+    },
+    {
+        code: 'ey-doy',
+        description: 'Once a year: on a specific day',
+        regex: /^dayOfYear=TBD$/
     }
-
 ];
 

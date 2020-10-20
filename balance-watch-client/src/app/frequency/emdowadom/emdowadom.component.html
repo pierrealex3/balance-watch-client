@@ -1,0 +1,18 @@
+<div class="spacer5"></div>
+<div class="row">
+    <div class="col-md-6">
+        <label>Which day of week?</label>
+    </div>
+    <div class="col-md-6">
+        <app-simple-dow [selDow]="dow" (dowChange)="dowChange($event)"></app-simple-dow>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <label>Which day of month?</label>
+    </div>
+    <div class="col-md-6">
+        <input class="form-control" [(ngModel)]="dom" (focusout)="focusOut()" placeholder="Warning: above 28 does not apply to ALL months..."/>
+    </div>
+</div>
+

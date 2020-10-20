@@ -49,6 +49,11 @@ export class TtGroupSummaryComponent implements OnInit {
       let matchRes = tgtRegex.exec(ttMeta.data.frequency);
       let dayOfMonth:any = matchRes[1];
       return `Every month - on day: ${dayOfMonth} - may be postponed`;
+    } else if (targetFreq.code === 'em-dowadom') {
+      let matchRes = tgtRegex.exec(ttMeta.data.frequency);
+      let dayOfWeek:any = matchRes[1];
+      let dayOfMonth:any = matchRes[2];
+      return `Once a month: On ${dayOfWeek} after the ${dayOfMonth}`;
     } else {
       return 'description unavailable';
     }
