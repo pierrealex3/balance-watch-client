@@ -1,0 +1,54 @@
+<div class="spacer5"></div>
+<div class="row">
+    <div class="col-md-6">
+        <label>Which day?</label>
+    </div>
+    <div class="col-md-6">
+        <input class="form-control" [(ngModel)]="dayOfMonth" (focusout)="inputChange()" placeholder="Warning: above 28 does not apply to ALL months..."/>
+    </div>
+</div>
+<div class="spacer5"></div>
+<div class="row">
+    <div class="col-md-3">
+        <label>If day falls on</label>
+    </div>
+    <div class="col-md-3">
+        <app-simple-dow [selDow]="fromDow1" (dowChange)="fromDow1Change($event)"></app-simple-dow>
+    </div>
+    <div class="col-md-3">
+        <label>Then make it</label>
+    </div>
+    <div class="col-md-3">
+        <app-simple-dow [selDow]="toDow1" (dowChange)="toDow1Change($event)"></app-simple-dow>
+    </div>
+</div>
+<div class="spacer5"></div>
+<div class="row">
+    <div class="col-md-3">
+        <label>If day falls on</label>
+    </div>
+    <div class="col-md-3">
+        <app-simple-dow [selDow]="fromDow2" (dowChange)="fromDow2Change($event)"></app-simple-dow>
+    </div>
+    <div class="col-md-3">
+        <label>Then make it</label>
+    </div>
+    <div class="col-md-3">
+        <app-simple-dow [selDow]="toDow2" (dowChange)="toDow2Change($event)"></app-simple-dow>
+    </div>
+</div>
+<div class="spacer5"></div>
+<div class="row">
+    <div class="col-md-3">
+        <label>If day falls on</label>
+    </div>
+    <div class="col-md-3">
+        <app-simple-dow [selDow]="fromDow3" (dowChange)="fromDow3Change($event)"></app-simple-dow>
+    </div>
+    <div class="col-md-3">
+        <label>Then make it</label>
+    </div>
+    <div class="col-md-3">
+        <app-simple-dow [selDow]="toDow3" (dowChange)="toDow3Change($event)"></app-simple-dow>
+    </div>
+</div>

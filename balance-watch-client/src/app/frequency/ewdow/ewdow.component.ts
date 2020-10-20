@@ -16,7 +16,9 @@ export class EwdowComponent implements OnInit {
 
   ngOnInit() {
     let dow:any = this.activeTT.freqRef.regex.exec(this.activeTT.data.frequency);
-    this.dayOfWeek = dow[1];
+    if (dow != null) {
+      this.dayOfWeek = dow[1];
+    }
   }
 
   dowChange(selDow: string) : void {

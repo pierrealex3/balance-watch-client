@@ -35,7 +35,7 @@ export class TtGroupSummaryComponent implements OnInit {
     if (targetFreq.code === 'em-dom') {
       let matchRes = tgtRegex.exec(ttMeta.data.frequency);
       let dayOfMonth:any = matchRes[1];
-      return `Every month - on that specific day: ${dayOfMonth}`;
+      return `Every month - on day: ${dayOfMonth}`;
     } else if (targetFreq.code === 'ew-dow') {
       let matchRes = tgtRegex.exec(ttMeta.data.frequency);
       let dayOfWeek:any = matchRes[1];
@@ -45,6 +45,10 @@ export class TtGroupSummaryComponent implements OnInit {
       let dayOfWeek:any = matchRes[1];
       let x:any = matchRes[2];
       return `Every ${x} weeks on ${dayOfWeek}`;
+    } else if (targetFreq.code === 'em-domwr') {
+      let matchRes = tgtRegex.exec(ttMeta.data.frequency);
+      let dayOfMonth:any = matchRes[1];
+      return `Every month - on day: ${dayOfMonth} - may be postponed`;
     } else {
       return 'description unavailable';
     }

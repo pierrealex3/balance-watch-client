@@ -23,6 +23,7 @@ import { TimepickerModule } from 'ngx-bootstrap/timepicker';
 import { EwdowComponent } from './frequency/ewdow/ewdow.component';
 import { ExwdowComponent } from './frequency/exwdow/exwdow.component';
 import { SimpleDowComponent } from './frequency/commons/simple-dow/simple-dow.component';
+import { EmdomwrComponent } from './frequency/emdomwr/emdomwr.component';
 
 
 @NgModule({
@@ -38,7 +39,7 @@ import { SimpleDowComponent } from './frequency/commons/simple-dow/simple-dow.co
     AccountEditComponent,
     SomHomeComponent,
     MonthSelectorComponent,    
-    EwdowComponent, ExwdowComponent, SimpleDowComponent
+    EwdowComponent, ExwdowComponent, SimpleDowComponent, EmdomwrComponent
   ],
   imports: [
     BrowserModule,

@@ -22,6 +22,11 @@ export const globalFrequencyList: TTFrequency[] = [
         code: 'ey-doy',
         description: 'Every year - on a specific day',
         regex: /^dayOfYear=TBD$/
+    },
+    {
+        code: 'em-domwr',
+        description: 'Every month - on a specific day - may be postponed',
+        regex: /^dayOfMonth=(\d+)(?:;time=(\d+)h(\d+)m)?\|report\|(?:from1=(MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY);to1=(MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY)(?:;from2=(MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY);to2=(MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY)(?:;from3=(MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY);to3=(MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY))?)?)?$/
     }
 
 ];
