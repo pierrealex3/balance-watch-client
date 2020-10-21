@@ -16,8 +16,12 @@ export class TtGroupSummaryComponent implements OnInit {
 
   frequencyList:TTFrequency[] = [];
 
+  // this stuff could be in a ts core lib
+  monthLiterals: string[];
+
   constructor() {
     this.frequencyList = globalFrequencyList;
+    this.monthLiterals = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
    }
 
   ngOnInit() {
@@ -35,25 +39,30 @@ export class TtGroupSummaryComponent implements OnInit {
     if (targetFreq.code === 'em-dom') {
       let matchRes = tgtRegex.exec(ttMeta.data.frequency);
       let dayOfMonth:any = matchRes[1];
-      return `Every month - on day: ${dayOfMonth}`;
+      return `Once a month: on day ${dayOfMonth}`;
     } else if (targetFreq.code === 'ew-dow') {
       let matchRes = tgtRegex.exec(ttMeta.data.frequency);
       let dayOfWeek:any = matchRes[1];
-      return `Every week on ${dayOfWeek}`;
+      return `Once a week on ${dayOfWeek}`;
     } else if (targetFreq.code === 'exw-dow') {
       let matchRes = tgtRegex.exec(ttMeta.data.frequency);
       let dayOfWeek:any = matchRes[1];
       let x:any = matchRes[2];
-      return `Every ${x} weeks on ${dayOfWeek}`;
+      return `Once every ${x} weeks on ${dayOfWeek}`;
     } else if (targetFreq.code === 'em-domwr') {
       let matchRes = tgtRegex.exec(ttMeta.data.frequency);
       let dayOfMonth:any = matchRes[1];
-      return `Every month - on day: ${dayOfMonth} - may be postponed`;
+      return `Once a month on day: ${dayOfMonth} - under some conditions`;
     } else if (targetFreq.code === 'em-dowadom') {
       let matchRes = tgtRegex.exec(ttMeta.data.frequency);
       let dayOfWeek:any = matchRes[1];
       let dayOfMonth:any = matchRes[2];
-      return `Once a month: On ${dayOfWeek} after the ${dayOfMonth}`;
+      return `Once a month on ${dayOfWeek} after the ${dayOfMonth}`;
+    } else if (targetFreq.code === 'ey-doy') {
+      let matchRes = tgtRegex.exec(ttMeta.data.frequency);
+      let month:number = matchRes[1];
+      let day:any = matchRes[2];
+      return `Once a year on ${this.monthLiterals[month-1]} ${day}`;
     } else {
       return 'description unavailable';
     }

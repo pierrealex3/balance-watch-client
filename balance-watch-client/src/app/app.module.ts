@@ -25,6 +25,7 @@ import { ExwdowComponent } from './frequency/exwdow/exwdow.component';
 import { SimpleDowComponent } from './frequency/commons/simple-dow/simple-dow.component';
 import { EmdomwrComponent } from './frequency/emdomwr/emdomwr.component';
 import { EmdowadomComponent } from './frequency/emdowadom/emdowadom.component';
+import { EydoyComponent } from './frequency/eydoy/eydoy.component';
 
 
 @NgModule({
@@ -40,7 +41,7 @@ import { EmdowadomComponent } from './frequency/emdowadom/emdowadom.component';
     AccountEditComponent,
     SomHomeComponent,
     MonthSelectorComponent,    
-    EwdowComponent, ExwdowComponent, SimpleDowComponent, EmdomwrComponent, EmdowadomComponent
+    EwdowComponent, ExwdowComponent, SimpleDowComponent, EmdomwrComponent, EmdowadomComponent, EydoyComponent
   ],
   imports: [
     BrowserModule,

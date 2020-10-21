@@ -31,7 +31,7 @@ export const globalFrequencyList: TTFrequency[] = [
     {
         code: 'ey-doy',
         description: 'Once a year: on a specific day',
-        regex: /^dayOfYear=TBD$/
+        regex: /^dayOfYear=([1-9]|1[012])-([1-9]|[12][0-9]|3[01])(?:;time=(\d+)h(\d+)m)?$/
     }
 ];
 
