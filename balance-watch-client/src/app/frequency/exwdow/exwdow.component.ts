@@ -17,8 +17,10 @@ export class ExwdowComponent implements OnInit {
 
   ngOnInit() {
     let matchRes: any = this.activeTT.freqRef.regex.exec(this.activeTT.data.frequency);
-    this.selDow = matchRes[1];
-    this.selX = matchRes[2];
+    if (matchRes != null) {
+      this.selDow = matchRes[1];
+      this.selX = matchRes[2];
+    }
   }
 
   inputChange() : void {

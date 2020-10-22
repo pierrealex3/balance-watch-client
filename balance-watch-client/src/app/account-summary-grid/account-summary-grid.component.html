@@ -51,14 +51,14 @@
         </thead>
         <tbody>
             <tr *ngFor="let t of sortedTransactions; let i = index" (click)="onSelect(t)">
-                <td [title]="t.date | date:'medium'"><a [ngStyle]="{'color': t.ttIdGen ? '#00d0ff' : '#007bff'}" routerLink="/tdetail/{{t.id}}">{{t.date | date:'fullDate'}}</a></td>
-                <td><a [ngStyle]="{'color': t.ttIdGen ? '#00d0ff' : '#007bff'}" routerLink="/tdetail/{{t.id}}">{{t.type}}</a></td>
-                <td><a [ngStyle]="{'color': t.ttIdGen ? '#00d0ff' : '#007bff'}" routerLink="/tdetail/{{t.id}}">{{t.amount | currency}}</a></td>
-                <td><a [ngStyle]="{'color': t.ttIdGen ? '#00d0ff' : '#007bff'}" routerLink="/tdetail/{{t.id}}">{{t.way}}</a></td>
-                <td><a [ngStyle]="{'color': t.ttIdGen ? '#00d0ff' : '#007bff'}" routerLink="/tdetail/{{t.id}}">{{t.note}}</a></td>
-                <td><a [ngStyle]="{'color': t.ttIdGen ? '#00d0ff' : '#007bff'}" routerLink="/tdetail/{{t.id}}">{{t.noteXtra}}</a></td>
-                <td><a [ngStyle]="{'color': t.ttIdGen ? '#00d0ff' : '#007bff'}" routerLink="/tdetail/{{t.id}}">{{t.account}}</a></td>
-                <td><a [ngStyle]="{'color': t.ttIdGen ? '#00d0ff' : '#007bff'}" routerLink="/tdetail/{{t.id}}">{{t.accountConnection}}</a></td>
+                <td [title]="t.date | date:'medium'"><a [ngStyle]="{'color': t.ttIdGen ? '#f8f9fa' : '#007bff'}" routerLink="/tdetail/{{t.id}}">{{t.date | date:'fullDate'}}</a></td>
+                <td><a [ngStyle]="{'color': t.ttIdGen ? '#f8f9fa' : '#007bff'}" routerLink="/tdetail/{{t.id}}">{{t.type}}</a></td>
+                <td><a [ngStyle]="{'color': t.ttIdGen ? '#f8f9fa' : '#007bff'}" routerLink="/tdetail/{{t.id}}">{{t.amount | currency}}</a></td>
+                <td><a [ngStyle]="{'color': t.ttIdGen ? '#f8f9fa' : '#007bff'}" routerLink="/tdetail/{{t.id}}">{{t.way}}</a></td>
+                <td><a [ngStyle]="{'color': t.ttIdGen ? '#f8f9fa' : '#007bff'}" routerLink="/tdetail/{{t.id}}">{{t.note}}</a></td>
+                <td><a [ngStyle]="{'color': t.ttIdGen ? '#f8f9fa' : '#007bff'}" routerLink="/tdetail/{{t.id}}">{{t.noteXtra}}</a></td>
+                <td><a [ngStyle]="{'color': t.ttIdGen ? '#f8f9fa' : '#007bff'}" routerLink="/tdetail/{{t.id}}">{{t.account}}</a></td>
+                <td><a [ngStyle]="{'color': t.ttIdGen ? '#f8f9fa' : '#007bff'}" routerLink="/tdetail/{{t.id}}">{{t.accountConnection}}</a></td>
                 <td [ngStyle]="{'background-color': balanceAtIndex(i) &lt; 0 ? 'red' : ''}">{{balanceAtIndex(i) | currency}}</td>
             </tr>
         </tbody>

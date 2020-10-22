@@ -84,12 +84,12 @@
     <div class="spacer5"></div>
     <button class="btn btn-primary" *ngIf="activeTTExists()" style="margin-right: 10px" (click)="saveActiveTT(hookType, hookAmount, hookWay)">Update</button>
     <button class="btn btn-primary" *ngIf="!activeTTExists()" style="margin-right: 10px" (click)="saveActiveTT(hookType, hookAmount, hookWay)">Add</button>
-    <button class="btn btn-primary" (click)="clearFields()">Clear</button>
+    <button class="btn btn-primary" (click)="clearFields()">Clear Fields</button>
 </div>
 
 <app-tt-group-summary [allTT]="listOfTT" (ttSelected)=editTT($event)></app-tt-group-summary>
 
 <div class="container" style="padding-left: 0px; padding-right: 0px">
     <a class="btn btn-primary" style="margin-right:10px" (click)="goBack()">Back</a>
-    <button class="btn btn-primary" (click)="saveTTGroup()">Generate Canvas</button>
+    <button *ngIf="listOfTT.length > 0" class="btn btn-primary" (click)="saveTTGroup()">{{ttgId > 0 ? 'Update' : 'Add'}} Canvas</button>
 </div>

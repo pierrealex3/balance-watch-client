@@ -1,25 +1,22 @@
 <div class="spacer5"></div>
 <div class="row">
-    <div class="col-md-2 offset-md-6">
+    <div class="col-md-6">
         <label>Once every</label>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-6">
         <select class="form-control" [(ngModel)]="selX" (change)="inputChange()">
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
+            <option value="2">2 Weeks</option>
+            <option value="3">3 Weeks</option>
+            <option value="4">4 Weeks</option>
         </select>        
-    </div>
-    <div class="col-md-1">
-        <label>weeks</label>
     </div>
 </div>
 <div class="spacer5"></div>
 <div class="row">
-    <div class="col-md-2 offset-md-6">
+    <div class="col-md-6">
         <label>On</label>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-6">
         <app-simple-dow [selDow]="selDow" (dowChange)="dowChange($event)"></app-simple-dow>
     </div>
 </div>

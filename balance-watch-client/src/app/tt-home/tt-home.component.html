@@ -1,18 +1,18 @@
 <div class="container form-group" style="margin-top:15px">
 
 <div>
-    <label for="selAccountId">Build for account</label>
+    <label for="selAccountId">Build For Account</label>
     <select id="selAccountId" [(ngModel)]="sessionDataService.selectedAccount" (change)="fetchTransactionGroups()" class="form-control">
         <option *ngFor="let account of accountList" [ngValue]="account">{{account.accountNumber}} - {{account.desc}}</option>
     </select>
 </div>
 <div class="spacer20"></div>
-<div>
-    <label>Transaction canvas</label>
-</div>
-<div>
+<div *ngIf="sessionDataService.selectedAccount">
+    <label>Transaction Canvas To Build From</label>
+    <div>
         <a class="btn btn-primary" routerLink="/ttgroup/0" style="margin-right: 10px">Add</a>
         <button *ngIf="selGroup" class="btn btn-primary" (click)="editTtGroup()">Edit</button>
+    </div>
 </div>
 
 <div class="spacer10"></div>
@@ -25,9 +25,9 @@
 </div>
 <div class="spacer20"></div>
 <div>
-    <label for="tgtYearId">Year</label><input id="tgtYearId" [(ngModel)]="tgtYear" class="form-control" />
+    <label for="tgtYearId">Target Year</label><input id="tgtYearId" [(ngModel)]="tgtYear" class="form-control" />
     <div class="spacer10"></div>
-    <label for="tgtMonthId">Month</label>
+    <label for="tgtMonthId">Target Month</label>
     <select id="tgtMonthId" [(ngModel)]="tgtMonth" class="form-control">
         <option value="1">January</option>
         <option value="2">February</option>
@@ -45,7 +45,7 @@
 </div>
 <div class="spacer20"></div>
 <div>
-    <a class="btn btn-primary" [routerLink]="['/tsummary', {selGroup: selGroup != undefined ? selGroup.id : '', forMonth: tgtMonth, forYear: tgtYear}]">Build</a>    
+    <a *ngIf="selGroup && sessionDataService.selectedAccount" class="btn btn-primary" [routerLink]="['/tsummary', {selGroup: selGroup != undefined ? selGroup.id : '', forMonth: tgtMonth, forYear: tgtYear}]">Build</a>    
 </div>
 </div>
 
