@@ -103,6 +103,9 @@ npm update // when everything was screwed up compiling after bot updates in gith
 <p> {{ myDate | date:'yMMMd' }} </p>	// with granular info
 <p> {{ myDate | date:'medium' }} </p>	// preformatted - look at the docs
 
+// TitleCase pipe
+{{ myVar || titlecase }}	// transforms AAA into Aaa
+
 
 // custom pipe - transform with regex
 lookup for @Pipe({ name: 'xxx'})

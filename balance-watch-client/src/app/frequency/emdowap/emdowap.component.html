@@ -1,0 +1,27 @@
+<div class="spacer5"></div>
+<div class="row">
+    <div class="col-md-6">
+        <label>Which day?</label>
+    </div>
+    <div class="col-md-6">
+        <app-simple-dow [selDow]="dow" (dowChange)="dowChange($event)"></app-simple-dow>
+    </div>
+</div>
+<div class="spacer5"></div>
+<div *ngIf="dow" class="row">
+    <div class="col-md-6">
+        <label>
+            At which position within the month?
+        </label>
+    </div>
+    <div class="col-md-6">
+        <select class="form-control" [(ngModel)]="position" (change)="inputChange()">
+            <option value="1">1st {{dow | titlecase }} of the month</option>
+            <option value="2">2nd {{dow | titlecase }} of the month</option>
+            <option value="3">3rd {{dow | titlecase}} of the month</option>
+            <option value="4">4th {{dow | titlecase}} of the month</option>
+            <option value="5">5th {{dow | titlecase}} of the month</option>
+            <option value="LAST">Last {{dow | titlecase}} of the month</option>
+        </select>
+    </div>
+</div>

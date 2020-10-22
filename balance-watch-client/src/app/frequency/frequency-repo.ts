@@ -19,6 +19,11 @@ export const globalFrequencyList: TTFrequency[] = [
         regex: /^dayOfMonth=(\d+)(?:;time=(\d+)h(\d+)m)?$/
     },
     {
+        code: 'em-dowap',
+        description: 'Once a month: position in the month for a day of week',
+        regex: /^dayOfWeek=(MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY)(?:;time=(\d+)h(\d+)m)?\|at\|rank=([12345]{1}|LAST)$/
+    },
+    {
         code: 'em-dowadom',
         description: 'Once a month: on a day of week  - after a specific day of month',
         regex: /^dayOfWeek=(MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY)\|after\|dayOfMonth=(\d+)(?:;time=(\d+)h(\d+)m)?$/
