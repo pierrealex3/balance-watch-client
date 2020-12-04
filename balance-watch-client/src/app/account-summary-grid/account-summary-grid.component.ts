@@ -13,42 +13,50 @@ import { Account } from '../account';
 })
 export class AccountSummaryGridComponent implements OnInit {
 
-somBalance: number;  
-selectedTransaction: AccountTransaction;
-transactions: AccountTransaction[] = [];
-selectedAccount: Account;
-accountList: Account[] = [];
+  somBalance: number;
+  selectedTransaction: AccountTransaction;
+  transactions: AccountTransaction[] = [];
+  selectedAccount: Account;
+  accountList: Account[] = [];
+
+  userId: string;
 
   constructor(
-    private accountTransactionService:AccountTransactionService,
+    private accountTransactionService: AccountTransactionService,
     public sessionDataService: SessionDataService,
     private route: ActivatedRoute
-    ) {}
+  ) { }
 
   ngOnInit() {
-    const paramMap:ParamMap = this.route.snapshot.paramMap;
-    this.getAccounts();
-    this.getSom();
-    
-    if (paramMap.keys.length == 0) {
-      this.getTransactions();    
-    } else {            
-      this.sessionDataService.summaryYear = paramMap.get('forYear');
-      this.sessionDataService.summaryMonth = paramMap.get('forMonth');
-      this.getTransactionsFromTemplateGroup(paramMap.get('selGroup'), paramMap.get('forMonth'), paramMap.get('forYear'));
-    }    
+    const paramMap: ParamMap = this.route.snapshot.paramMap;
+
+    this.sessionDataService.authenticatedUser.subscribe(u => {
+      this.userId = u;
+
+      this.getAccounts();
+
+      this.getSom();
+
+      if (paramMap.keys.length == 0) {
+        this.getTransactions();
+      } else {
+        this.sessionDataService.summaryYear = paramMap.get('forYear');
+        this.sessionDataService.summaryMonth = paramMap.get('forMonth');
+        this.getTransactionsFromTemplateGroup(paramMap.get('selGroup'), paramMap.get('forMonth'), paramMap.get('forYear'));
+      }
+    });
   }
 
   // TODO this function has a copy within account-transaction-template... think about sharing the code.
-  getAccounts() : void {
+  getAccounts(): void {
     this.accountList = [];
     if (this.sessionDataService.selectedAccount != null) {
       this.accountList.push(this.sessionDataService.selectedAccount);
     }
-    this.accountTransactionService.getAllAccounts(this.sessionDataService.loggedUser).subscribe( (accountWrapperList) => {
-      accountWrapperList.forEach( (aw) => {
+    this.accountTransactionService.getAllAccounts(this.userId).subscribe((accountWrapperList) => {
+      accountWrapperList.forEach((aw) => {
 
-        const exAccount = this.accountList.find( (value:Account) => {
+        const exAccount = this.accountList.find((value: Account) => {
           return value.id == aw.id;
         });
 
@@ -60,7 +68,7 @@ accountList: Account[] = [];
           account.id = aw.id;
           this.accountList.push(account);
         }
-      });      
+      });
     });
 
   }
@@ -68,60 +76,60 @@ accountList: Account[] = [];
   /**
    * Clears the actual transactions and fetches the transactions from the service and updates this component with the fetched data.
    */
-  getTransactions() : void {
+  getTransactions(): void {
     if (this.sessionDataService.selectedAccount) {
-      this.transactions = [];    
-      this.accountTransactionService.getTransactions(this.sessionDataService.summaryYear, this.sessionDataService.summaryMonth, this.sessionDataService.selectedAccount.id, t => {      
+      this.transactions = [];
+      this.accountTransactionService.getTransactions(this.sessionDataService.summaryYear, this.sessionDataService.summaryMonth, this.sessionDataService.selectedAccount.id, t => {
         this.transactions.push(this.mapFromWrapperToTransaction(t));
       });
     }
   }
 
-  getSomAndTransactions() : void {
+  getSomAndTransactions(): void {
     this.getSom();
     this.getTransactions();
   }
 
-  get sortedTransactions() : AccountTransaction[] {
-    return this.transactions.sort( (a, b) => {
-      let aa:Date = new Date(a.date);
-      let bb:Date = new Date(b.date);
-       return aa<bb ? -1 : (aa===bb ? 0 : 1) 
-      });
+  get sortedTransactions(): AccountTransaction[] {
+    return this.transactions.sort((a, b) => {
+      let aa: Date = new Date(a.date);
+      let bb: Date = new Date(b.date);
+      return aa < bb ? -1 : (aa === bb ? 0 : 1)
+    });
   }
 
-  balanceAtIndex(i:number) : number {
+  balanceAtIndex(i: number): number {
     console.log('balanceAtIndex:' + i);
-    return this.sortedTransactions.slice(0, i+1)
-    .map( at => {return at.way === 'DEBIT' ? at.amount*-1 : at.amount} )
-    .reduce( (pr, cu) => {
-      console.log('pr=' + pr + ' cu=' + cu);
-      return pr + cu
-    } , this.somBalance); // this.somBalance is the initial value by the provided account balance on current month's day-1.
+    return this.sortedTransactions.slice(0, i + 1)
+      .map(at => { return at.way === 'DEBIT' ? at.amount * -1 : at.amount })
+      .reduce((pr, cu) => {
+        console.log('pr=' + pr + ' cu=' + cu);
+        return pr + cu
+      }, this.somBalance); // this.somBalance is the initial value by the provided account balance on current month's day-1.
   }
 
-  onSelect(t:AccountTransaction) : void {
+  onSelect(t: AccountTransaction): void {
     this.selectedTransaction = t;
   }
 
-  onAccountSelect() : void {    
+  onAccountSelect(): void {
     this.sessionDataService.selectedAccount = this.selectedAccount;
   }
 
-  getTransactionsFromTemplateGroup(groupId:string, month:string, year:string) : void {
-    this.accountTransactionService.generateTransactions(groupId, month, year, () => {      
+  getTransactionsFromTemplateGroup(groupId: string, month: string, year: string): void {
+    this.accountTransactionService.generateTransactions(groupId, month, year, () => {
 
       this.accountTransactionService.getTransactions(year, month, this.sessionDataService.selectedAccount.id, ii => {
         console.log('transaction added to list');
         this.transactions.push(this.mapFromWrapperToTransaction(ii));
       });
-    } );
+    });
   }
 
-  getSom() : void {
+  getSom(): void {
     if (this.sessionDataService.selectedAccount) {
-      this.accountTransactionService.getTBoard(+this.sessionDataService.summaryYear, +this.sessionDataService.summaryMonth, this.sessionDataService.selectedAccount.id).subscribe( (res) => {
-          this.somBalance = res.startAmtCalc;
+      this.accountTransactionService.getTBoard(+this.sessionDataService.summaryYear, +this.sessionDataService.summaryMonth, this.sessionDataService.selectedAccount.id).subscribe((res) => {
+        this.somBalance = res.startAmtCalc;
       }, (err) => {
         this.somBalance = 0;
       });
@@ -129,7 +137,7 @@ accountList: Account[] = [];
   }
 
   // refactor this mapper somewhere else
-  mapFromWrapperToTransaction(i: TransactionResWrapper) : AccountTransaction {
+  mapFromWrapperToTransaction(i: TransactionResWrapper): AccountTransaction {
     const t: AccountTransaction = {
       id: i.id,
       date: i.data.date,
@@ -145,7 +153,7 @@ accountList: Account[] = [];
     return t;
   }
 
-  accountYearMonthAvail() : boolean {
+  accountYearMonthAvail(): boolean {
     return this.sessionDataService.selectedAccount != null && this.sessionDataService.summaryYear != null && this.sessionDataService.summaryMonth != null;
   }
 

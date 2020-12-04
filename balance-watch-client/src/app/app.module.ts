@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {MatNativeDateModule} from '@angular/material/core';
 import { AppComponent } from './app.component';
 import { AccountSummaryGridComponent } from './account-summary-grid/account-summary-grid.component';
@@ -27,7 +27,12 @@ import { EmdomwrComponent } from './frequency/emdomwr/emdomwr.component';
 import { EmdowadomComponent } from './frequency/emdowadom/emdowadom.component';
 import { EydoyComponent } from './frequency/eydoy/eydoy.component';
 import { EmdowapComponent } from './frequency/emdowap/emdowap.component';
+import { KeycloakService } from './keycloak.service';
+import { TokenInterceptorService } from './interceptors/token-interceptor.service';
 
+export function kcFactory(keycloakService: KeycloakService) {
+  return () => keycloakService.init();
+}
 
 @NgModule({
   declarations: [
@@ -57,7 +62,19 @@ import { EmdowapComponent } from './frequency/emdowap/emdowap.component';
     TimepickerModule.forRoot()
   ],
   providers: [
-    CurrencyPipe
+    CurrencyPipe,
+    KeycloakService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: kcFactory,
+      deps: [KeycloakService],
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptorService,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

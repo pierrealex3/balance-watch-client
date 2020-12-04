@@ -14,6 +14,8 @@ export class AccountEditComponent implements OnInit {
   editMode: boolean;
   selAccount: Account;
 
+  userId: string;
+
   constructor(
     private transactionService: AccountTransactionService,
     private sessionDataService: SessionDataService,
@@ -21,40 +23,43 @@ export class AccountEditComponent implements OnInit {
     private route: ActivatedRoute
   ) { }
 
-  ngOnInit() {    
-    this.selAccount = {} as Account;
-    const id = +this.route.snapshot.paramMap.get('id');    
-    if (id != 0) {
-      this.editMode = true;
-      this.getAccount(id);
-    } else {      
-      this.editMode = false;              
-    }
+  ngOnInit() {
+    this.sessionDataService.authenticatedUser.subscribe(u => {
+      this.userId = u;
+      this.selAccount = {} as Account;
+      const id = +this.route.snapshot.paramMap.get('id');
+      if (id != 0) {
+        this.editMode = true;
+        this.getAccount(id);
+      } else {
+        this.editMode = false;
+      }
+    });
   }
 
-  getAccount(id: number) : void {
-    this.transactionService.getAccount(id).subscribe( accountWrapper => {
+  getAccount(id: number): void {
+    this.transactionService.getAccount(id).subscribe(accountWrapper => {
       this.selAccount.id = accountWrapper.id;
       this.selAccount.accountNumber = accountWrapper.data.accountNumber;
-      this.selAccount.desc = accountWrapper.data.desc;      
+      this.selAccount.desc = accountWrapper.data.desc;
     });
   }
 
-  save() : void {
-    this.transactionService.addAccount(this.sessionDataService.loggedUser, this.selAccount).subscribe( (res) => {
-      // TODO manage errors
-        this.goBack();
-    });
-  }
-
-  update() : void {
-    this.transactionService.updateAccount(this.selAccount).subscribe( (res) => {
+  save(): void {
+    this.transactionService.addAccount(this.userId, this.selAccount).subscribe((res) => {
       // TODO manage errors
       this.goBack();
     });
   }
 
-  goBack() : void {
+  update(): void {
+    this.transactionService.updateAccount(this.selAccount).subscribe((res) => {
+      // TODO manage errors
+      this.goBack();
+    });
+  }
+
+  goBack(): void {
     this.router.navigate(['/accounts']);
   }
 

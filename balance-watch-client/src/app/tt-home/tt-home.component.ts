@@ -12,14 +12,16 @@ import { Account } from '../account';
   styleUrls: ['./tt-home.component.css']
 })
 export class AccountTransactionTemplateComponent implements OnInit {
-    
+
   ttGroups: TransactionTemplateGroupResWrapper[] = [];
   accountList: Account[];
   initSelTtGroup: number;
-  initSelAccount: string;  
+  initSelAccount: string;
   selGroup: TransactionTemplateGroupResWrapper;
   tgtMonth: string;
   tgtYear: string;
+
+  userId: string;
 
   constructor(
     private transactionService: AccountTransactionService,
@@ -32,26 +34,30 @@ export class AccountTransactionTemplateComponent implements OnInit {
     if (id != 0) {  // TODO lookup for optional route params instead of 0
       this.initSelTtGroup = id;
     }
-    this.getAccounts();
-    this.fetchTransactionGroups();
+
+    this.sessionDataService.authenticatedUser.subscribe(u => {
+      this.userId = u;
+      this.getAccounts();
+      this.fetchTransactionGroups();
+    });
   }
 
-  fetchTransactionGroups() : void {
+  fetchTransactionGroups(): void {
     this.ttGroups = [];
-    this.transactionService.getAllTtGroups(this.sessionDataService.selectedAccount.id).subscribe( res => {
+    this.transactionService.getAllTtGroups(this.sessionDataService.selectedAccount.id).subscribe(res => {
       this.ttGroups = res;
     });
   }
 
-  getAccounts() : void {
+  getAccounts(): void {
     this.accountList = [];
     if (this.sessionDataService.selectedAccount != null) {
       this.accountList.push(this.sessionDataService.selectedAccount);
     }
-    this.transactionService.getAllAccounts(this.sessionDataService.loggedUser).subscribe( (accountWrapperList) => {
-      accountWrapperList.forEach( (aw) => {
+    this.transactionService.getAllAccounts(this.userId).subscribe((accountWrapperList) => {
+      accountWrapperList.forEach((aw) => {
 
-        const exAccount = this.accountList.find( (value:Account) => {
+        const exAccount = this.accountList.find((value: Account) => {
           return value.id == aw.id;
         });
 
@@ -63,12 +69,12 @@ export class AccountTransactionTemplateComponent implements OnInit {
           account.id = aw.id;
           this.accountList.push(account);
         }
-      });      
+      });
     });
 
   }
 
-  editTtGroup() : void {
+  editTtGroup(): void {
     this.router.navigateByUrl(`/ttgroup/${this.selGroup.id}`);
   }
 

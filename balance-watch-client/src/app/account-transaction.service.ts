@@ -170,4 +170,11 @@ export class AccountTransactionService {
     return this.http.get<TBoard>(BASE_URI + 'transactionBoards/' + year + '/' + month + '/' + account, {observe: "body", responseType: "json"});
   }
 
+  addUser(userId: string) : Observable<HttpResponse<Object>> {
+    const req = {
+      id: userId
+    };
+    return this.http.post<HttpResponse<Object>>(BASE_URI + 'users', req, {observe: "body", responseType: "json"});
+  }
+
 }

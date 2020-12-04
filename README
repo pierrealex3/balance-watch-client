@@ -211,3 +211,66 @@ copyOfOriginal: UserSettings = { ...this.originalSetting };
 // validation classes in angular
 ng-valid ng-invalid
 
+#########################
+// angular security 
+#########################
+
+npm install oidc-client  --save
+
+import {UserManager, User} from 'oidc-client';
+
+scope definition: high-level access control identifiers for a backend resource (ex: api endpoint)
+
+login and logout must go to the sts, as sts handles the token expiration.
+
+Wrap the sts interaction within an angular "home-made-authentication" service.
+Send config params to the sts, such as: 
+* the scopes desired for the app (those scopes must be configured on the sts already)
+* an app identifier
+* a redirect uri callback to be used when login is valid.
+* and more, see => https://app.pluralsight.com/course-player?clipId=3296def2-473e-4498-93b7-d8084a231701
+
+Add functions in the AppComponent that interact with the "home-made-authentication" service to check if the user is logged in or not.
+
+Should download FIDDLER, to look at request and responses for the oidc flow.  Way better than what's in the console.
+
+Example of identity server response with a cookie (to prevent the connection page when already logged in)
+Response (302) ---
+
+Location:	http://localhost;4200/signing-callback?code=hjgjgahghjs...
+Set-Cookie: .AspNetCore.Identity.Application=CslkjajdsfhHKJ...
+
+_userManager.signinRedirectCallback( user => {} ) // to be placed in "home-made-authentication" service to update the user field.
+
+In Angular, the component "routed" (as configured in app-routing.module.ts) by the "app-signin-callback URI" provided in the 302 emitted by the STS *must* complete the login before giving back control to the end-user.
+To do so, ngOnInit() {
+	this._authService.completeLogin().then( user => {
+		this._router.navigate(['/'], { replaceUrl:true });	// replaceUrl to remove signingRedirectCallbackComponent FROM THE "BACK NAVIGATION" STACK
+	});	
+ }
+
+Upon authentication, the oidc-client User object contains the id and access bearer tokens.
+
+"home-made-authentication" service logout
+called by logout button click handler ==> this._userManager.signoutRedirect();
+also called after to complete logout (complete from the Angular app standpoint) ==> this._userManager.signoutRedirectCallback();
+
+
+#########################
+// security with KeyCloak 
+#########################
+
+// startup standalone server
+..\bin\standalone.bat -Djboss.socket.binding.port-offset=100
+http://localhost:8180/auth/admin/
+(palemire/cremePoff666)
+
+(user Mr. Pedro Gonzalo) abc@hotmail.com / kodakkkk
+
+// Token endpoint  - access token with permissions (Requesting Party Token aka RPT)
+
+Token Endpoint
+OAuth2 clients (such as front end applications) can obtain access tokens from the server using the token endpoint and use these same tokens to access resources protected by a resource server (such as back end services). In the same way, Keycloak Authorization Services provide extensions to OAuth2 to allow access tokens to be issued based on the processing of all policies associated with the resource(s) or scope(s) being requested. This means that resource servers can enforce access to their protected resources based on the permissions granted by the server and held by an access token. In Keycloak Authorization Services the access token with permissions is called a Requesting Party Token or RPT for short.
+
+// User Realm created from the Master realm: this is what users have access to
+http://localhost:8080/auth/realms/mds/account/

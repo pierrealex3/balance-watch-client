@@ -36,6 +36,21 @@
     font-weight: 600;
   }
 
+  .toolbar-right {
+    height: 60px;
+    margin: 0px;
+    display: flex;
+    align-items: center;
+    background-color: #181c20;
+    color: white;
+    font-weight: 600;
+  }
+
+  .padding-0 {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
   .toolbar img {
     margin: 0 16px;
   }
@@ -289,16 +304,24 @@
 </style>
 
 <!-- Toolbar -->
-<div class="toolbar" role="banner">
-
-  <span class="titlebar-content"><h3 style="color: white; font-family: fantasy; margin-left: 10px">LookingGood</h3></span>
-
-  <span class="titlebar-content"><a style="color: white" routerLink="tsummary">Transactions</a></span>  
-  <span style="margin-right:5px">|</span>
-  <span class="titlebar-content"><a style="color: white" routerLink="ttemplate/0">Build from canvas</a></span>
-  <span style="margin-right:5px">|</span>
-  <span class="titlebar-content"><a style="color: white" routerLink="accounts">Accounts</a></span>
-
+<div class="row">
+  <div class="col-md-11" style="padding-right: 0">
+    <div class="toolbar" role="banner">
+      
+      <span class="titlebar-content"><h3 style="color: white; font-family: fantasy; margin-left: 10px">LookingGood</h3></span>
+      
+      <span class="titlebar-content"><a style="color: white" routerLink="tsummary">Transactions</a></span>  
+      <span style="margin-right:5px">|</span>
+      <span class="titlebar-content"><a style="color: white" routerLink="ttemplate/0">Build from canvas</a></span>
+      <span style="margin-right:5px">|</span>
+      <span class="titlebar-content"><a style="color: white" routerLink="accounts">Accounts</a></span>  
+    </div>
+  </div>
+  <div class="col-md-1 padding-0">
+    <div class="toolbar-right" role="banner">
+      <span class="titlebar-content"><a (click)="logout()" style="color: white">Logout</a></span>
+    </div>
+  </div>
 </div>
 
 <router-outlet></router-outlet>

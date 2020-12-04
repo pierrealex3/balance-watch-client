@@ -26,4 +26,5 @@ set title(s: string) : void
 // static members
 static myVar L string = 'allo';
 
-
+// check not null
+if (!!user)
