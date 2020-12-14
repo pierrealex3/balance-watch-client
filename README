@@ -211,6 +211,16 @@ copyOfOriginal: UserSettings = { ...this.originalSetting };
 // validation classes in angular
 ng-valid ng-invalid
 
+// CORS concerns in Angular ( from https://angular.io/guide/deployment#requesting-services-from-a-different-server-cors )
+Requesting services from a different server (CORS)
+-- links:
+- cross origin resource sharing: https://en.wikipedia.org/wiki/Cross-origin_resource_sharing
+- enable cors for specific servers: https://enable-cors.org/server.html
+- make it work with Spring Security: https://www.baeldung.com/spring-security-cors-preflight
+Angular developers may encounter a cross-origin resource sharing error when making a service request (typically a data service request) to a server other than the application's own host server. Browsers forbid such requests unless the server permits them explicitly.
+
+There isn't anything the client application can do about these errors. The server must be configured to accept the application's requests. Read about how to enable CORS for specific servers at enable-cors.org.
+
 #########################
 // angular security 
 #########################

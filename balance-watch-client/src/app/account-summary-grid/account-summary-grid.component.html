@@ -33,12 +33,10 @@
                 <th>Debit|Credit</th>
                 <th>Note #1</th>
                 <th>Note #2</th>
-                <th>Account</th>
                 <th>Connection</th>
                 <th>Balance</th>
             </tr>
             <tr *ngIf="accountYearMonthAvail()">
-                <th></th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -57,7 +55,6 @@
                 <td><a [ngStyle]="{'color': t.ttIdGen ? '#f8f9fa' : '#007bff'}" routerLink="/tdetail/{{t.id}}">{{t.way}}</a></td>
                 <td><a [ngStyle]="{'color': t.ttIdGen ? '#f8f9fa' : '#007bff'}" routerLink="/tdetail/{{t.id}}">{{t.note}}</a></td>
                 <td><a [ngStyle]="{'color': t.ttIdGen ? '#f8f9fa' : '#007bff'}" routerLink="/tdetail/{{t.id}}">{{t.noteXtra}}</a></td>
-                <td><a [ngStyle]="{'color': t.ttIdGen ? '#f8f9fa' : '#007bff'}" routerLink="/tdetail/{{t.id}}">{{t.account}}</a></td>
                 <td><a [ngStyle]="{'color': t.ttIdGen ? '#f8f9fa' : '#007bff'}" routerLink="/tdetail/{{t.id}}">{{t.accountConnection}}</a></td>
                 <td [ngStyle]="{'background-color': balanceAtIndex(i) &lt; 0 ? 'red' : ''}">{{balanceAtIndex(i) | currency}}</td>
             </tr>

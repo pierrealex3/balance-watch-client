@@ -26,6 +26,9 @@ export class AccountsHomeComponent implements OnInit {
     this.sessionDataService.authenticatedUser.subscribe(u => {
       this.userId = u;
       this.getAllAccountsInScope();
+
+      // TODO test
+      this.accountTransactionService.getAllRelatedAccounts(u).subscribe( x => {} );
     });
   }
 

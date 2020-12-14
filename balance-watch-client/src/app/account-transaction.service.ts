@@ -95,6 +95,10 @@ export class AccountTransactionService {
     return this.http.get<AccountResWrapper[]>(BASE_URI + 'users/' + userId + '/accounts', { observe: "body", responseType: "json"});
   }
 
+  getAllRelatedAccounts(userId : string) : Observable<AccountResWrapper[]> {
+    return this.http.get<AccountResWrapper[]>(BASE_URI + 'users/' + userId + '/relatedAccounts', { observe: "body", responseType: "json"});
+  }
+
   getAccount(accountId: number) : Observable<AccountResWrapper> {
     return this.http.get<AccountResWrapper>(BASE_URI + 'accounts/' + accountId, {observe: "body", responseType: "json"});
   }

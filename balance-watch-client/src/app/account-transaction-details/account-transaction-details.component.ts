@@ -1,8 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AccountTransaction } from '../account-transaction';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AccountTransactionService } from '../account-transaction.service';
 import { SessionDataService } from '../session-data.service';
+import { Account } from '../account';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-account-transaction-details',
@@ -12,6 +14,8 @@ import { SessionDataService } from '../session-data.service';
 export class AccountTransactionDetailsComponent implements OnInit {
   
   transaction:AccountTransaction;
+  connectedAccount: Account;
+
   selTransactionId: number;
   editMode: boolean;
   timeCheck: boolean;
@@ -21,6 +25,10 @@ export class AccountTransactionDetailsComponent implements OnInit {
 
   selDate: Date = new Date();
   selTime: Date = new Date();
+
+  userId: string;
+
+  otherAccounts: Account[] = [];
   
   constructor(
     private route: ActivatedRoute,
@@ -29,20 +37,29 @@ export class AccountTransactionDetailsComponent implements OnInit {
     private sessionData: SessionDataService
     ) {}
     
-    ngOnInit() {      
-      this.firstDayOfMonth = new Date(+this.sessionData.summaryYear, +this.sessionData.summaryMonth-1, 1);
-      this.lastDayOfMonth = new Date(+this.sessionData.summaryYear, +this.sessionData.summaryMonth, 0);
-
-      const id = +this.route.snapshot.paramMap.get('id');
-
-      if (id != 0) {
-        this.editMode = true;
-        this.getTransaction(id);
-      } else {
-        this.selTime.setHours(0, 0);
-        this.editMode = false;        
-        this.startFromNew();
-      }
+    ngOnInit() { 
+      this.sessionData.authenticatedUser.subscribe( u => {
+        this.userId = u;
+        
+        this.firstDayOfMonth = new Date(+this.sessionData.summaryYear, +this.sessionData.summaryMonth-1, 1);
+        this.lastDayOfMonth = new Date(+this.sessionData.summaryYear, +this.sessionData.summaryMonth, 0);
+        
+        this.getSelectableOtherAccounts().subscribe( x => {
+          
+          const id = +this.route.snapshot.paramMap.get('id');
+          
+          if (id != 0) {
+            this.editMode = true;
+            this.getTransaction(id);
+          } else {
+            this.selTime.setHours(0, 0);
+            this.editMode = false;        
+            this.startFromNew();
+          }
+          
+        });
+        
+      });     
     }
     
     getTransaction(id: number) : void {    
@@ -51,7 +68,33 @@ export class AccountTransactionDetailsComponent implements OnInit {
         this.selTransactionId = id;
         this.selDate = new Date(t.date);
         this.selTime = new Date(t.date);
+        this.connectedAccount = this.otherAccounts.find( o => o.id == t.accountConnection );        
       } );
+    }
+
+    /**
+    * Returns a list of accounts to be used within the transaction's "Connected Account" field.
+    * @param id
+    */
+    getSelectableOtherAccounts() : Observable<any> {
+      
+      const jobDone:Observable<any> = new Observable( subs => {
+        
+        this.accountTransactionService.getAllAccounts(this.userId).subscribe( awArr => {
+          
+          this.otherAccounts = awArr.map( aw => {
+            let accModel: Account = new Account(aw.data.accountNumber, aw.data.desc);
+            accModel.id = aw.id;
+            return accModel;
+          }).filter(accModel => this.sessionData.selectedAccount.id != accModel.id);
+          
+          subs.next();
+          
+        });        
+        
+      });
+      
+      return jobDone;
     }
     
     startFromNew() : void {
@@ -64,20 +107,28 @@ export class AccountTransactionDetailsComponent implements OnInit {
     }
     
     update() : void {    
-      this.injectTimeIntoModel();
+      this.mapFormToDto();
       this.accountTransactionService.updateTransaction(this.transaction, this.selTransactionId).subscribe( r => {
         this.goBack();
       });
     }
     
     add() : void {
-      this.injectTimeIntoModel();
+      this.mapFormToDto();
       this.accountTransactionService.addTransaction(this.transaction).subscribe( 
         r => {
           this.goBack();
         },
         err => console.log(err)
         );     
+    }
+
+    /**
+     * Maps the form model to a DTO ready for REST backend interaction.
+     */
+    mapFormToDto() : void {
+      this.transaction.accountConnection = this.connectedAccount.id;
+      this.injectTimeIntoModel();
     }
 
     injectTimeIntoModel() : void {

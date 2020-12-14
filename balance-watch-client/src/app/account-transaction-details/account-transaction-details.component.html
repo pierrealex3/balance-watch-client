@@ -37,7 +37,9 @@
     </div>
     <div>
         <label for="tconn">Account Connection</label>
-        <input id="tconn" class="form-control" [(ngModel)]="transaction.accountConnection"/>
+        <select id="tconn" class="form-control" [(ngModel)]="connectedAccount">
+            <option *ngFor="let a of otherAccounts" [ngValue]="a">{{a.accountNumber}} - {{a.desc}}</option>
+        </select>
     </div>    
     <div style="margin-top:15px">
         <button class="btn btn-primary" style="margin-right:7px" (click)="goBack()">Back</button>
