@@ -11,6 +11,7 @@ import { SessionDataService } from '../session-data.service';
 import { TransactionTemplateGroupResWrapper } from '../service-response-wrappers/transaction-template-group-res-wrapper';
 import { TransactionTemplateResWrapper } from '../service-response-wrappers/transaction-template-res-wrapper';
 import { NgModel } from '@angular/forms';
+import { Account } from '../account';
 
 @Component({
   selector: 'app-transaction-template-group',
@@ -18,6 +19,8 @@ import { NgModel } from '@angular/forms';
   styleUrls: ['./tt-group-home.component.css']
 })
 export class TransactionTemplateGroupComponent implements OnInit {
+  userId: string;
+  otherAccounts: Account[] = [];
 
   displayErrBox: boolean = false;
 
@@ -37,16 +40,57 @@ export class TransactionTemplateGroupComponent implements OnInit {
       this.frequencyList = globalFrequencyList;
     }
 
-  ngOnInit() {
+  ngOnInit() {    
 
     this.ttgId = +this.activatedRoute.snapshot.paramMap.get('id');    
     this.clearFields();
 
-    if (this.ttgId > 0) {
-      this.renderEdit();
-    }
+    this.sessionDataService.authenticatedUser.subscribe( u => {
+      this.userId = u;
+
+      this.getSelectableOtherAccounts().subscribe( x => {
+        if (this.ttgId > 0) {
+          this.renderEdit();
+        }
+      });
+
+    });
+
   }
 
+  /**
+  * Returns a list of accounts to be used within the transaction's "Connected Account" field.
+  * @param id
+  */
+  getSelectableOtherAccounts() : Observable<any> {
+    
+    const jobDone:Observable<any> = new Observable( subs => {
+      
+      this.transactionService.getAllAccounts(this.userId).subscribe( awArr => {
+        
+        this.otherAccounts = awArr.map( aw => {
+          let accModel: Account = new Account(aw.data.accountNumber, aw.data.desc);
+          accModel.id = aw.id;
+          return accModel;
+        }).filter(accModel => this.sessionDataService.selectedAccount.id != accModel.id);
+        
+        subs.next();
+        
+      });        
+      
+    });
+    
+    return jobDone;
+  }
+
+  getOtherAccountIds() : number[] {
+    return this.otherAccounts.map( acc => acc.id );
+  }
+
+  getOtherAccountLabels(accountId: number) : string {
+    let account: Account = this.otherAccounts.find(a => a.id == accountId);
+    return `${account.accountNumber} - ${account.desc}`;
+  }
 
   saveActiveTT(hookType: NgModel, hookAmount: NgModel, hookWay: NgModel): void {
 
@@ -106,6 +150,7 @@ export class TransactionTemplateGroupComponent implements OnInit {
             'amount': value.amount,
             'way': value.way,
             'account': this.sessionDataService.selectedAccount.id,
+            'accountConnection': value.accountConnection,
             'frequency': value.frequency,
             'note': value.note
           };
