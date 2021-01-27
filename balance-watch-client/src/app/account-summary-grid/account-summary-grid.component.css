@@ -1,0 +1,11 @@
+.pendingTransactions {
+    background-color: red;
+    color: white;    
+    display: inline-block;
+    vertical-align: middle;
+    margin-right:10px    
+}
+
+.pendingTransactions:not(:disabled):hover {
+    background-color: rgb(136, 10, 10);
+}

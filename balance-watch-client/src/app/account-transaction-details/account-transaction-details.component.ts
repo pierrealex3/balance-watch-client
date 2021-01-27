@@ -127,7 +127,7 @@ export class AccountTransactionDetailsComponent implements OnInit {
      * Maps the form model to a DTO ready for REST backend interaction.
      */
     mapFormToDto() : void {
-      this.transaction.accountConnection = this.connectedAccount.id;
+      this.transaction.accountConnection = this.connectedAccount === null || this.connectedAccount === undefined ? undefined : this.connectedAccount.id;  // TODO upgrade TS and use the Optional Chaining feature
       this.injectTimeIntoModel();
     }
 

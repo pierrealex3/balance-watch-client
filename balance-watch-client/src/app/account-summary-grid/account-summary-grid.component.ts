@@ -16,6 +16,7 @@ export class AccountSummaryGridComponent implements OnInit {
   somBalance: number;
   selectedTransaction: AccountTransaction;
   transactions: AccountTransaction[] = [];
+  subTransactionsCnt: number; // TODO un-fake
   selectedAccount: Account;
   accountList: Account[] = [];
 
@@ -28,6 +29,8 @@ export class AccountSummaryGridComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.subTransactionsCnt = 0;  // TODO un-fake
+
     const paramMap: ParamMap = this.route.snapshot.paramMap;
 
     this.sessionDataService.authenticatedUser.subscribe(u => {

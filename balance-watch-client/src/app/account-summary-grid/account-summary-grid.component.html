@@ -17,9 +17,10 @@
 
     </div>
     <div class="row">
-        <div class="col-md-4 offset-md-8">
+        <div class="col-md-12">
+            <a class="btn pendingTransactions" [ngClass]="subTransactionsCnt == 0 ? 'disabled' : ''">Pending Transactions ({{subTransactionsCnt}})</a>
             <a class="btn btn-primary" routerLink="/som/{{sessionDataService.summaryYear}}/{{sessionDataService.summaryMonth}}/{{sessionDataService.selectedAccount?.id}}" style="display: inline-block;vertical-align: middle;margin-right:10px">Start Of Month</a>
-            <a class="btn btn-primary" routerLink="/tdetail/0" style="display: inline-block;vertical-align: middle;">Add Transaction</a>
+            <a class="btn btn-primary" routerLink="/tdetail/0" style="display: inline-block;vertical-align: middle;">Add Transaction</a>            
         </div>
     </div>
 </div>
