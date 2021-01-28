@@ -21,11 +21,15 @@ export class AccountTransactionService {
 
   constructor(private http: HttpClient) { }
 
-  getTransactions(year: string, month: string, account:number, callbackFn: (value: TransactionResWrapper) => void) : void {
-    const ot:Observable<TransactionResWrapper[]> = this.http.get<TransactionResWrapper[]>(BASE_URI + 'transactions?year=' + year + '&month=' + month + '&account=' + account);
-    ot.subscribe( (t) => {
-       t.forEach( callbackFn) 
-      });
+  getTransactions(year: string, month: string, account: number, callbackFn: (value: TransactionResWrapper) => void, callbackFnForTransactionSet?: (value: number) => void): void {
+    const ot: Observable<TransactionResWrapper[]> = this.http.get<TransactionResWrapper[]>(BASE_URI + 'transactions?year=' + year + '&month=' + month + '&account=' + account);
+    ot.subscribe((t) => {
+      let submittedNb: number = t.filter((tt) => tt.data.flagSubmitted).length;
+      if (callbackFnForTransactionSet != undefined) {
+        callbackFnForTransactionSet(submittedNb);
+      }
+      t.forEach(callbackFn)
+    });
   }
 
   getTransaction(id: number) : Observable<AccountTransaction> {

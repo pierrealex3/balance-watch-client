@@ -82,10 +82,23 @@ export class AccountSummaryGridComponent implements OnInit {
   getTransactions(): void {
     if (this.sessionDataService.selectedAccount) {
       this.transactions = [];
-      this.accountTransactionService.getTransactions(this.sessionDataService.summaryYear, this.sessionDataService.summaryMonth, this.sessionDataService.selectedAccount.id, t => {
-        this.transactions.push(this.mapFromWrapperToTransaction(t));
-      });
+      this.handleTransactionsFromService(this.sessionDataService.summaryMonth, this.sessionDataService.summaryYear);
     }
+  }
+
+  /**
+   * Calls the HTTP service to get transactions and manages the callbacks.
+   * Note: what was a good idea back then may have changed with the progress of the app features.  TODO think about subscribing the Observable<ResWrapper> within this method, to keep the HTTP service proxy more generic.
+   * @param month 
+   * @param year 
+   */
+  handleTransactionsFromService(month: string, year: string) {
+    this.accountTransactionService.getTransactions(year, month, this.sessionDataService.selectedAccount.id, ii => {
+      console.log('transaction added to list');
+      this.transactions.push(this.mapFromWrapperToTransaction(ii));
+    }, subTransactionsCount => {
+      this.subTransactionsCnt = subTransactionsCount;
+    });
   }
 
   getSomAndTransactions(): void {
@@ -121,11 +134,7 @@ export class AccountSummaryGridComponent implements OnInit {
 
   getTransactionsFromTemplateGroup(groupId: string, month: string, year: string): void {
     this.accountTransactionService.generateTransactions(groupId, month, year, () => {
-
-      this.accountTransactionService.getTransactions(year, month, this.sessionDataService.selectedAccount.id, ii => {
-        console.log('transaction added to list');
-        this.transactions.push(this.mapFromWrapperToTransaction(ii));
-      });
+      this.handleTransactionsFromService(month, year);
     });
   }
 
@@ -151,7 +160,8 @@ export class AccountSummaryGridComponent implements OnInit {
       noteXtra: i.data.noteXtra,
       account: i.data.account,
       accountConnection: i.data.accountConnection,
-      ttIdGen: i.data.ttIdGen
+      ttIdGen: i.data.ttIdGen,
+      flagSubmitted: i.data.flagSubmitted
     };
     return t;
   }

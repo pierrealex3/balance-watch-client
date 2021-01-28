@@ -13,4 +13,5 @@ export interface TransactionRes {
     account: number;
     accountConnection: number;
     ttIdGen: number;
+    flagSubmitted: boolean;
 }

@@ -9,4 +9,5 @@ export interface AccountTransaction {
     account: number;
     accountConnection: number;
     ttIdGen: number;
+    flagSubmitted: boolean;
 }
