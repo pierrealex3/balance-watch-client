@@ -29,6 +29,7 @@ export class AccountTransactionDetailsComponent implements OnInit {
   userId: string;
 
   otherAccounts: Account[] = [];
+  selTransactionLastUpdated: string;
   
   constructor(
     private route: ActivatedRoute,
@@ -64,11 +65,12 @@ export class AccountTransactionDetailsComponent implements OnInit {
     
     getTransaction(id: number) : void {    
       this.accountTransactionService.getTransaction(id).subscribe( t => {
-        this.transaction = t;
+        this.transaction = t.body;
         this.selTransactionId = id;
-        this.selDate = new Date(t.date);
-        this.selTime = new Date(t.date);
-        this.connectedAccount = this.otherAccounts.find( o => o.id == t.accountConnection );        
+        this.selTransactionLastUpdated = t.headers.get('X-Last-Modified');
+        this.selDate = new Date(t.body.date);
+        this.selTime = new Date(t.body.date);
+        this.connectedAccount = this.otherAccounts.find( o => o.id == t.body.accountConnection );        
       } );
     }
 
@@ -108,7 +110,7 @@ export class AccountTransactionDetailsComponent implements OnInit {
     
     update() : void {    
       this.mapFormToDto();
-      this.accountTransactionService.updateTransaction(this.transaction, this.selTransactionId).subscribe( r => {
+      this.accountTransactionService.updateTransaction(this.transaction, this.selTransactionId, this.selTransactionLastUpdated).subscribe( r => {
         this.goBack();
       });
     }

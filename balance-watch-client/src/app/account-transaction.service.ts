@@ -32,8 +32,8 @@ export class AccountTransactionService {
     });
   }
 
-  getTransaction(id: number) : Observable<AccountTransaction> {
-    return this.http.get<AccountTransaction>(BASE_URI + 'transactions/' + id);
+  getTransaction(id: number) : Observable<HttpResponse<AccountTransaction>> {
+    return this.http.get<AccountTransaction>(BASE_URI + 'transactions/' + id, {observe: "response"});
   }
 
   /**
@@ -123,7 +123,7 @@ export class AccountTransactionService {
     return this.http.put<HttpResponse<Object>>(BASE_URI + 'accounts/' + account.id, req, {observe: "body", responseType: "json"});
   }
 
-  updateTransaction(t: AccountTransaction, id: number) : Observable<HttpResponse<Object>> {
+  updateTransaction(t: AccountTransaction, id: number, lastModified: string) : Observable<HttpResponse<Object>> {
     const req = {
       date: t.date,
       type: t.type,
@@ -134,7 +134,7 @@ export class AccountTransactionService {
       account: t.account,
       accountConnection: t.accountConnection
     }
-    return this.http.put<HttpResponse<Object>>(BASE_URI + 'transactions/' + id, req, {observe: "body", responseType: "json"});
+    return this.http.put<HttpResponse<Object>>(BASE_URI + 'transactions/' + id, req, {headers: new HttpHeaders({'X-Last-Modified' : lastModified}), observe: "body", responseType: "json"});
   }
 
   addTransaction(t: AccountTransaction) : Observable<HttpResponse<Object>> {
