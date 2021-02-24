@@ -5,6 +5,7 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { TransactionResWrapper } from '../service-response-wrappers/transaction-res-wrapper';
 import { SessionDataService } from '../session-data.service';
 import { Account } from '../account';
+import { ToastrWrapperService } from '../toastr-wrapper.service';
 
 @Component({
   selector: 'app-account-summary-grid',
@@ -25,7 +26,8 @@ export class AccountSummaryGridComponent implements OnInit {
   constructor(
     private accountTransactionService: AccountTransactionService,
     public sessionDataService: SessionDataService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toastr: ToastrWrapperService
   ) { }
 
   ngOnInit() {
@@ -40,7 +42,7 @@ export class AccountSummaryGridComponent implements OnInit {
 
       this.getSom();
 
-      if (paramMap.keys.length == 0) {
+      if (paramMap.keys.length === 0) {
         this.getTransactions();
       } else {
         this.sessionDataService.summaryYear = paramMap.get('forYear');
@@ -60,7 +62,7 @@ export class AccountSummaryGridComponent implements OnInit {
       accountWrapperList.forEach((aw) => {
 
         const exAccount = this.accountList.find((value: Account) => {
-          return value.id == aw.id;
+          return value.id === aw.id;
         });
 
         if (exAccount) {
@@ -88,17 +90,21 @@ export class AccountSummaryGridComponent implements OnInit {
 
   /**
    * Calls the HTTP service to get transactions and manages the callbacks.
-   * Note: what was a good idea back then may have changed with the progress of the app features.  TODO think about subscribing the Observable<ResWrapper> within this method, to keep the HTTP service proxy more generic.
-   * @param month 
-   * @param year 
+   * Note: what was a good idea back then may have changed with the progress of the app features.
+   * TODO think about subscribing the Observable<ResWrapper> within this method, to keep the HTTP service proxy more generic.
    */
-  handleTransactionsFromService(month: string, year: string) {
-    this.accountTransactionService.getTransactions(year, month, this.sessionDataService.selectedAccount.id, ii => {
-      console.log('transaction added to list');
+  handleTransactionsFromService(month: string, year: string, successCallback?: () => void, errorCallback?: () => void) {
+    this.accountTransactionService.getTransactions(year, month, this.sessionDataService.selectedAccount.id,
+      ii => {
       this.transactions.push(this.mapFromWrapperToTransaction(ii));
-    }, subTransactionsCount => {
+    },
+    subTransactionsCount => {
       this.subTransactionsCnt = subTransactionsCount;
-    });
+      if (successCallback !== undefined) {
+        successCallback();
+      }
+    },
+    errorCallback);
   }
 
   getSomAndTransactions(): void {
@@ -108,19 +114,19 @@ export class AccountSummaryGridComponent implements OnInit {
 
   get sortedTransactions(): AccountTransaction[] {
     return this.transactions.sort((a, b) => {
-      let aa: Date = new Date(a.date);
-      let bb: Date = new Date(b.date);
-      return aa < bb ? -1 : (aa === bb ? 0 : 1)
+      const aa: Date = new Date(a.date);
+      const bb: Date = new Date(b.date);
+      return aa < bb ? -1 : (aa === bb ? 0 : 1);
     });
   }
 
   balanceAtIndex(i: number): number {
     console.log('balanceAtIndex:' + i);
     return this.sortedTransactions.slice(0, i + 1)
-      .map(at => { return at.way === 'DEBIT' ? at.amount * -1 : at.amount })
+      .map(at => at.way === 'DEBIT' ? at.amount * -1 : at.amount )
       .reduce((pr, cu) => {
         console.log('pr=' + pr + ' cu=' + cu);
-        return pr + cu
+        return pr + cu;
       }, this.somBalance); // this.somBalance is the initial value by the provided account balance on current month's day-1.
   }
 
@@ -133,14 +139,26 @@ export class AccountSummaryGridComponent implements OnInit {
   }
 
   getTransactionsFromTemplateGroup(groupId: string, month: string, year: string): void {
-    this.accountTransactionService.generateTransactions(groupId, month, year, () => {
-      this.handleTransactionsFromService(month, year);
-    });
+
+    const fetchTransactionMsgErr = `There was a problem fetching transactions for month:${month} year:${year}`;
+    this.accountTransactionService.generateTransactions(groupId, month, year,
+      () => {
+        this.handleTransactionsFromService(month, year,
+          () => this.toastr.success('Transactions have been generated successfully'),
+          () => this.toastr.error(fetchTransactionMsgErr));
+      },
+      () => {
+        this.handleTransactionsFromService(month, year, undefined, () => this.toastr.error(fetchTransactionMsgErr) );
+        this.toastr.error('There was a problem generating transactions from canvas');
+      }
+    );
   }
 
   getSom(): void {
     if (this.sessionDataService.selectedAccount) {
-      this.accountTransactionService.getTBoard(+this.sessionDataService.summaryYear, +this.sessionDataService.summaryMonth, this.sessionDataService.selectedAccount.id).subscribe((res) => {
+      this.accountTransactionService.
+      getTBoard(+this.sessionDataService.summaryYear, +this.sessionDataService.summaryMonth, this.sessionDataService.selectedAccount.id).
+      subscribe((res) => {
         this.somBalance = res.startAmtCalc;
       }, (err) => {
         this.somBalance = 0;
@@ -167,7 +185,9 @@ export class AccountSummaryGridComponent implements OnInit {
   }
 
   accountYearMonthAvail(): boolean {
-    return this.sessionDataService.selectedAccount != null && this.sessionDataService.summaryYear != null && this.sessionDataService.summaryMonth != null;
+    return this.sessionDataService.selectedAccount != null
+    && this.sessionDataService.summaryYear != null
+    && this.sessionDataService.summaryMonth != null;
   }
 
 }

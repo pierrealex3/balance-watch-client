@@ -17,7 +17,8 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ]//,
+    //"skipLibCheck": true  // had to set this flag b/c the ngx-toastr lib was problematic on "ng build".  It was addressed via version downgrade to match the Angular version.
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

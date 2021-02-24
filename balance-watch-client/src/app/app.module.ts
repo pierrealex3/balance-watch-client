@@ -12,6 +12,7 @@ import { TransactionTemplateGroupComponent } from './tt-group-home/tt-group-home
 import { TtGroupSummaryComponent } from './tt-group-summary/tt-group-summary.component';
 import { EmdomComponent } from './frequency/emdom/emdom.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 import {MatMaterialModule} from './material-module';
 import { AccountsHomeComponent } from './accounts-home/accounts-home.component';
 import { AccountEditComponent } from './account-edit/account-edit.component';
@@ -46,7 +47,7 @@ export function kcFactory(keycloakService: KeycloakService) {
     AccountsHomeComponent,
     AccountEditComponent,
     SomHomeComponent,
-    MonthSelectorComponent,    
+    MonthSelectorComponent,
     EwdowComponent, ExwdowComponent, SimpleDowComponent, EmdomwrComponent, EmdowadomComponent, EydoyComponent, EmdowapComponent
   ],
   imports: [
@@ -59,7 +60,8 @@ export function kcFactory(keycloakService: KeycloakService) {
     MatNativeDateModule,
     ReactiveFormsModule,
     BsDatepickerModule.forRoot(),
-    TimepickerModule.forRoot()
+    TimepickerModule.forRoot(),
+    ToastrModule.forRoot()
   ],
   providers: [
     CurrencyPipe,

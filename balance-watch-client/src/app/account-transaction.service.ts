@@ -21,15 +21,25 @@ export class AccountTransactionService {
 
   constructor(private http: HttpClient) { }
 
-  getTransactions(year: string, month: string, account: number, callbackFn: (value: TransactionResWrapper) => void, callbackFnForTransactionSet?: (value: number) => void): void {
-    const ot: Observable<TransactionResWrapper[]> = this.http.get<TransactionResWrapper[]>(BASE_URI + 'transactions?year=' + year + '&month=' + month + '&account=' + account);
+  getTransactions(year: string, month: string, account: number,
+                  callbackFn: (value: TransactionResWrapper) => void,
+                  callbackFnForTransactionSet?: (value: number) => void,
+                  errCallback?: () => void): void {
+
+    const ot: Observable<TransactionResWrapper[]> = this.http.get<TransactionResWrapper[]>(
+      BASE_URI + 'transactions?year=' + year + '&month=' + month + '&account=' + account);
     ot.subscribe((t) => {
-      let submittedNb: number = t.filter((tt) => tt.data.flagSubmitted).length;
-      if (callbackFnForTransactionSet != undefined) {
+      const submittedNb: number = t.filter((tt) => tt.data.flagSubmitted).length;
+      if (callbackFnForTransactionSet !== undefined) {
         callbackFnForTransactionSet(submittedNb);
       }
-      t.forEach(callbackFn)
+      t.forEach(callbackFn);
+    }, (e) => {
+      if (errCallback !== undefined) {
+        errCallback();
+      }
     });
+
   }
 
   getTransaction(id: number) : Observable<HttpResponse<AccountTransaction>> {
@@ -73,13 +83,15 @@ export class AccountTransactionService {
     return this.http.get<TransactionTemplateResWrapper[]>(BASE_URI + 'transactionTemplateGroups/' + groupId + '/templates', {observe: "body", responseType: "json"});
   }
 
-  generateTransactions(groupId: string, forMonth: string, forYear: string, callbackFn: () => void) : void {
+  generateTransactions(groupId: string, forMonth: string, forYear: string, callbackFn: () => void, errCallback?: () => void): void {
 
     const fullTransactionObsArr: Observable<TransactionResWrapper[]>[] = [];
 
     this.getAllTt(groupId).subscribe( ttArr => {
-      ttArr.forEach(tt => {
-        const transactionArrObservable: Observable<TransactionResWrapper[]> = this.http.get<TransactionResWrapper[]>(BASE_URI + 'xtransactions?year=' + forYear + '&month=' + forMonth + '&ttId=' + tt.id);
+      ttArr.forEach(
+        tt => {
+        const transactionArrObservable: Observable<TransactionResWrapper[]> = this.http.get<TransactionResWrapper[]>(
+          BASE_URI + 'xtransactions?year=' + forYear + '&month=' + forMonth + '&ttId=' + tt.id);
         fullTransactionObsArr.push(transactionArrObservable);
       });
 
@@ -88,11 +100,22 @@ export class AccountTransactionService {
           console.log('forkJoin resp from account-transaction-service');
           const flatArray: TransactionResWrapper[] = ([] as TransactionResWrapper[]).concat(...resp);
           console.log('xtransactions generated = ' + flatArray.length);
-          callbackFn();        
+          callbackFn();
+        }, err => {
+          console.log(`Problem with the generation of transactions from template for group id: ${groupId}`);
+          if (errCallback !== undefined) {
+            errCallback();
+          }
         }
       );
+    },
+    (error) => {
+      console.log(`Problem getting the transaction templates for group id: ${groupId}`);
+      if (errCallback !== undefined) {
+        errCallback();
+      }
     });
-    
+
   }
 
   getAllAccounts(userId : string) : Observable<AccountResWrapper[]> {

@@ -284,3 +284,8 @@ OAuth2 clients (such as front end applications) can obtain access tokens from th
 
 // User Realm created from the Master realm: this is what users have access to
 http://localhost:8080/auth/realms/mds/account/
+
+
+// install and use ngx-toastr @see https://www.npmjs.com/package/ngx-toastr
+npm install ngx-toastr --save
+npm install @angular/animations --save

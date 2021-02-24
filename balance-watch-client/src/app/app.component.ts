@@ -29,7 +29,7 @@ export class AppComponent implements OnInit {
     });
   }
 
-  logout() : void {
+  logout(): void {
     this.keycloakService.logout();
   }
 }
