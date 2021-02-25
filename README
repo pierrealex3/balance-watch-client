@@ -120,6 +120,12 @@ export class Character { constructor(public id: number, public name:string){} }
 ... })
 export class AppModule { }
 
+
+// "providers:" syntax in @NgModule
+providers: [MyService]
+is shorthand to:
+providers: [{ provide: MyService, useClass: MyService }]
+
 // example of how to use Http @angular/http
 * log at the service level, then decide what action to take at the ui component level.
 import 'rxjs/add/operator/map';
@@ -154,7 +160,46 @@ fList: Observable<MyDomain[]>;
 			<my-child (childEvent)="parentFunction($event)"</my-child> @Component export class Mychild { @Output() childEvent = new EventEmitter<ChildPropType>(); doSomething() : void { this.childEvent.emit(childProp); } }
 @ViewChild	access child components method/data from parent
 			@Component export class MyParent { @ViewChild(MyChild) childHook: MyChild; }
-			
+	
+	
+// Content reusability with CONTENT-PROJECTION: <ng-content></ng-content> used in child component to allow html-template *partial* definition from inside parent
+
+<my-component>
+  <h4>Vietnam</h4>
+</my-component>
+
+@Component({
+	selector: 'my-component',
+	template: `
+	  <div>
+	    <h3>Good morning</h3>
+		<ng-content *ngIf="visible"></ng-content>
+	  </div>
+	`	
+})
+export class MyComponent {
+  visible: boolean;
+
+*or if there's more than one component to include: use attribute selectors*
+
+<my-component>
+  <h4 blabla>Vietnam</h4>
+  <h4 bloblo>China</h4>
+</my-component>
+
+@Component({
+	selector: 'my-component',
+	template: `
+	  <div>
+	    <h3>Good morning</h3>
+		<ng-content select="[blabla]" *ngIf="visible"></ng-content>
+		<ng-content select="[bloblo]" *ngIf="visible"></ng-content>
+	  </div>
+	`	
+})
+export class MyComponent {
+  visible: boolean;
+  
 
 // Template variable references
 to reuse a DOM element somewhere else in the same template
