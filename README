@@ -145,6 +145,57 @@ private handleError(error: Response) {
 
 a.subscribe( d => this.something = d, error => this.errorMsg = <any>error )
 
+
+// how-to: build your Observable for consumption by 1.* Observer
+* WHEN YOU BUILD AN OBSERVABLE OF SOMETHING, YOU CODE THE INTERACTION WITH THE OBSERVER OF SOMETHING
+
+ex:
+const appleStream = new Observable( appleObserver => {
+  appleObserver.next( new Apple('Lobo') );
+  appleObserver.next( new Apple('MacIntosh') );
+  appleObserver.complete();		// the stream is closed
+});
+
+
+// how-to: rxjs - Observable subscription mechanism for DOM events
+* Use rxjs static function fromEvent
+
+...
+  <div #domElementId > 
+...
+
+@ViewChild('domElementId') anyElementOfInterest: ElementRef;
+
+ngAfterViewInit() {
+  const myStream = fromEvent(this.anyElementOfInterest.nativeElement, 'click')
+                   .subscribe( doSomething() );                   
+}
+
+
+// rxjs Operators 'rxjs/operators'
+* head-tail functions piped out of the Observable before a value is emitted to the Observer(s)
+
+of(1, 3, 5)
+  .pipe(  
+    map(item => item * 2)						// transform
+	.map(item => {								// also there is the possibility to throw!
+	  if(item === 0) {
+        throw new Error('zero detected'); 
+	  }
+	  return item;
+	})
+	.tap( item => console.log(item) )			// actions that does not modify the stream
+	.take( 2 )									// limits to the *first* n items
+  ).subscribe( res => doSomething(res) );
+
+
+// rxjs INTERESTING FACT: how is it different than java.util.Stream ?
+
+1) every execution of a *chain of operators* processes a single "apple", before going on with the next "apple" in the stream.
+2) the take(n) operator IMO should be placed at the START of the operator chain to avoid useless processing... in other words, the "nth+1 apple" ain't gonna make it til the end anyways.
+3) if an error is thrown within an operator, the next "apple" ain't gonna be processed, and the complete callback of the Observer(s) is NOT gonna be called.
+
+
 // async pipe - alternative to simplify display - just chain the Observable.catch in the UI component.
 @Component
 fList: Observable<MyDomain[]>;
