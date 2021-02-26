@@ -146,6 +146,24 @@ private handleError(error: Response) {
 a.subscribe( d => this.something = d, error => this.errorMsg = <any>error )
 
 
+// rx-js how-to: map individual X elements from an Observable<X[]> - within an Observable.pipe() function
+* by understanding that the pipe rxjs operator chain operates on the <T> within Observable<T>, and in the case <T> is actually an array of something, every rxjs operator within the pipe will have to operate on an ARRAY.
+* by using rxjs operator methods to operate on the STREAM along with array methods to operate on ARRAY ELEMENTS OF THE OBSERVABLE OF ARRAY
+
+products$ = this.http.get<Product[]>(this.url)
+  .pipe(
+    map( productArray =>  
+	  productArray.map(product => 		// leverage JS array.map function to obtain (input array => array.map => output array)
+	  ({									// return a Generic Object
+	     ...product, 						// copy everything from array element
+		 price: product.price * 1.15,		// individual object field override
+		 searchKey: [product.productName]	// individual object field override	    
+	  }) as Product							// cast the Generic Object as a TYPED object
+	  )
+	)
+  );
+
+
 // how-to: build your Observable for consumption by 1.* Observer
 * WHEN YOU BUILD AN OBSERVABLE OF SOMETHING, YOU CODE THE INTERACTION WITH THE OBSERVER OF SOMETHING
 
@@ -189,6 +207,61 @@ of(1, 3, 5)
   ).subscribe( res => doSomething(res) );
 
 
+// rxjs how-to: apply CATCH AND REPLACE pattern to handle errors cleanly
+* by using the catchError rxjs operator and the EMPTY Observable
+
+products$: Observable<Product[]>;
+
+this.products$ = this.productService.getProducts()
+  .pipe(
+    catchError( err => {
+	  this.errorMessage = err;
+	  return EMPTY;
+	})
+  );
+  
+** this way, the template will be able to work, still.
+
+<tr ngFor*="let product of products$ | async">
+...
+
+
+// rxjs how-to: apply CATCH AND RETHROW pattern to build a custom error from the service BEFORE it gets to the Observer
+* by using the catchError AND throwError rxjs from the service AND THEN the EMPTY Observable from the component
+* note: @see the previous post for component and template, as they don't change
+
+** service definition example!
+
+return http.get(...)
+  .pipe(
+    map(...)
+	.catchError( err => {
+	  handleError(err);
+	})
+  );
+  
+handleError(err: any) {
+  let errorMessage: string;
+  if (err.error instanceof ErrorEvent) {
+    errorMessage = `Error occured: ${err.error.message}`;
+  } else {
+    errorMessage = `From backend: ${err.status} : ${err.body.error}`;
+  }
+  console.error(err);
+  return throwError(errorMessage);	// THAT IS THE IMPORTANT PART!
+}
+
+
+// rxjs performance improvement with ChangeDetectionStrategy.onPush
+* Target "pure reactive" components that are updated via Observable streams
+* BE CAREFUL WITH THAT because every change to a component property which is not a stream will NOT be updated in the component by using this (OnPush) Change Detection Strategy!!!
+
+@Component({
+ ...
+ changeDetection: ChangeDetectionStrategy.onPush
+)}
+
+
 // rxjs INTERESTING FACT: how is it different than java.util.Stream ?
 
 1) every execution of a *chain of operators* processes a single "apple", before going on with the next "apple" in the stream.
@@ -197,11 +270,14 @@ of(1, 3, 5)
 
 
 // async pipe - alternative to simplify display - just chain the Observable.catch in the UI component.
-@Component
-fList: Observable<MyDomain[]>;
+* It's nice because async handles the subscribe/unsubscribe to the Observable by itself.  Therefore, no need for the component to implement OnDestroy and have sub:Subscription.unsubscribe().
 
-<select>
-	<option *ngFor="let f of fList | async">
+@Component
+fList$: Observable<MyDomain[]>;
+
+<div *ngIf="fList$ | async as fList">
+  <select>
+	  <option *ngFor="let f of fList | async">
 
 
 // @Input() @Output() and @ViewChild(MyComponent)
@@ -213,6 +289,21 @@ fList: Observable<MyDomain[]>;
 			@Component export class MyParent { @ViewChild(MyChild) childHook: MyChild; }
 	
 	
+// rxjs how-to: combine a group of Observable streams (a, b, c) to EMIT the *LATEST* value (a1, b1, c1) whenever there's a new value on *ANY* stream of the group
+* use rxjs combineLatest creation function
+* an array with the latest value for each stream of the group will be emitted.  ex: [ a1, b2, c1 ]
+	
+
+// rxjs how-to: combine a group of Observable streams (a, b, c) to EMIT the *LATEST* value (a1, b1, c1) whenever there's a new value on the *MASTER* stream of the group
+* use rxjs withLatestFrom operator
+* the MASTER stream is also called the SOURCE stream
+
+
+// rxjs how-to: combine a group of Observable streams to EMIT the *LAST* value for *ALL* streams of the group
+* use rxjs forkJoin creation function
+* note: this is perfect for synchronizing HTTP requests, since @angular/http does return an Observable of a SINGLE value for every HTTP call.
+
+
 // Content reusability with CONTENT-PROJECTION: <ng-content></ng-content> used in child component to allow html-template *partial* definition from inside parent
 
 <my-component>
