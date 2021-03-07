@@ -30,6 +30,7 @@ import { EydoyComponent } from './frequency/eydoy/eydoy.component';
 import { EmdowapComponent } from './frequency/emdowap/emdowap.component';
 import { KeycloakService } from './keycloak.service';
 import { TokenInterceptorService } from './interceptors/token-interceptor.service';
+import { AccountsMgmtHomeComponent } from './accounts-mgmt/accounts-mgmt-home/accounts-mgmt-home.component';
 
 export function kcFactory(keycloakService: KeycloakService) {
   return () => keycloakService.init();
@@ -48,7 +49,14 @@ export function kcFactory(keycloakService: KeycloakService) {
     AccountEditComponent,
     SomHomeComponent,
     MonthSelectorComponent,
-    EwdowComponent, ExwdowComponent, SimpleDowComponent, EmdomwrComponent, EmdowadomComponent, EydoyComponent, EmdowapComponent
+    EwdowComponent,
+    ExwdowComponent,
+    SimpleDowComponent,
+    EmdomwrComponent,
+    EmdowadomComponent,
+    EydoyComponent,
+    EmdowapComponent,
+    AccountsMgmtHomeComponent
   ],
   imports: [
     BrowserModule,

@@ -277,7 +277,10 @@ fList$: Observable<MyDomain[]>;
 
 <div *ngIf="fList$ | async as fList">
   <select>
-	  <option *ngFor="let f of fList | async">
+	  <option 
+	    *ngFor="let f of fList"
+		[ngClass]="{'active': f?.id === (selectedF$ | async)?.id}"				// here, fList$ represents the DATA STREAM and selectedF$ represents the ACTION STREAM
+	  >
 
 
 // @Input() @Output() and @ViewChild(MyComponent)
@@ -304,6 +307,101 @@ fList$: Observable<MyDomain[]>;
 * note: this is perfect for synchronizing HTTP requests, since @angular/http does return an Observable of a SINGLE value for every HTTP call.
 
 
+// rxjs difference between an rxjs Subject and Observable
+* Observable is unicast (can have a single Observer)
+* Subject is a multicast Observable (can have many Observers)
+
+
+// rxjs how-to: React to an action stream, providing the data stream as reference
+1) Create an action stream (ex: Subject or BehaviorSubject)
+2) Combine the action stream and data stream (ex: combineLatest(obs1, obs2) )
+3) Emit a value to the action stream when an action occurs
+* note: there are 2 ways to have an INITIAL value emitted by the Observable: 
+	1) provide the Subject with an initial value in its constructor arg
+	2) add a pipe the the Subject.asObservable reference, with the startWith rxjs operator as first arg
+* note: the use case here is to provide a filtered (data stream) that consists of a list of products linked to the category selected by the user (action stream)
+
+@Component
+private categorySelectedSubject = new BehaviorSubject<number>(0);						// NOTE: (0) is the initial value that gets emitted upon subscription!
+categorySelectedAction$ = this.categorySelectedSubject.asObservable();			// makes the Subject to Observable (i.e. $-suffixed field) translation.  																				
+
+onSelected(categoryId): void {
+  this.categorySelectedSubject.next(+categoryId);
+}
+
+ngOnInit() {
+
+  products$ = combineLatest([
+    this.productService.products$,
+	this.categorySelectedAction$												// NOTE: the (0) initial value could as well have been placed here within this.categorySelectedAction$.pipe( startWith(0) )  using the startWith(x) rxjs operator!
+  )]
+  .pipe(
+    map([products, categoryId]) =>
+	  products.filter(product =>
+	    categoryId ? product.categoryId === categoryId : true)
+  )
+  
+}
+
+
+// rxjs how-to: React to an 'add Product' operation when you also have a 'list of Products' to display
+* merge the action stream (insert product) and data stream (list products) by using rxjs merge function, and then "flatten out" the output stream with .pipe( scan(...) ) rxjs operator.
+
+ex:
+productsWithAdd$ = merge(
+    this.products$,
+	this.insertAction$
+)
+.pipe(
+  scan( (acc: Product[], value: Product) => [...acc, value] )
+);
+
+
+// caching data using rxjs shareReplay(1) operator vs traditional way
+* using shareReplay(1) will always replay the last emission on the Observable
+
+ex:
+
+...
+products$ : Observable<Product[]> = this.http.get(URI + '/products')
+  .pipe(
+    tap( p => console.log(JSON.stringify(p)) ) ,
+	shareReplay(1) ,
+	catchError( err => handleError(err) )	
+  );
+
+return products$;  
+...
+
+
+// rxjs when should we use: higher-order mapping rxjs operator *concatMap* instead of rxjs operator *map* ???
+* concatMap must be used when a pipeable function itself returns an Observable<?>, for example an http.get (@see example below) *AND* we want to sequence the execution of the inner Observables (i.e. order IS important)
+* concatMap will WAIT for the inner Observable to COMPLETE before letting the inner Observable of the next emission be processed: in other words, concatMap has its own queue!
+
+ex:
+
+products$ = of(33, 44, 55)
+  .pipe(   
+    tap( id => console.log(`processing ${id}`) ) ,
+    concatMap( o => http.get( URL + '/products/' + o.id) ) ,		// concatMap has its own blocking queue, which will result in the following processing...  http.get(33) --> http.get(44) --> http.get(55)
+	tap ( p => console.log(`done processing product ${p.id}`) )
+  );
+
+
+// rxjs when should we use: higher-order mapping rxjs operator *mergeMap* instead of *concatMap* ???
+* when order is NOT important, as inner Observables will be executed in PARALLEL
+
+@from previous post
+...
+    mergeMap( o => http.get( URL + '/products/' + o.id) ) ,		// mergeMap does not have any blocking queue, so the following processing MAY happen...  http.get(33) --> http.get(55) --> http.get(44)
+...
+
+
+// rxjs when should we use: higher-order mapping operator *switchMap*?
+* that's a pretty niche rxjs operator.
+* when we need to forget about the preceding emissions currently executing in the pipe and focus on the last one... ex: type-ahead scenario.  In that case, only the last emission will be processed further in the pipe.
+  
+  
 // Content reusability with CONTENT-PROJECTION: <ng-content></ng-content> used in child component to allow html-template *partial* definition from inside parent
 
 <my-component>

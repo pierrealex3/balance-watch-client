@@ -8,11 +8,13 @@ import { TransactionTemplateResWrapper } from './service-response-wrappers/trans
 import { TransactionResWrapper } from './service-response-wrappers/transaction-res-wrapper';
 import { AccountResWrapper } from './service-response-wrappers/account-res-wrapper';
 import { Account } from './account';
-import { MatMultiYearView } from '@angular/material/datepicker';
 import { TBoard } from './tboard';
-import { throwMatDialogContentAlreadyAttachedError } from '@angular/material/dialog';
+import { catchError } from 'rxjs/operators';
 
-const BASE_URI = 'http://localhost:9897/mds/'; // This is the proxy-pass PORT
+export const BASE_URI = 'http://localhost:9897/mds/'; // This is the proxy-pass PORT
+
+export const ERROR_TECHNICAL_ERROR = 'Unexpected issue with the application.  Please contact technical support for assistance.';
+export const ERROR_TOKEN_INVALID = 'Access token is invalid or expired';
 
 @Injectable({
   providedIn: 'root'
@@ -118,8 +120,21 @@ export class AccountTransactionService {
 
   }
 
-  getAllAccounts(userId : string) : Observable<AccountResWrapper[]> {
-    return this.http.get<AccountResWrapper[]>(BASE_URI + 'users/' + userId + '/accounts', { observe: "body", responseType: "json"});
+  getAllAccounts(userId: string): Observable<AccountResWrapper[]> {
+    return this.http.get<AccountResWrapper[]>(BASE_URI + 'users/' + userId + '/accounts', { observe: 'body', responseType: 'json'})
+    .pipe(
+      catchError( err => {
+        let errMsg = ERROR_TECHNICAL_ERROR;
+        if (err.status === 401 ) {
+          errMsg = ERROR_TOKEN_INVALID;
+        } else if (err.status === 404) {
+          errMsg = 'There are no accounts available for this user.  Please create an account first.';
+        }
+
+        const ex: HttpErrorWrapperException = { msg: errMsg };
+        throw ex;
+      })
+    );
   }
 
   getAllRelatedAccounts(userId : string) : Observable<AccountResWrapper[]> {
@@ -208,4 +223,12 @@ export class AccountTransactionService {
     return this.http.post<HttpResponse<Object>>(BASE_URI + 'users', req, {observe: "body", responseType: "json"});
   }
 
+  getAllUsersFromGroup() : any {
+    this.http.get(BASE_URI + 'users').subscribe();
+  }
+
+}
+
+export interface HttpErrorWrapperException {
+  msg: string;
 }

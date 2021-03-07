@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountTransaction } from '../account-transaction';
-import { AccountTransactionService } from '../account-transaction.service';
+import { AccountTransactionService, HttpErrorWrapperException } from '../account-transaction.service';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { TransactionResWrapper } from '../service-response-wrappers/transaction-res-wrapper';
 import { SessionDataService } from '../session-data.service';
@@ -74,7 +74,9 @@ export class AccountSummaryGridComponent implements OnInit {
           this.accountList.push(account);
         }
       });
-    });
+    } ,
+    err => this.toastr.error((err as HttpErrorWrapperException).msg)
+    );
 
   }
 

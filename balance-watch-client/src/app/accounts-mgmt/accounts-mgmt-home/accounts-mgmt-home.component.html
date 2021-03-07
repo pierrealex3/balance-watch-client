@@ -1,0 +1,37 @@
+<div *ngIf="rService.usersFromAuthorizedGroup$ | async as users">
+
+    <ul *ngFor="let user of users">
+        <li (click)="userSelected(user.id)">
+            {{user.id}}
+        </li>
+    </ul>
+
+</div>
+
+<div *ngIf="rService.accountsFromAuthorizedGroup$ | async as accounts">
+
+    <ul *ngFor="let account of accounts">
+        <li (click)="accountSelected(account.id)">
+            {{account.data.accountNumber}} | {{account.data.desc}}
+        </li>
+    </ul>    
+
+</div>
+
+<div *ngIf="userAccountRights$ | async as accountRights">
+    <ul class="list-group">
+
+    <li class="list-group-item">
+        <span>Is Owner: <input type="checkbox" [checked]="accountRights.isOwner" /></span>
+    </li>
+    <li class="list-group-item">
+        <span>Is Admin: <input type="checkbox" [checked]="accountRights.isAdmin" /></span>
+    </li>    
+    <li class="list-group-item">
+        <span>Is Transfer: <input type="checkbox" [checked]="accountRights.isTransfer" /></span>
+    </li>    
+    <li class="list-group-item">
+        <span>Is Read: <input type="checkbox" [checked]="accountRights.isRead" /></span>
+    </li>    
+</ul>
+</div>

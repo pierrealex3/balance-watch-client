@@ -7,6 +7,7 @@ import { TransactionTemplateGroupComponent } from './tt-group-home/tt-group-home
 import { AccountsHomeComponent } from './accounts-home/accounts-home.component';
 import { AccountEditComponent } from './account-edit/account-edit.component';
 import { SomHomeComponent } from './som-home/som-home.component';
+import { AccountsMgmtHomeComponent } from './accounts-mgmt/accounts-mgmt-home/accounts-mgmt-home.component';
 
 const routes:Routes = [
   {path: 'tsummary', component: AccountSummaryGridComponent},
@@ -16,6 +17,7 @@ const routes:Routes = [
   {path: 'accounts', component: AccountsHomeComponent},
   {path: 'accountDetail/:id', component: AccountEditComponent},
   {path: 'som/:year/:month/:account', component: SomHomeComponent},
+  {path: 'accountsMgmt', component: AccountsMgmtHomeComponent},
   {path: '', redirectTo:'tsummary', pathMatch: 'full'}
 
 ]

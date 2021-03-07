@@ -3,6 +3,7 @@ import { AccountTransactionService } from '../account-transaction.service';
 import { SessionDataService } from '../session-data.service';
 import { AccountResWrapper } from '../service-response-wrappers/account-res-wrapper';
 import { Account } from '../account';
+import { KeycloakService } from '../keycloak.service';
 
 @Component({
   selector: 'app-accounts-home',
@@ -17,7 +18,8 @@ export class AccountsHomeComponent implements OnInit {
 
   constructor(
     private accountTransactionService: AccountTransactionService,
-    private sessionDataService: SessionDataService
+    private sessionDataService: SessionDataService,
+    private keycloakService: KeycloakService
   ) { }
 
   ngOnInit() {
@@ -26,9 +28,6 @@ export class AccountsHomeComponent implements OnInit {
     this.sessionDataService.authenticatedUser.subscribe(u => {
       this.userId = u;
       this.getAllAccountsInScope();
-
-      // TODO test
-      this.accountTransactionService.getAllRelatedAccounts(u).subscribe( x => {} );
     });
   }
 
