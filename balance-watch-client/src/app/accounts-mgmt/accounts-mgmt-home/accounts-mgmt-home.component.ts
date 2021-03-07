@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { combineLatest, Subject } from 'rxjs';
-import { concatMap, map, tap } from 'rxjs/operators';
+import { combineLatest, EMPTY, of, Subject } from 'rxjs';
+import { catchError, concatMap, tap } from 'rxjs/operators';
 import { ReactiveService } from 'src/app/reactive.service';
+import { UserAccountRightsModel } from 'src/app/service-response-wrappers/user-account-rights-res-wrapper';
 
 @Component({
   selector: 'app-accounts-mgmt-home',
@@ -16,13 +17,32 @@ export class AccountsMgmtHomeComponent implements OnInit {
   private accountSelectedSubject = new Subject<number>();
   accountSelectedAction$ = this.accountSelectedSubject.asObservable();
 
-  userAccountRights$ = combineLatest( [this.userSelectedAction$, this.accountSelectedAction$] )
-  .pipe(
-    concatMap(([userId, accountId]) => this.rService.getUserAccountRights(userId, accountId)) ,
-//    tap( (userId, accountId) => console.log(`selected account:${'' + accountId} and user: ${userId}`) )
-    tap( () => console.log('selected account and user') )
-
-  );
+  userAccountRights$ = combineLatest([this.userSelectedAction$, this.accountSelectedAction$])
+    .pipe(
+      tap(() => console.log('selected account and user')),
+      concatMap(([userId, accountId]) => {
+        return this.rService.getUserAccountRights(userId, accountId)
+          .pipe(
+            catchError(err => {
+              console.log(`error is: ${JSON.stringify(err)}`);
+              if (err.status === 401) {
+                return of({
+                  exists: false,
+                  dto: {
+                    isOwner: false,
+                    isAdmin: false,
+                    isTransfer: false,
+                    isRead: false
+                  }
+                } as UserAccountRightsModel);
+              } else {
+                return EMPTY;
+              }
+            }
+            )
+          );
+      })
+    );
 
 
   constructor(private rService: ReactiveService) { }

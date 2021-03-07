@@ -4,3 +4,8 @@ export interface UserAccountRights {
     isTransfer: boolean;
     isRead: boolean;
 }
+
+export interface UserAccountRightsModel {
+    exists: boolean;
+    dto: UserAccountRights;
+}

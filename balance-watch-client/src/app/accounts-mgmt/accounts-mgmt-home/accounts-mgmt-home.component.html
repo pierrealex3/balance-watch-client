@@ -1,37 +1,70 @@
-<div *ngIf="rService.usersFromAuthorizedGroup$ | async as users">
+<div class="spacer10"></div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body" *ngIf="rService.usersFromAuthorizedGroup$ | async as users">
+                    <h5 class="card-title">Select User</h5>
 
-    <ul *ngFor="let user of users">
-        <li (click)="userSelected(user.id)">
-            {{user.id}}
-        </li>
-    </ul>
+                    <div class="list-group" *ngFor="let user of users">
+                        <button type="button" class="list-group-item list-group-item-action"
+                            (click)="userSelected(user.id)">
+                            {{user.id}}
+                        </button>
+                    </div>
 
-</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body" *ngIf="rService.accountsFromAuthorizedGroup$ | async as accounts">
+                    <h5 class="card-title">Select Account</h5>
 
-<div *ngIf="rService.accountsFromAuthorizedGroup$ | async as accounts">
+                    <div class="list-group" *ngFor="let account of accounts">
+                        <button type="button" class="list-group-item list-group-item-action" (click)="accountSelected(account.id)">
+                            {{account.data.accountNumber}} | {{account.data.desc}}
+                        </button>
+                    </div>
 
-    <ul *ngFor="let account of accounts">
-        <li (click)="accountSelected(account.id)">
-            {{account.data.accountNumber}} | {{account.data.desc}}
-        </li>
-    </ul>    
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="spacer10"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body" *ngIf="userAccountRights$ | async as accountRights">
+                    <h5 class="card-title">Choose User Account Rights</h5>
+                    <p class="card-text" *ngIf="accountRights.exists">Those are the existing rights.</p>
+                    <p class="card-text" *ngIf="!accountRights.exists">The user does not have rights on this account at
+                        the moment.</p>
+                    <ul class="list-group">
 
-</div>
-
-<div *ngIf="userAccountRights$ | async as accountRights">
-    <ul class="list-group">
-
-    <li class="list-group-item">
-        <span>Is Owner: <input type="checkbox" [checked]="accountRights.isOwner" /></span>
-    </li>
-    <li class="list-group-item">
-        <span>Is Admin: <input type="checkbox" [checked]="accountRights.isAdmin" /></span>
-    </li>    
-    <li class="list-group-item">
-        <span>Is Transfer: <input type="checkbox" [checked]="accountRights.isTransfer" /></span>
-    </li>    
-    <li class="list-group-item">
-        <span>Is Read: <input type="checkbox" [checked]="accountRights.isRead" /></span>
-    </li>    
-</ul>
+                        <li class="list-group-item">
+                            <span>Is Owner: <input type="checkbox" [checked]="accountRights.dto.isOwner" /></span>
+                        </li>
+                        <li class="list-group-item">
+                            <span>Is Admin: <input type="checkbox" [checked]="accountRights.dto.isAdmin" /></span>
+                        </li>
+                        <li class="list-group-item">
+                            <span>Is Transfer: <input type="checkbox" [checked]="accountRights.dto.isTransfer" /></span>
+                        </li>
+                        <li class="list-group-item">
+                            <span>Is Read: <input type="checkbox" [checked]="accountRights.dto.isRead" /></span>
+                        </li>
+                    </ul>
+                    <div class="spacer10"></div>
+                    <a class="btn btn-primary">Save</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="spacer10"></div>
+    <div class="row">
+        <div class="col-md-2">
+            <a class="btn btn-primary">Back</a>
+        </div>        
+    </div>
 </div>
