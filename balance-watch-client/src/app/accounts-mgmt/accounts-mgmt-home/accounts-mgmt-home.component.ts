@@ -37,12 +37,16 @@ export class AccountsMgmtHomeComponent implements OnInit {
           this.toastr.error(`The Account Rights cannot be saved.  Please contact technical support for assistance.`);
           return EMPTY;
         }) ,
-        tap(() => this.toastr.success(`Saved the Account Rights`))
+        tap(() => {
+          this.toastr.success(`Saved the Account Rights`);
+          this.userSelectedSubject.next(selectedUser);  // note: this call does re-trigger the (user AND account) action stream Observer
+        }
+        )
       );
     })
   );
 
-  userAccountRights$ = combineLatest([this.userSelectedAction$, this.accountSelectedAction$])
+  userAccountRights$ = combineLatest([this.userSelectedAction$, this.accountSelectedAction$]) // (user AND account) action stream Observer
     .pipe(
       tap(() => console.log('selected account and user')),
       concatMap(([userId, accountId]) => {
