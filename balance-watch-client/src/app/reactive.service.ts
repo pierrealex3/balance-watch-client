@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from './service-response-wrappers/users-res-wrapper';
 import { BASE_URI } from './account-transaction.service';
-import { EMPTY, Observable, of } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { AccountResWrapper } from './service-response-wrappers/account-res-wrapper';
 import { UserAccountRights, UserAccountRightsModel } from './service-response-wrappers/user-account-rights-res-wrapper';
 
@@ -35,6 +35,28 @@ export class ReactiveService {
         )
 
       );
+  }
+
+  saveUserAccountRights(userId: string, accountId: number, rightsModel: UserAccountRightsModel): Observable<any> {
+    if (rightsModel.exists) {
+      return this.updateUserAccountRights(userId, accountId, rightsModel);
+    } else {
+      return this.addUserAccountRights(userId, accountId, rightsModel);
+    }
+  }
+
+  addUserAccountRights(userId: string, accountId: number, rightsModel: UserAccountRightsModel): Observable<any> {
+    return this.http.post(`${BASE_URI}users/${userId}/accounts/${'' + accountId}/rights`, rightsModel.dto)
+    .pipe(
+      tap( r => console.log(`addUserAccountRights response is: ${JSON.stringify(r)}`) )
+    );
+  }
+
+  updateUserAccountRights(userId: string, accountId: number, rightsModel: UserAccountRightsModel): Observable<any> {
+    return this.http.put(`${BASE_URI}users/${userId}/accounts/${'' + accountId}/rights`, rightsModel.dto)
+    .pipe(
+      tap( r => console.log(`updateUserAccountRights response is: ${JSON.stringify(r)}`) )
+    );
   }
 
 }

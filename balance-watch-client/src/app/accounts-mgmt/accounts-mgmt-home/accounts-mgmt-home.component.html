@@ -43,20 +43,20 @@
                     <ul class="list-group">
 
                         <li class="list-group-item">
-                            <span>Is Owner: <input type="checkbox" [checked]="accountRights.dto.isOwner" /></span>
+                            <span>Is Owner: <input type="checkbox" [(ngModel)]="accountRights.dto.isOwner" /></span>
                         </li>
                         <li class="list-group-item">
-                            <span>Is Admin: <input type="checkbox" [checked]="accountRights.dto.isAdmin" /></span>
+                            <span>Is Admin: <input type="checkbox" [(ngModel)]="accountRights.dto.isAdmin" /></span>
                         </li>
                         <li class="list-group-item">
-                            <span>Is Transfer: <input type="checkbox" [checked]="accountRights.dto.isTransfer" /></span>
+                            <span>Is Transfer: <input type="checkbox" [(ngModel)]="accountRights.dto.isTransfer" /></span>
                         </li>
                         <li class="list-group-item">
-                            <span>Is Read: <input type="checkbox" [checked]="accountRights.dto.isRead" /></span>
+                            <span>Is Read: <input type="checkbox" [(ngModel)]="accountRights.dto.isRead" /></span>
                         </li>
                     </ul>
                     <div class="spacer10"></div>
-                    <a class="btn btn-primary">Save</a>
+                    <a class="btn btn-primary" (click)="saveRights(accountRights)">Save</a>
                 </div>
             </div>
         </div>
@@ -64,7 +64,7 @@
     <div class="spacer10"></div>
     <div class="row">
         <div class="col-md-2">
-            <a class="btn btn-primary">Back</a>
+            <a class="btn btn-primary" (click)="goBack()">Back</a>
         </div>        
     </div>
 </div>

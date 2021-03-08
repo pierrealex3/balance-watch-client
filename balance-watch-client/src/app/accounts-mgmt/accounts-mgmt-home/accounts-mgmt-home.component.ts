@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { combineLatest, EMPTY, of, Subject } from 'rxjs';
-import { catchError, concatMap, tap } from 'rxjs/operators';
+import { catchError, concatMap, map, tap, withLatestFrom } from 'rxjs/operators';
 import { ReactiveService } from 'src/app/reactive.service';
 import { UserAccountRightsModel } from 'src/app/service-response-wrappers/user-account-rights-res-wrapper';
 
@@ -16,6 +17,16 @@ export class AccountsMgmtHomeComponent implements OnInit {
 
   private accountSelectedSubject = new Subject<number>();
   accountSelectedAction$ = this.accountSelectedSubject.asObservable();
+
+  private saveRightsSelectedSubject = new Subject<UserAccountRightsModel>()
+  saveRightsSelectedAction$ = this.saveRightsSelectedSubject.asObservable()
+  .pipe(
+    withLatestFrom(this.userSelectedAction$, this.accountSelectedAction$) ,
+    concatMap( ([rights, selectedUser, selectedAccount]) => {
+      console.log(`About to save rights for user: ${selectedUser} account: ${selectedAccount} and rights: ${JSON.stringify(rights)} `);
+      return this.rService.saveUserAccountRights(selectedUser, selectedAccount, rights);
+    })
+  );
 
   userAccountRights$ = combineLatest([this.userSelectedAction$, this.accountSelectedAction$])
     .pipe(
@@ -45,9 +56,14 @@ export class AccountsMgmtHomeComponent implements OnInit {
     );
 
 
-  constructor(private rService: ReactiveService) { }
+
+  constructor(
+    private rService: ReactiveService,
+    private router: Router
+    ) {}
 
   ngOnInit() {
+    this.saveRightsSelectedAction$.subscribe();
   }
 
   accountSelected(id: number): void {
@@ -59,6 +75,15 @@ export class AccountsMgmtHomeComponent implements OnInit {
     console.log(`selected user: ${id}`);
     this.userSelectedSubject.next(id);
 
+  }
+
+  saveRights(accountRights: UserAccountRightsModel): void {
+    console.log(`ready to add/update ${JSON.stringify(accountRights)}`);
+    this.saveRightsSelectedSubject.next(accountRights);
+  }
+
+  goBack(): void {
+    this.router.navigate(['/accounts']);
   }
 
 }
