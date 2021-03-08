@@ -54,7 +54,7 @@ export class AccountsMgmtHomeComponent implements OnInit {
           .pipe(
             catchError(err => {
               console.log(`error is: ${JSON.stringify(err)}`);
-              if (err.status === 401) {
+              if (err.status === 403) {
                 return of({
                   exists: false,
                   dto: {
@@ -65,6 +65,7 @@ export class AccountsMgmtHomeComponent implements OnInit {
                   }
                 } as UserAccountRightsModel);
               } else {
+                this.toastr.error(`The Account Rights cannot be fetched.  Please contact technical support for assistance.`);
                 return EMPTY;
               }
             }
