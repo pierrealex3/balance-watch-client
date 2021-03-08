@@ -4,6 +4,7 @@ import { combineLatest, EMPTY, of, Subject } from 'rxjs';
 import { catchError, concatMap, map, tap, withLatestFrom } from 'rxjs/operators';
 import { ReactiveService } from 'src/app/reactive.service';
 import { UserAccountRightsModel } from 'src/app/service-response-wrappers/user-account-rights-res-wrapper';
+import { ToastrWrapperService } from 'src/app/toastr-wrapper.service';
 
 @Component({
   selector: 'app-accounts-mgmt-home',
@@ -11,6 +12,12 @@ import { UserAccountRightsModel } from 'src/app/service-response-wrappers/user-a
   styleUrls: ['./accounts-mgmt-home.component.css']
 })
 export class AccountsMgmtHomeComponent implements OnInit {
+
+  /* IMPORTANT NOTE: those click-event trackers used for counter a css-problem with the user and
+   * account HTML lists prevent this class from being *FULLY REACTIVE*
+   */
+  private userActiveIdx = -1;
+  private accountActiveIdx = -1;
 
   private userSelectedSubject = new Subject<string>();
   userSelectedAction$ = this.userSelectedSubject.asObservable();
@@ -24,7 +31,14 @@ export class AccountsMgmtHomeComponent implements OnInit {
     withLatestFrom(this.userSelectedAction$, this.accountSelectedAction$) ,
     concatMap( ([rights, selectedUser, selectedAccount]) => {
       console.log(`About to save rights for user: ${selectedUser} account: ${selectedAccount} and rights: ${JSON.stringify(rights)} `);
-      return this.rService.saveUserAccountRights(selectedUser, selectedAccount, rights);
+      return this.rService.saveUserAccountRights(selectedUser, selectedAccount, rights)
+      .pipe(
+        catchError(() => {
+          this.toastr.error(`The Account Rights cannot be saved.  Please contact technical support for assistance.`);
+          return EMPTY;
+        }) ,
+        tap(() => this.toastr.success(`Saved the Account Rights`))
+      );
     })
   );
 
@@ -59,22 +73,24 @@ export class AccountsMgmtHomeComponent implements OnInit {
 
   constructor(
     private rService: ReactiveService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrWrapperService
     ) {}
 
   ngOnInit() {
     this.saveRightsSelectedAction$.subscribe();
   }
 
-  accountSelected(id: number): void {
+  accountSelected(id: number, idx: number): void {
     console.log(`selected account: ${id}`);
     this.accountSelectedSubject.next(id);
+    this.accountActiveIdx = idx;
   }
 
-  userSelected(id: string): void {
+  userSelected(id: string, idx: number): void {
     console.log(`selected user: ${id}`);
     this.userSelectedSubject.next(id);
-
+    this.userActiveIdx = idx;
   }
 
   saveRights(accountRights: UserAccountRightsModel): void {

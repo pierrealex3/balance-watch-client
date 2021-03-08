@@ -6,11 +6,10 @@
                 <div class="card-body" *ngIf="rService.usersFromAuthorizedGroup$ | async as users">
                     <h5 class="card-title">Select User</h5>
 
-                    <div class="list-group" *ngFor="let user of users">
-                        <button type="button" class="list-group-item list-group-item-action"
-                            (click)="userSelected(user.id)">
+                    <div class="list-group" *ngFor="let user of users; let i = index">
+                        <a [ngClass]="i === userActiveIdx ? 'active list-group-item list-group-item-action' : 'list-group-item list-group-item-action'" (click)="userSelected(user.id, i)">
                             {{user.id}}
-                        </button>
+                        </a>
                     </div>
 
                 </div>
@@ -21,10 +20,10 @@
                 <div class="card-body" *ngIf="rService.accountsFromAuthorizedGroup$ | async as accounts">
                     <h5 class="card-title">Select Account</h5>
 
-                    <div class="list-group" *ngFor="let account of accounts">
-                        <button type="button" class="list-group-item list-group-item-action" (click)="accountSelected(account.id)">
+                    <div class="list-group" *ngFor="let account of accounts; let i = index">
+                        <a [ngClass]="i === accountActiveIdx ? 'active list-group-item list-group-item-action' : 'list-group-item list-group-item-action'" (click)="accountSelected(account.id, i)">
                             {{account.data.accountNumber}} | {{account.data.desc}}
-                        </button>
+                        </a>
                     </div>
 
                 </div>
@@ -34,8 +33,8 @@
     <div class="spacer10"></div>
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-body" *ngIf="userAccountRights$ | async as accountRights">
+            <div class="card" *ngIf="userAccountRights$ | async as accountRights">
+                <div class="card-body">
                     <h5 class="card-title">Choose User Account Rights</h5>
                     <p class="card-text" *ngIf="accountRights.exists">Those are the existing rights.</p>
                     <p class="card-text" *ngIf="!accountRights.exists">The user does not have rights on this account at
@@ -49,7 +48,8 @@
                             <span>Is Admin: <input type="checkbox" [(ngModel)]="accountRights.dto.isAdmin" /></span>
                         </li>
                         <li class="list-group-item">
-                            <span>Is Transfer: <input type="checkbox" [(ngModel)]="accountRights.dto.isTransfer" /></span>
+                            <span>Is Transfer: <input type="checkbox"
+                                    [(ngModel)]="accountRights.dto.isTransfer" /></span>
                         </li>
                         <li class="list-group-item">
                             <span>Is Read: <input type="checkbox" [(ngModel)]="accountRights.dto.isRead" /></span>
@@ -65,6 +65,6 @@
     <div class="row">
         <div class="col-md-2">
             <a class="btn btn-primary" (click)="goBack()">Back</a>
-        </div>        
+        </div>
     </div>
 </div>
