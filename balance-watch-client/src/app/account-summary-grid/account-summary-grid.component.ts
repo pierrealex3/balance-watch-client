@@ -172,16 +172,7 @@ export class AccountSummaryGridComponent implements OnInit {
   mapFromWrapperToTransaction(i: TransactionResWrapper): AccountTransaction {
     const t: AccountTransaction = {
       id: i.id,
-      date: i.data.date,
-      type: i.data.type,
-      amount: i.data.amount,
-      way: i.data.way,
-      note: i.data.note,
-      noteXtra: i.data.noteXtra,
-      account: i.data.account,
-      accountConnection: i.data.accountConnection,
-      ttIdGen: i.data.ttIdGen,
-      flagSubmitted: i.data.flagSubmitted
+      ...i.data
     };
     return t;
   }

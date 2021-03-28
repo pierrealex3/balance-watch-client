@@ -14,4 +14,5 @@ export interface TransactionRes {
     accountConnection: number;
     ttIdGen: number;
     flagSubmitted: boolean;
+    connectivityStatus: string;
 }
