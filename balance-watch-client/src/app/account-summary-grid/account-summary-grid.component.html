@@ -6,7 +6,7 @@
                 <div class="card-body">
                     <a class="btn pendingTransactions" [ngClass]="subTransactionsCnt == 0 ? 'disabled' : ''">Pending Transactions
                         <span class="badge badge-light">{{subTransactionsCnt}}</span></a>
-                    <a class="btn btn-primary" routerLink="/tdetail/0">Add Transaction
+                    <a *ngIf="sessionDataService.selectedAccount" class="btn btn-primary" routerLink="/tdetail/0">Add Transaction
                     </a>
                 </div>
             </div>

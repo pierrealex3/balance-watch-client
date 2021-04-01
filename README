@@ -92,8 +92,11 @@ component event:	<vehicle-detail (changed)="vehicleChanged"></vehicle-detail>
 npm update // when everything was screwed up compiling after bot updates in github
 
 
-// built-in directives
-[ngStyle]=
+// ngStyle built-in directive
+note: with the following construct, the border-color style attribute will NOT be added i.e. when null is returned.
+[ngStyle]="{'border-color': iway.invalid && invalidSaveAttempt ? 'red' : null}"
+
+// ngClass built-in directive
 [ngClass]="{selected: isSelected}"
 
 // alternative to *ngIf when all we want to do is show|hide something and not play with the DOM
