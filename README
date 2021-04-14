@@ -360,7 +360,7 @@ productsWithAdd$ = merge(
 );
 
 
-// caching data using rxjs shareReplay(1) operator vs traditional way
+// rxjs caching data using rxjs shareReplay(1) operator vs traditional way
 * using shareReplay(1) will always replay the last emission on the Observable
 
 ex:

@@ -45,7 +45,7 @@
 </div>
 <div class="spacer20"></div>
 <div>
-    <a *ngIf="selGroup && sessionDataService.selectedAccount" class="btn btn-primary" [routerLink]="['/tsummary', {selGroup: selGroup != undefined ? selGroup.id : '', forMonth: tgtMonth, forYear: tgtYear}]">Build</a>    
+    <a *ngIf="selGroup && sessionDataService.selectedAccount" class="btn btn-primary" [routerLink]="['/tsummary', {action: 'fetchData', selGroup: selGroup != undefined ? selGroup.id : '', forMonth: tgtMonth, forYear: tgtYear}]">Build</a>    
 </div>
 </div>
 

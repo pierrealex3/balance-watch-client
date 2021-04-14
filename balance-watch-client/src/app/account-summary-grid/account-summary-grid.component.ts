@@ -6,6 +6,7 @@ import { TransactionResWrapper } from '../service-response-wrappers/transaction-
 import { SessionDataService } from '../session-data.service';
 import { Account } from '../account';
 import { ToastrWrapperService } from '../toastr-wrapper.service';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
   selector: 'app-account-summary-grid',
@@ -39,21 +40,23 @@ export class AccountSummaryGridComponent implements OnInit {
       this.userId = u;
 
       this.getAccounts();
-
       this.getSom();
 
       if (paramMap.keys.length === 0) {
         this.getTransactions();
-      } else {
+      } else if (paramMap.get('action') === 'fetchData') {
         this.sessionDataService.summaryYear = paramMap.get('forYear');
         this.sessionDataService.summaryMonth = paramMap.get('forMonth');
         this.getTransactionsFromTemplateGroup(paramMap.get('selGroup'), paramMap.get('forMonth'), paramMap.get('forYear'));
+      } else {
+        console.error('unsupported condition for this component.  Should redirect to login page');
       }
     });
   }
 
   // TODO this function has a copy within account-transaction-template... think about sharing the code.
   getAccounts(): void {
+
     this.accountList = [];
     if (this.sessionDataService.selectedAccount != null) {
       this.accountList.push(this.sessionDataService.selectedAccount);
@@ -77,7 +80,6 @@ export class AccountSummaryGridComponent implements OnInit {
     } ,
     err => this.toastr.error((err as HttpErrorWrapperException).msg)
     );
-
   }
 
   /**
@@ -138,6 +140,14 @@ export class AccountSummaryGridComponent implements OnInit {
 
   onAccountSelect(): void {
     this.sessionDataService.selectedAccount = this.selectedAccount;
+  }
+
+  clickOtherAccount(otherAccountId: number) {
+    const tgtAccount = this.accountList.find((value: Account) => {
+      return value.id === otherAccountId;
+    });
+    this.sessionDataService.selectedAccount = tgtAccount;
+    this.getSomAndTransactions();
   }
 
   getTransactionsFromTemplateGroup(groupId: string, month: string, year: string): void {

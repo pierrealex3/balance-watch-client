@@ -89,7 +89,10 @@
                 <td><span [ngStyle]="{'color': t.ttIdGen ? 'black' : '#007bff'}">{{t.way}}</span></td>
                 <td><span [ngStyle]="{'color': t.ttIdGen ? 'black' : '#007bff'}">{{t.note}}</span></td>
                 <td><span [ngStyle]="{'color': t.ttIdGen ? 'black' : '#007bff'}">{{t.noteXtra}}</span></td>
-                <td><span [ngStyle]="{'color': t.ttIdGen ? 'black' : '#007bff'}">{{t.accountConnection}}</span></td>
+                <td *ngIf="t.accountConnection; else noAccountConnection"><a (click)="clickOtherAccount(t.accountConnection)">{{t.accountConnection}}</a></td>
+                <ng-template #noAccountConnection>
+                    <td><span [ngStyle]="{'color': t.ttIdGen ? 'black' : '#007bff'}">{{t.accountConnection}}</span></td>
+                </ng-template>
                 <td [ngStyle]="{'background-color': balanceAtIndex(i) &lt; 0 ? 'red' : ''}">{{balanceAtIndex(i) |
                     currency}}</td>
                 <td><a class="btn btn-secondary btn-sm" routerLink="/tdetail/{{t.id}}">Edit</a></td>
